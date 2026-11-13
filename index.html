@@ -1868,6 +1868,49 @@ label.btn.disabled{opacity:.5;pointer-events:none}
   body{padding-top:env(titlebar-area-height,0px)}
   body::before{content:"Égide";position:fixed;top:0;left:env(titlebar-area-x,0);width:env(titlebar-area-width,100%);height:env(titlebar-area-height,32px);display:flex;align-items:center;padding-left:12px;font:600 12px var(--f-ui,system-ui);color:#fff;background:#003865;-webkit-app-region:drag;app-region:drag;z-index:9999}
 }
+
+/* ===== Formation à distance ===== */
+body.train .app{grid-template-columns:minmax(0,1fr)}
+body.train .rail,body.train #chatfab,body.train #welcome,body.train #savebtn{display:none!important}
+.tr{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.tr-brand{display:flex;align-items:center;gap:12px}
+.tr-brand svg{width:40px;height:40px}
+.tr-brand b{display:block;font-family:var(--f-display);color:var(--heading);font-size:1.05rem}
+.tr-brand span{font-size:.84rem;color:var(--muted)}
+.tr-hero{padding:26px 28px;border-radius:calc(var(--r) + 4px);color:#fff;background:linear-gradient(135deg,#003865,#0088CE 70%,#BA6AA7 130%)}
+.tr-hero .eyebrow{color:rgba(255,255,255,.75)}
+.tr-hero h1{color:#fff;margin:6px 0 8px;font-size:1.8rem;text-wrap:balance}
+.tr-hero p{margin:0;max-width:62ch;color:rgba(255,255,255,.9)}
+.tr-hero small{display:block;margin-top:6px;color:rgba(255,255,255,.85)}
+.tr-prog{height:8px;border-radius:9px;background:rgba(255,255,255,.22);margin-top:16px;overflow:hidden;max-width:420px}
+.tr-prog span{display:block;height:100%;background:#fff;border-radius:9px;transition:width .5s}
+.tr-card{padding:22px}
+.tr-err{min-height:1.2em;color:var(--crit);font-size:.88rem;margin:8px 0}
+.tr-info{font-size:.86rem;color:var(--muted);margin:4px 0 14px}
+.tr-info summary{cursor:pointer;font-weight:600;color:var(--primary)}
+.tr-info p{margin:8px 0 0;max-width:75ch}
+.tr-list{display:flex;flex-direction:column;gap:14px}
+.tr-course{display:flex;gap:18px;padding:20px;border-left:4px solid var(--cc)}
+.tr-art{font-size:2.4rem;line-height:1;flex:none}
+.tr-body{min-width:0;flex:1}
+.tr-body h2{margin:0 0 4px;font-size:1.15rem}
+.tr-body p{margin:0 0 8px;color:var(--muted);font-size:.9rem}
+.tr-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--muted);margin-bottom:10px}
+.tr-res{font-size:.88rem;padding:8px 12px;border-radius:10px;margin-bottom:10px}
+.tr-res.ok{background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.tr-res.ko{background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.tr-res span{display:inline-flex;align-items:center;gap:4px}.tr-res svg{width:13px;height:13px}
+.tr-foot{text-align:center;font-size:.85rem;color:var(--muted)}
+.trn-adm,.trn-res{margin-top:18px}
+.trn-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+.trn-cours{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.trn-cours .chk{display:flex;gap:8px;align-items:center;font-size:.9rem}
+.trn-link{margin:14px 0 10px;padding:10px 12px;border-radius:10px;background:var(--sunk);border:1px dashed var(--line-2);overflow-x:auto}
+.trn-link code{font-size:.78rem;white-space:nowrap;color:var(--ink)}
+.trn-imp textarea{width:100%;margin-bottom:8px}
+.tbl-wrap{overflow-x:auto;margin-top:14px}
+.trn-res table{width:100%;border-collapse:collapse;font-size:.88rem}.trn-res th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px;border-bottom:1px solid var(--line)}.trn-res td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+@media (max-width:760px){.trn-grid{grid-template-columns:1fr}.tr-course{flex-direction:column}}
 </style>
 
 <div class="app">
@@ -1882,7 +1925,7 @@ label.btn.disabled{opacity:.5;pointer-events:none}
       <div class="sync"><span class="dot" id="sync-dot"></span><span id="sync-label">Connexion…</span></div>
       <button class="savebtn" id="savebtn" data-action="save-now" hidden title="Enregistrer et vérifier (Ctrl + S)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h9V3"/><rect x="7" y="13" width="10" height="7" rx="1"/></svg><span><b id="savebtn-t">Enregistrer</b><small id="savebtn-s">Ctrl + S</small></span></button>
       <button class="lnk" data-action="journal" style="font-size:.78rem">Journal d'activité</button>
-      <div>Règlement (UE) 2016/679</div>
+      <div>Règlement (UE) 2016/679 · <span id="appver" title="Version de l'application"></span></div>
     </div>
   </aside>
   <main><div class="wrap" id="main"></div></main>
@@ -1903,6 +1946,8 @@ label.btn.disabled{opacity:.5;pointer-events:none}
 window.__NEWS_SEED__=[{"titre": "Omnibus numérique : l'avis conjoint des autorités européennes", "resume": "Le CEPD et le Contrôleur européen saluent certaines simplifications, comme un seuil plus élevé pour notifier les violations, mais s'opposent à la modification de la définition de donnée personnelle.", "aRetenir": "La réforme du RGPD est encore en discussion : continuez d'appliquer les règles actuelles.", "source": "CNIL", "url": "https://www.cnil.fr/fr/cepd-edps-avis-conjoint-omnibus-numerique", "date": "2026-02-12", "categorie": "europe", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "CJUE : publier les noms de personnes sanctionnées doit rester proportionné", "resume": "La Cour de justice, en grande chambre, a jugé que la mise en ligne des noms de sportifs sanctionnés doit être proportionnée et peut exiger un examen au cas par cas.", "aRetenir": "Avant toute publication nominative (organigramme, palmarès, sanctions), vérifiez qu'elle est vraiment nécessaire.", "source": "Vigier Avocats", "url": "https://www.vigier-avocats.com/donnees-personnelles-les-principales-actualites-de-lete-2026/", "date": "2026-07-14", "categorie": "jurisprudence", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Facturation électronique : la CNIL rappelle les enjeux pour les données personnelles", "resume": "Avec l'entrée en vigueur de la première phase de la réforme le 1er septembre 2026, la CNIL précise les points de vigilance, notamment pour les factures adressées à des entrepreneurs individuels.", "aRetenir": "Vérifiez la fiche « Comptabilité et fiscalité » : plateforme agréée choisie, contrat de sous-traitance et durées de conservation.", "source": "CNIL", "url": "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux", "date": "2026-09-10", "categorie": "cnil", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "La CNIL encadre la reconstitution des adresses e-mail professionnelles", "resume": "Deviner une adresse du type prenom.nom@entreprise à partir d'informations publiées en ligne peut reposer sur l'intérêt légitime, mais seulement après une analyse au cas par cas et avec des garanties pour les personnes.", "aRetenir": "Si vos commerciaux reconstituent des adresses pour prospecter, documentez l'analyse d'intérêt légitime dans la fiche « Prospection commerciale » et prévoyez un droit d'opposition simple.", "source": "Leptidigital", "url": "https://leptidigital.fr/growth-hacking/appels-a-froid-e-mails-pro-devines-cnil-encadre-deux-pratiques-courantes-prospection-commerciale-92263", "date": "2026-10-16", "categorie": "cnil", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Cybermois 2026 : une fiche pour réagir à une violation de données en trois étapes", "resume": "La CNIL et Cybermalveillance.gouv.fr publient une fiche pratique destinée aux personnes victimes d'une fuite de leurs données, avec les actions à mener du premier jour au trentième.", "aRetenir": "Une ressource utile à joindre à vos courriers d'information en cas de violation de données touchant des salariés ou des clients.", "source": "CNIL", "url": "https://www.cnil.fr/fr/cybermois-2026", "date": "2026-10-01", "categorie": "cyber", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Démarchage téléphonique : le consentement préalable devient obligatoire", "resume": "Depuis le 11 août 2026, appeler un consommateur pour le démarcher suppose son accord préalable. La CNIL et la DGCCRF ont détaillé ces nouvelles règles lors d'un webinaire.", "aRetenir": "Si vous démarchez des particuliers par téléphone, la base légale de la fiche « Prospection » doit devenir le consentement.", "source": "Leptidigital", "url": "https://leptidigital.fr/growth-hacking/appels-a-froid-e-mails-pro-devines-cnil-encadre-deux-pratiques-courantes-prospection-commerciale-92263", "date": "2026-08-11", "categorie": "legislation", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Conflits d'intérêts du DPO : la CNIL publie une recommandation", "resume": "La CNIL rappelle que les autres fonctions confiées au délégué à la protection des données ne doivent ni compromettre son indépendance ni lui laisser trop peu de temps pour sa mission.", "aRetenir": "À vérifier si votre DPO occupe aussi un poste de direction, juridique ou informatique.", "source": "Vigier Avocats", "url": "https://www.vigier-avocats.com/donnees-personnelles-les-principales-actualites-de-lete-2026/", "date": "2026-08-10", "categorie": "cnil", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Amendes RGPD : le CEPD propose une méthode commune en cinq étapes", "resume": "Le Comité européen de la protection des données a adopté des lignes directrices sur la décision d'infliger ou non une amende, afin d'harmoniser les pratiques des autorités. Consultation publique jusqu'au 13 novembre 2026.", "aRetenir": "Les autorités tiendront compte des mesures prises en amont : un registre à jour et des actions correctives documentées restent vos meilleurs arguments.", "source": "Gibson Dunn", "url": "https://www.gibsondunn.com/gibson-dunn-europe-data-protection-october-2026/", "date": "2026-09-17", "categorie": "europe", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Le CEPD publie une déclaration sur les lunettes connectées", "resume": "Le Comité européen de la protection des données s'est prononcé sur les lunettes capables de filmer ou d'enregistrer, qui posent des questions de surveillance des personnes filmées à leur insu.", "aRetenir": "Si des salariés ou visiteurs utilisent ce type d'équipement dans vos locaux, encadrez-le dans le règlement intérieur ou la charte informatique.", "source": "CEPD (EDPB)", "url": "https://www.edpb.europa.eu/documents/statement/statement-of-the-edpb-on-smart-glasses_en", "date": "2026-10-13", "categorie": "europe", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "La Commission propose un « EU KIDS Act » pour l'accès des mineurs aux réseaux sociaux", "resume": "Le texte prévoit une interdiction des réseaux sociaux avant 13 ans, des comptes limités entre 13 et 15 ans, puis des comptes complets. Il doit encore être examiné par le Parlement et le Conseil.", "aRetenir": "Concerne surtout les plateformes en ligne ; à suivre si vous proposez un service accessible aux mineurs.", "source": "Gibson Dunn", "url": "https://www.gibsondunn.com/gibson-dunn-europe-data-protection-october-2026/", "date": "2026-09-17", "categorie": "legislation", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Omnibus numérique : le vote du Conseil reporté sous la pression de Paris et Berlin", "resume": "Les représentants des États membres ont repoussé au 11 octobre le vote sur la position du Conseil concernant le paquet « Omnibus numérique », qui doit notamment modifier le RGPD et le Data Act.", "aRetenir": "Aucune règle ne change pour l'instant : le RGPD actuel continue de s'appliquer tant que la réforme n'est pas adoptée.", "source": "Agence Europe", "url": "https://agenceurope.eu/en/bulletin/article/13954/5/vote-on-digital-omnibus-postponed-until-11-october-under-pressure-from-paris-and-berlin", "date": "2026-10-07", "categorie": "legislation", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "300 000 € d'amende pour des demandes d'effacement mal traitées", "resume": "La CNIL a sanctionné une société de conseil en informatique : plus des trois quarts des 265 demandes d'effacement examinées n'avaient pas été traitées correctement.", "aRetenir": "Suivez chaque demande dans le module « Demandes de droits » : l'échéance d'un mois y est calculée automatiquement.", "source": "CNIL", "url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia", "date": "2026-09-09", "categorie": "sanction", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Violation de données : 42 millions d'euros d'amende pour Free et Free Mobile", "resume": "Après la fuite de 2024 touchant 24 millions de contrats, la CNIL a relevé des mesures de sécurité insuffisantes, une information incomplète des abonnés et une conservation excessive des données d'anciens clients.", "aRetenir": "Trois réflexes : sécuriser les accès distants, informer clairement les personnes après une violation et purger les données d'anciens clients.", "source": "CNIL", "url": "https://www.cnil.fr/fr/sanction-free-2026", "date": "2026-01-14", "categorie": "sanction", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "500 000 € d'amende pour un hôpital après une violation de données", "resume": "Une violation survenue en 2025 a exposé les données de plus de 520 000 patients. La CNIL a retenu des mesures de sécurité insuffisantes.", "aRetenir": "La sécurité reste le premier motif de sanction : double authentification et revue des journaux sont attendues.", "source": "Gibson Dunn", "url": "https://www.gibsondunn.com/gibson-dunn-europe-data-protection-october-2026/", "date": "2026-09-03", "categorie": "sanction", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "5 millions d'euros d'amende pour des entrepôts de données de santé", "resume": "La CNIL a sanctionné IQVIA Operations France, notamment pour l'absence de double authentification et de revue régulière des journaux de connexion.", "aRetenir": "La double authentification est désormais un minimum attendu pour tout accès à des données sensibles.", "source": "Datanaos", "url": "https://www.datanaos.com/blog/actualites/cnil-les-sanctions-du-2eme-trimestre-2026/", "date": "2026-05-26", "categorie": "sanction", "ajouteLe": "2026-10-20T17:30:00.000Z"}, {"titre": "Près de 825 millions d'euros d'amende pour une plateforme de VTC", "resume": "L'autorité néerlandaise, en coopération avec la CNIL, a sanctionné une grande plateforme de VTC, notamment pour des décisions automatisées de désactivation des comptes de chauffeurs.", "aRetenir": "Toute décision automatisée ayant un effet important sur une personne doit être signalée dans la fiche du traitement et prévoir une intervention humaine.", "source": "Vigier Avocats", "url": "https://www.vigier-avocats.com/donnees-personnelles-les-principales-actualites-de-lete-2026/", "date": "2026-08-24", "categorie": "sanction", "ajouteLe": "2026-10-20T17:30:00.000Z"}];
 window.__EGIDE_LOCAL__ = true;
 (function(){
+  // Espace formation (lien envoyé aux collègues) : aucune donnée du registre n'est lue ni écrite.
+  if (/^#formation(&|$)/.test(location.hash)) { window.__LOCAL = {training:true, onChange:null, init:Promise.resolve(), supported:false}; window.claude = {use: async () => null}; return; }
   const KEY = "egide-local-store", META = "egide-local-meta", NAMEK = "egide-user-name", LOCKK = "egide-lock-min";
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }, del: k => { try { localStorage.removeItem(k); } catch (e) {} } };
   let saved = {}; try { saved = JSON.parse(ls.get(KEY) || "{}"); } catch (e) {}
@@ -2215,6 +2260,7 @@ window.__EGIDE_LOCAL__ = true;
 <script>
 const LOCAL = !!window.__EGIDE_LOCAL__;
 const LS = window.__LOCAL || null;
+const TRAIN = (() => { const h = location.hash || ""; if (!/^#formation(&|$)/.test(h)) return null; const q = new URLSearchParams(h.replace(/^#formation&?/, "")); const up = q.get("up") || ""; return {c:(q.get("c") || "").split(",").filter(Boolean), org:q.get("org") || "", dpo:q.get("dpo") || "", up:/^https:\/\//.test(up) ? up : "", dir:(q.get("dir") || "").split("|").filter(Boolean)}; })();
 /* ================= Icônes ================= */
 const I = {
   lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
@@ -2256,6 +2302,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
+const EGIDE_VERSION = "2026.11.13-a";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -3054,6 +3101,199 @@ function vfDeck(){
 }
 function markVfSeen(it){ const all = qSeenAll(); const s = new Set(all.vf || []); s.add(qhash(it[0])); all.vf = [...s]; qSeenSave(all); }
 
+/* ================= Formation à distance : espace apprenant ================= */
+const TK = "egide-apprenant";
+const TS = (() => { let s = {}; try { s = JSON.parse(localStorage.getItem(TK) || "{}"); } catch {} return {me:s.me || null, res:s.res || {}, step:s.me ? "cat" : "reg", t0:{}}; })();
+const tSave = () => { try { localStorage.setItem(TK, JSON.stringify({me:TS.me, res:TS.res})); } catch {} };
+const PASS = 70;
+const tCourses = () => { const ids = TRAIN && TRAIN.c.length ? TRAIN.c : COURSES.map(c => c.id); return ids.map(id => COURSES.find(c => c.id === id)).filter(Boolean); };
+const b64u = s => btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64u = s => decodeURIComponent(escape(atob(s.replace(/-/g, "+").replace(/_/g, "/"))));
+function tPacket(cid){
+  const r = TS.res[cid], c = COURSES.find(x => x.id === cid);
+  return {v:1, type:"egide-formation", prenom:TS.me.prenom, nom:TS.me.nom, email:TS.me.email, service:TS.me.service, cours:cid, coursTitre:c ? c.t : cid,
+    score:r.score, total:r.total, pct:r.pct, reussi:r.pct >= PASS, date:r.date, dureeMin:r.dureeMin, org:TRAIN.org || ""};
+}
+const tCode = p => "EGIDE1." + b64u(JSON.stringify(p));
+function vTrain(){
+  const org = TRAIN.org || "votre entreprise";
+  const brand = `<div class="tr-brand"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="trg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0088CE"/><stop offset="1" stop-color="#003865"/></linearGradient></defs><path d="M20 3 6 8.5v10.2C6 27.6 12 34.4 20 37c8-2.6 14-9.4 14-18.3V8.5z" fill="url(#trg)"/><path d="m13.5 20.5 4.5 4.5 8.5-9.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Égide · Formation RGPD</b><span>${esc(org)}</span></div></div>`;
+  if (TS.step === "reg" || !TS.me) {
+    const me = TS.me || {}, dirs = TRAIN.dir || [];
+    return `<div class="tr">${brand}
+    <section class="tr-hero"><span class="eyebrow">Avant de commencer</span><h1>Inscrivez-vous à la formation</h1><p>Quelques informations pour que votre délégué à la protection des données puisse enregistrer votre participation.</p></section>
+    <form id="tr-reg" class="panel tr-card" novalidate><div class="fields">
+      <div class="f"><label for="tr-prenom">Prénom</label><input type="text" id="tr-prenom" autocomplete="given-name" value="${esc(me.prenom || "")}" required></div>
+      <div class="f"><label for="tr-nom">Nom</label><input type="text" id="tr-nom" autocomplete="family-name" value="${esc(me.nom || "")}" required></div>
+      <div class="f"><label for="tr-email">E-mail professionnel</label><input id="tr-email" type="email" autocomplete="email" value="${esc(me.email || "")}" required></div>
+      <div class="f"><label for="tr-service">Service ou direction</label><input type="text" id="tr-service" list="tr-dirs" value="${esc(me.service || "")}" required><datalist id="tr-dirs">${dirs.map(d => `<option value="${esc(d)}">`).join("")}</datalist></div>
+    </div>
+    <div id="tr-err" class="tr-err" role="alert"></div>
+    <details class="tr-info"><summary>Comment vos informations sont utilisées</summary><p>${esc(org)} utilise vos nom, prénom, e-mail et service, ainsi que vos résultats aux quiz, pour suivre les formations à la protection des données de ses équipes. Ces informations restent dans votre navigateur ; elles ne sont transmises au délégué à la protection des données (DPO) que lorsque vous lui envoyez votre résultat. Elles sont conservées le temps de votre présence dans l'entreprise. Vous pouvez y accéder, les faire rectifier ou effacer en écrivant au DPO${TRAIN.dpo ? ` : ${esc(TRAIN.dpo)}` : ""}.</p></details>
+    <div class="actions"><button class="btn primary" type="submit">${I.check}Commencer la formation</button></div></form></div>`;
+  }
+  const cs = tCourses(), done = cs.filter(c => TS.res[c.id]).length, ok = cs.filter(c => (TS.res[c.id]?.pct || 0) >= PASS).length;
+  return `<div class="tr">${brand}
+  <section class="tr-hero"><span class="eyebrow">Bonjour ${esc(TS.me.prenom)}</span><h1>Vos formations à la protection des données</h1>
+    <p>${cs.length} module${cs.length > 1 ? "s" : ""} à suivre. Chacun se termine par un quiz de 10 questions : à partir de ${PASS} % de bonnes réponses, le module est validé.</p>
+    <div class="tr-prog"><span style="width:${cs.length ? Math.round(100 * ok / cs.length) : 0}%"></span></div><small>${ok} validé${ok > 1 ? "s" : ""} sur ${cs.length} · ${done} terminé${done > 1 ? "s" : ""}</small></section>
+  <div class="tr-list">${cs.map(c => { const r = TS.res[c.id], pass = r && r.pct >= PASS; const s = courseStats(c);
+    return `<article class="panel tr-course" style="--cc:${c.c}">
+      <div class="tr-art">${c.art.main}</div>
+      <div class="tr-body"><h2>${esc(c.t)}</h2><p>${esc(c.pitch)}</p><div class="tr-meta"><span>${I.clock || ""}${esc(c.dur)}</span><span>${s.ch} chapitres</span><span>Quiz de 10 questions</span></div>
+        ${r ? `<div class="tr-res ${pass ? "ok" : "ko"}"><b>${pass ? "Module validé" : "À repasser"}</b> · ${r.score} / ${r.total} (${r.pct} %) le ${fmtD(r.date.slice(0, 10))}${r.sent ? ` · <span>${I.check}envoyé au DPO</span>` : ""}</div>` : ""}
+        <div class="actions">
+          <button class="btn ${r ? "" : "primary"}" data-action="tr-start" data-c="${c.id}">${r ? "Refaire le module" : "Commencer"}</button>
+          ${r ? `<button class="btn ${r.sent ? "" : "primary"}" data-action="tr-send" data-c="${c.id}">${I.send}${r.sent ? "Renvoyer" : "Envoyer mon résultat au DPO"}</button>
+          <button class="btn ghost" data-action="tr-cert" data-c="${c.id}">${I.pdf}Attestation</button>${TRAIN.up ? `<button class="btn ghost" data-action="tr-drop" data-c="${c.id}">${I.up}Déposer le fichier</button>` : ""}` : ""}
+        </div></div></article>`; }).join("")}</div>
+  <p class="tr-foot">Vous n'êtes pas ${esc(TS.me.prenom)} ${esc(TS.me.nom)} ? <button class="lnk" data-action="tr-edit">Modifier l'inscription</button></p></div>`;
+}
+function renderTrain(){
+  document.body.classList.add("train");
+  const m = $("#main"); if (m) m.innerHTML = vTrain();
+}
+// Appelé par le lecteur de diapositives : enregistre le résultat quand tout le quiz est fait.
+function trainCapture(){
+  if (!TRAIN || P.trainSaved) return;
+  const n = Object.keys(P.answers).length; if (!QUIZ.length || n < QUIZ.length) return;
+  const good = Object.entries(P.answers).filter(([i, a]) => QUIZ[i].a === a).length, pct = Math.round(100 * good / QUIZ.length);
+  const t0 = TS.t0[CUR.id] || Date.now();
+  TS.res[CUR.id] = {score:good, total:QUIZ.length, pct, date:new Date().toISOString(), dureeMin:Math.max(1, Math.round((Date.now() - t0) / 60000)), sent:false};
+  P.trainSaved = true; tSave();
+}
+async function trainCert(cid){
+  const p = tPacket(cid), jsPDF = await loadJsPDF(); const d = new jsPDF({orientation:"landscape", unit:"mm", format:"a4"});
+  const W = 297, H = 210, navy = [0, 56, 101], blue = [0, 136, 206];
+  d.setFillColor(...navy); d.rect(0, 0, W, 16, "F"); d.setFillColor(...blue); d.rect(0, H - 6, W, 6, "F");
+  d.setTextColor(255); d.setFont("helvetica", "bold"); d.setFontSize(11); d.text((p.org || "Formation RGPD").toUpperCase(), 14, 10.5);
+  d.setTextColor(...navy); d.setFontSize(30); d.text("Attestation de formation", W / 2, 52, {align:"center"});
+  d.setFont("helvetica", "normal"); d.setFontSize(13); d.setTextColor(60); d.text("Protection des données personnelles (RGPD)", W / 2, 62, {align:"center"});
+  d.setFontSize(12); d.text("Délivrée à", W / 2, 84, {align:"center"});
+  d.setFont("helvetica", "bold"); d.setFontSize(24); d.setTextColor(...navy); d.text(`${p.prenom} ${p.nom}`, W / 2, 97, {align:"center"});
+  d.setFont("helvetica", "normal"); d.setFontSize(12); d.setTextColor(60); d.text(p.service || "", W / 2, 106, {align:"center"});
+  d.setFontSize(13); d.text("pour avoir suivi le module", W / 2, 124, {align:"center"});
+  d.setFont("helvetica", "bold"); d.setTextColor(...navy); d.text(d.splitTextToSize(p.coursTitre, 220), W / 2, 134, {align:"center"});
+  d.setFont("helvetica", "normal"); d.setTextColor(60); d.setFontSize(12);
+  d.text(`Résultat au quiz : ${p.score} / ${p.total} (${p.pct} %)${p.reussi ? " - module validé" : ""}`, W / 2, 152, {align:"center"});
+  d.text(`Le ${new Date(p.date).toLocaleDateString("fr-FR", {day:"numeric", month:"long", year:"numeric"})}`, W / 2, 161, {align:"center"});
+  d.setFontSize(9); d.setTextColor(120); d.text("Document généré par Égide. Le résultat fait foi une fois enregistré par le délégué à la protection des données.", W / 2, 190, {align:"center"});
+  const blob = d.output("blob"), a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `Attestation-RGPD-${p.prenom}-${p.nom}-${cid}.pdf`.replace(/\s+/g, "-"); document.body.appendChild(a); a.click(); a.remove();
+}
+function trainMail(cid){
+  const p = tPacket(cid);
+  const subject = `Formation RGPD - ${p.prenom} ${p.nom} - ${p.coursTitre} (${p.score}/${p.total})`;
+  const body = `Bonjour,\n\nVoici mon résultat de formation à la protection des données.\n\nNom : ${p.prenom} ${p.nom}\nService : ${p.service}\nModule : ${p.coursTitre}\nRésultat : ${p.score} / ${p.total} (${p.pct} %)${p.reussi ? " - module validé" : ""}\nDate : ${new Date(p.date).toLocaleDateString("fr-FR")}\n\nCode à importer dans Égide :\n${tCode(p)}\n\nCordialement,\n${p.prenom} ${p.nom}`;
+  location.href = `mailto:${encodeURIComponent(TRAIN.dpo || "")}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  TS.res[cid].sent = true; tSave(); renderTrain();
+}
+function trainDrop(cid){
+  const p = tPacket(cid), blob = new Blob([JSON.stringify(p, null, 1)], {type:"application/json"}), a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = `resultat-formation-${p.prenom}-${p.nom}-${cid}.json`.replace(/\s+/g, "-"); document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => window.open(TRAIN.up, "_blank", "noopener"), 400);
+  TS.res[cid].sent = true; tSave(); renderTrain();
+  toast("Fichier téléchargé : déposez-le dans la page qui vient de s'ouvrir.");
+}
+const trainActions = {
+  "tr-start"(el){ const c = el.dataset.c; TS.t0[c] = Date.now(); actions.present({dataset:{c, i:"0"}}); P.trainSaved = false; },
+  "tr-send"(el){ trainMail(el.dataset.c); },
+  "tr-cert"(el){ trainCert(el.dataset.c).catch(() => toast("L'attestation n'a pas pu être générée. Vérifiez votre connexion.")); },
+  "tr-drop"(el){ trainDrop(el.dataset.c); },
+  "tr-edit"(){ TS.step = "reg"; renderTrain(); }
+};
+function trainSubmit(){
+  const v = id => ($("#" + id)?.value || "").trim(), me = {prenom:v("tr-prenom"), nom:v("tr-nom"), email:v("tr-email"), service:v("tr-service")};
+  const err = !me.prenom || !me.nom ? "Indiquez votre prénom et votre nom." : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(me.email) ? "Indiquez une adresse e-mail valide." : !me.service ? "Indiquez votre service ou votre direction." : "";
+  if (err) { $("#tr-err").textContent = err; return; }
+  TS.me = me; TS.step = "cat"; tSave(); renderTrain(); window.scrollTo(0, 0);
+}
+
+/* ================= Formation à distance : côté DPO ================= */
+const TRAIN_BASE_DEFAULT = "https://asmo97007.github.io/egide-rgpd/";
+function trainBase(){
+  const saved = (S.trainCfg || {}).base; if (saved) return saved;
+  if (/github\.io$/.test(location.hostname)) return location.origin + location.pathname;
+  return TRAIN_BASE_DEFAULT;
+}
+function trainLink(cfg){
+  const q = new URLSearchParams();
+  if (cfg.cours?.length && cfg.cours.length < COURSES.length) q.set("c", cfg.cours.join(","));
+  if (S.org.raisonSociale) q.set("org", S.org.raisonSociale);
+  if (cfg.dpo) q.set("dpo", cfg.dpo);
+  if (cfg.up) q.set("up", cfg.up);
+  const dirs = orgDirs(S.org); if (dirs.length) q.set("dir", dirs.join("|"));
+  return trainBase().replace(/#.*$/, "") + "#formation&" + q.toString();
+}
+function parseResults(text){
+  const out = []; const push = o => { if (o && o.type === "egide-formation" && o.email && o.cours) out.push(o); };
+  for (const m of String(text).matchAll(/EGIDE1\.([A-Za-z0-9_-]{20,})/g)) { try { push(JSON.parse(unb64u(m[1]))); } catch {} }
+  try { const j = JSON.parse(text); [].concat(j).forEach(push); } catch {}
+  return out;
+}
+async function importResults(list){
+  if (!list.length) { toast("Aucun résultat Égide trouvé : collez le contenu des e-mails reçus ou choisissez les fichiers .json."); return 0; }
+  let n = 0;
+  for (const r of list) {
+    const id = qhash(`${r.email.toLowerCase()}|${r.cours}|${r.date}`).slice(1);
+    if (S.results?.has(id)) continue;
+    await S.db.collection("resultats").doc(id).set({prenom:r.prenom, nom:r.nom, email:r.email, service:r.service || "", cours:r.cours, coursTitre:r.coursTitre || r.cours, score:+r.score, total:+r.total, pct:+r.pct, reussi:!!r.reussi, date:r.date, dureeMin:+r.dureeMin || null, importeLe:new Date().toISOString()});
+    n++;
+  }
+  toast(n ? `${n} résultat${n > 1 ? "s" : ""} importé${n > 1 ? "s" : ""}` : "Ces résultats étaient déjà importés.");
+  return n;
+}
+function vTrainAdmin(){
+  const cfg = {cours:COURSES.map(c => c.id), dpo:S.org.dpoEmail || "", up:"", ...(S.trainCfg || {})};
+  const link = trainLink(cfg), rs = [...(S.results || new Map()).values()].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  const people = new Set(rs.map(r => r.email.toLowerCase())).size, okN = rs.filter(r => r.reussi).length;
+  return `<section class="panel trn-adm" id="trn-adm">
+    <div class="panel-h"><h2>Former vos collègues à distance</h2><span class="pill t-neutral">Sans compte, depuis un simple lien</span></div>
+    <div class="panel-b">
+      <p class="muted" style="margin:0 0 12px;max-width:80ch">Vos collègues ouvrent le lien, s'inscrivent, suivent uniquement les modules choisis et passent le quiz. Ils n'ont accès à rien d'autre dans Égide. Leur résultat vous parvient par e-mail${cfg.up ? " ou par dépôt dans SharePoint" : ""} ; vous l'importez ici en un clic.</p>
+      <div class="trn-grid">
+        <div><span class="lbl">Modules proposés</span><div class="trn-cours">${COURSES.map(c => `<label class="chk"><input type="checkbox" data-trn-c="${c.id}" ${cfg.cours.includes(c.id) ? "checked" : ""}><span>${c.art.main} ${esc(c.short)}</span></label>`).join("")}</div></div>
+        <div class="fields">
+          <div class="f"><label for="trn-dpo">E-mail qui reçoit les résultats</label><input id="trn-dpo" type="email" value="${esc(cfg.dpo)}" placeholder="dpo@entreprise.fr"></div>
+          <div class="f"><label for="trn-up">Lien de dépôt SharePoint (facultatif)</label><input type="text" id="trn-up" value="${esc(cfg.up)}" placeholder="Lien « Demander des fichiers »"><span class="hint">Dans OneDrive ou SharePoint : clic droit sur un dossier, « Demander des fichiers ».</span></div>
+        </div>
+      </div>
+      <div class="trn-link"><code id="trn-link">${esc(link)}</code></div>
+      <div class="actions"><button class="btn primary" data-action="trn-copy">${I.copy}Copier le lien</button><button class="btn" data-action="trn-mail">${I.send}Préparer l'e-mail d'invitation</button><button class="btn ghost" data-action="trn-test">${I.eye}Tester comme un collègue</button></div>
+    </div></section>
+  <section class="panel trn-res">
+    <div class="panel-h"><h2>Résultats des collègues</h2>${rs.length ? `<span class="pill t-ok">${people} personne${people > 1 ? "s" : ""} formée${people > 1 ? "s" : ""} · ${okN}/${rs.length} modules validés</span>` : ""}</div>
+    <div class="panel-b">
+      <div class="trn-imp"><textarea id="trn-paste" rows="3" placeholder="Collez ici le contenu d'un ou plusieurs e-mails de résultat (le code commence par EGIDE1.)"></textarea>
+        <div class="actions"><button class="btn primary" data-action="trn-paste" ${W() ? "" : "disabled"}>${I.check}Importer le texte collé</button><label class="btn ${W() ? "" : "disabled"}">${I.up}Importer des fichiers .json<input type="file" accept=".json,application/json,.txt" multiple data-trn-files hidden></label>${rs.length ? `<button class="btn ghost" data-action="trn-csv">${I.down || I.pdf}Exporter (Excel)</button>` : ""}</div></div>
+      ${rs.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Collaborateur</th><th>Service</th><th>Module</th><th>Score</th><th>Date</th><th></th></tr></thead><tbody>${rs.map(r => `<tr><td><b>${esc(r.prenom)} ${esc(r.nom)}</b><br><small class="muted">${esc(r.email)}</small></td><td>${esc(r.service)}</td><td>${esc(r.coursTitre)}</td><td><span class="pill ${r.reussi ? "t-ok" : "t-warn"}">${r.score}/${r.total} · ${r.pct} %</span></td><td>${fmtD((r.date || "").slice(0, 10))}</td><td>${W() ? `<button class="btn ghost sm" data-action="trn-del" data-id="${esc(r._id)}" aria-label="Supprimer">${I.close}</button>` : ""}</td></tr>`).join("")}</tbody></table></div>`
+      : `<p class="muted" style="margin:12px 0 0">Aucun résultat importé pour l'instant.</p>`}
+    </div></section>`;
+}
+function trnCfgFromDom(){
+  return {cours:[...document.querySelectorAll("[data-trn-c]")].filter(x => x.checked).map(x => x.dataset.trnC), dpo:($("#trn-dpo")?.value || "").trim(), up:($("#trn-up")?.value || "").trim(), base:(S.trainCfg || {}).base || ""};
+}
+async function trnSaveCfg(){
+  const cfg = trnCfgFromDom(); S.trainCfg = cfg; const l = $("#trn-link"); if (l) l.textContent = trainLink(cfg);
+  if (W() && S.db) { try { await S.db.doc("config/formationDistance").set(cfg); } catch {} }
+}
+const trnActions = {
+  async "trn-copy"(){ await trnSaveCfg(); const l = trainLink(S.trainCfg || {}); try { await navigator.clipboard.writeText(l); toast("Lien copié : collez-le dans un e-mail ou un message Teams."); } catch { const n = $("#trn-link"); if (n) { const r = document.createRange(); r.selectNodeContents(n); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } toast("Lien sélectionné : copiez-le avec Ctrl + C."); } },
+  async "trn-mail"(){ await trnSaveCfg(); const cfg = S.trainCfg || {}, l = trainLink(cfg), n = (cfg.cours || []).length;
+    const body = `Bonjour,\n\nDans le cadre de notre démarche de protection des données personnelles, je vous invite à suivre ${n > 1 ? `les ${n} modules de formation RGPD` : "le module de formation RGPD"} proposé${n > 1 ? "s" : ""} dans Égide.\n\n1. Ouvrez ce lien dans Edge ou Chrome :\n${l}\n\n2. Inscrivez-vous (nom, service, e-mail).\n3. Suivez le module puis répondez au quiz de 10 questions (environ 20 à 30 minutes par module).\n4. À la fin, cliquez sur « Envoyer mon résultat au DPO » et envoyez l'e-mail qui s'ouvre.\n\nVous pouvez vous arrêter et reprendre plus tard depuis le même navigateur.\n\nMerci,\n${S.org.dpoNom || ""}${S.org.dpoNom ? "\nDélégué à la protection des données" : ""}`;
+    location.href = `mailto:?subject=${encodeURIComponent("Formation RGPD à suivre")}&body=${encodeURIComponent(body)}`; },
+  async "trn-test"(){ await trnSaveCfg(); window.open(trainLink(S.trainCfg || {}), "_blank", "noopener"); },
+  async "trn-paste"(){ const t = $("#trn-paste")?.value || ""; const n = await importResults(parseResults(t)); if (n && $("#trn-paste")) $("#trn-paste").value = ""; },
+  async "trn-del"(el){ try { await S.db.collection("resultats").doc(el.dataset.id).delete(); toast("Résultat supprimé"); } catch (e) { writeError(e); } },
+  async "trn-csv"(){
+    const rs = [...(S.results || new Map()).values()].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const csv = "﻿" + [["Prénom","Nom","E-mail","Service","Module","Score","Sur","Pourcentage","Validé","Date","Durée (min)"].map(q).join(";")]
+      .concat(rs.map(r => [r.prenom, r.nom, r.email, r.service, r.coursTitre, r.score, r.total, r.pct, r.reussi ? "Oui" : "Non", (r.date || "").slice(0, 10), r.dureeMin ?? ""].map(q).join(";"))).join("\r\n");
+    const name = `formations-rgpd-${new Date().toISOString().slice(0, 10)}.csv`;
+    try { await S.dl.save({filename:name, data:new Blob([csv], {type:"text/csv"})}); toast("Export prêt"); } catch { toast("L'export n'a pas pu être enregistré."); }
+  }
+};
+
 let CUR = COURSES[0], COURSE, QUIZ, SLIDES;
 function setCourse(id, fresh){
   CUR = COURSES.find(c=>c.id===id) || COURSES[0];
@@ -3498,6 +3738,7 @@ function renderNav(){
   $("#org-name-rail").textContent = (S.org.raisonSociale ? "RGPD · "+S.org.raisonSociale : "Conformité RGPD") + (LOCAL?" · édition locale":"");
 }
 function render(){
+  if (TRAIN){ renderTrain(); return; }
   renderNav();
   let html;
   if (S.view==="dashboard") html = vDashboard();
@@ -3735,6 +3976,7 @@ function vFormList(){
     </div>
     ${(()=>{ const qs=qStats(sel.id), L=qLevel(); return `<div class="qlvl"><span class="qlvl-t">${I.spark}Quiz : ${qs.total} questions en banque (${qs.byLv[0]} découverte, ${qs.byLv[1]} confirmé, ${qs.byLv[2]} expert) · <b>${qs.unseen}</b> encore jamais posée${qs.unseen>1?"s":""}. Chaque séance tire ${QN} questions nouvelles.</span><span class="qlvl-c" role="group" aria-label="Niveau du quiz">${[["mixte","Progressif"],["1","Découverte"],["2","Confirmé"],["3","Expert"]].map(([k,t])=>`<button class="chipbtn ${L===k?"on":""}" data-action="quiz-level" data-l="${k}" aria-pressed="${L===k}">${t}</button>`).join("")}</span></div>`; })()}
   </section>
+  ${vTrainAdmin()}
   <div class="head" style="margin-top:6px"><h2>Sessions enregistrées</h2>${exN&&W()?`<button class="btn sm" data-action="del-examples">Retirer les exemples (${exN})</button>`:""}</div>
   ${S.confirmEx?confirmBox(`Supprimer définitivement les ${exN} exemple(s) ?`,"confirm-ex","cancel-ex"):""}
   <p class="muted" style="margin-top:-12px;max-width:70ch">Garder une trace des sessions prouve que l'entreprise sensibilise ses équipes. La feuille d'émargement se télécharge depuis chaque session.</p>
@@ -3768,7 +4010,7 @@ function slideHTML(sl){
     case "quiz": { const q=QUIZ[sl.qi]; const ans=P.answers[sl.qi];
       return `<div class="slide"><span class="eyebrow m-for ai" style="--i:0">${esc(sl.t)} · <span class="qlv qlv${q.lv||1}">${QLV[q.lv||1]}</span></span><div class="qdots ai" style="--i:0">${QUIZ.map((x,i)=>`<i class="${i===sl.qi?"cur":P.answers[i]==null?"":P.answers[i]===x.a?"good":"bad"}"></i>`).join("")}</div><h2 class="ai" style="--i:1">${esc(q.q)}</h2><div class="qopts">${q.o.map((o,i)=>`<button class="qopt ai ${ans!=null?(i===q.a?"good":i===ans?"bad":""):""}" style="--i:${i+2}" data-action="answer" data-q="${sl.qi}" data-o="${i}" ${ans!=null?"disabled":""}><span class="l">${"ABCD"[i]}</span>${esc(o)}</button>`).join("")}</div>${ans!=null?`<div class="qexp ${ans===q.a?"good":"bad"}"><b>${ans===q.a?"🎉 Bonne réponse !":"💡 Pas tout à fait."}</b> ${esc(q.e)}</div>`:""}</div>`; }
     case "end": { const n=Object.keys(P.answers).length, good=Object.entries(P.answers).filter(([i,a])=>QUIZ[i].a===a).length; const pct = n?Math.round(100*good/QUIZ.length):0;
-      return `<div class="slide cover endc">${n&&pct>=70?confettiHTML():""}<div class="cv-txt"><span class="k ai" style="--i:0">Fin de la formation</span><h2 class="ai" style="--i:1">${esc(sl.t)}</h2><p class="lead ai" style="--i:2">${n?`Résultat du quiz : <b>${good} / ${QUIZ.length}</b>${pct>=80?" : bravo, excellents réflexes !":pct>=50?" : de bonnes bases à consolider.":" : relisez le support stagiaire, il reprend l'essentiel."} `:""}Pensez à enregistrer cette session pour garder une trace de la sensibilisation.</p><div class="actions ai" style="--i:3">${W()?`<button class="btn primary" data-action="pres-record" data-score="${n?good+"/"+QUIZ.length:""}">${I.plus}Enregistrer la session</button>`:""}<button class="btn" data-action="pdf-formation" data-c="${CUR.id}">${I.pdf}Support stagiaire</button><button class="btn" data-action="pres-close">Fermer</button></div></div>${n?`<div class="end-score ai" style="--i:2"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="bg"/><circle cx="60" cy="60" r="50" class="fg" style="--c0:314.2;--c1:${(314.2*(1-good/QUIZ.length)).toFixed(1)}" stroke-dasharray="314.2" stroke-dashoffset="${(314.2*(1-good/QUIZ.length)).toFixed(1)}"/></svg><b>${good}<small>/${QUIZ.length}</small></b></div>`:courseArt(CUR,"xl")}</div>`; }
+      return `<div class="slide cover endc">${n&&pct>=70?confettiHTML():""}<div class="cv-txt"><span class="k ai" style="--i:0">Fin de la formation</span><h2 class="ai" style="--i:1">${esc(sl.t)}</h2><p class="lead ai" style="--i:2">${n?`Résultat du quiz : <b>${good} / ${QUIZ.length}</b>${pct>=80?" : bravo, excellents réflexes !":pct>=50?" : de bonnes bases à consolider.":" : relisez le support stagiaire, il reprend l'essentiel."} `:""}${TRAIN?(n<QUIZ.length?"Répondez à toutes les questions du quiz pour valider le module.":"Fermez pour envoyer votre résultat à votre DPO et télécharger votre attestation."):"Pensez à enregistrer cette session pour garder une trace de la sensibilisation."}</p><div class="actions ai" style="--i:3">${!TRAIN&&W()?`<button class="btn primary" data-action="pres-record" data-score="${n?good+"/"+QUIZ.length:""}">${I.plus}Enregistrer la session</button>`:""}<button class="btn" data-action="pdf-formation" data-c="${CUR.id}">${I.pdf}Support stagiaire</button><button class="btn ${TRAIN?"primary":""}" data-action="pres-close">${TRAIN?"Voir mon résultat":"Fermer"}</button></div></div>${n?`<div class="end-score ai" style="--i:2"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="bg"/><circle cx="60" cy="60" r="50" class="fg" style="--c0:314.2;--c1:${(314.2*(1-good/QUIZ.length)).toFixed(1)}" stroke-dasharray="314.2" stroke-dashoffset="${(314.2*(1-good/QUIZ.length)).toFixed(1)}"/></svg><b>${good}<small>/${QUIZ.length}</small></b></div>`:courseArt(CUR,"xl")}</div>`; }
   }
   return "";
 }
@@ -3777,6 +4019,7 @@ function renderPres(){
   let el = $("#pres");
   if (!P.open){ if (el) el.hidden = true; document.body.style.overflow=""; return; }
   const sl = SLIDES[P.i];
+  if (TRAIN && sl && sl.k==="end") trainCapture();
   el.hidden = false; document.body.style.overflow="hidden";
   el.style.setProperty("--cc", CUR.c); el.style.setProperty("--cc2", CUR.c2);
   const chs = COURSE.map((c,i)=>`<button class="pdot ${i===sl.ci?"on":i<sl.ci?"done":""}" data-action="pres-go" data-i="${chapterStart(i)}" title="${esc(c.ch)}"></button>`).join("") + `<button class="pdot ${sl.ci===COURSE.length?"on":""}" data-action="pres-go" data-i="${SLIDES.findIndex(x=>x.k==="quiz")}" title="Quiz"></button>`;
@@ -7355,7 +7598,7 @@ const actions = {
   "pres-go"(el){ const i=+el.dataset.i; if (i>=0){ P.dir = i<P.i?-1:1; P.i=i; renderPres(); } },
   "pres-reveal"(){ P.rev[P.i]=true; P.still=true; renderPres(); },
   "course-sel"(el){ S.course=el.dataset.c; render(); setTimeout(()=>document.getElementById("fprog")?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"}),30); },
-  "pres-close"(){ P.open=false; try{ if (document.fullscreenElement) document.exitFullscreen(); }catch{} renderPres(); },
+  "pres-close"(){ P.open=false; try{ if (document.fullscreenElement) document.exitFullscreen(); }catch{} renderPres(); if (TRAIN){ trainCapture(); renderTrain(); window.scrollTo(0,0); } },
   "pres-full"(){ try{ const r=document.documentElement.requestFullscreen?.(); r?.catch?.(()=>toast("Le plein écran n'est pas disponible ici. Agrandissez la fenêtre du navigateur.")); }catch{ toast("Le plein écran n'est pas disponible ici."); } },
   answer(el){ const q=+el.dataset.q; if (P.answers[q]!=null) return; P.answers[q]=+el.dataset.o; P.still=true; markQuizSeen(CUR.id,[QUIZ[q]]); renderPres(); },
   "quiz-level"(el){ try{ localStorage.setItem(QLEVEL_K, el.dataset.l); }catch{} const c=S.course||"essentiel"; delete QCACHE[c]; render(); },
@@ -7381,7 +7624,8 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-document.addEventListener("keydown", e => { if (LOCAL && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
+Object.assign(actions, trainActions, trnActions);
+document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
   if (e.target?.id==="chat-in" && e.key==="Enter" && !e.shiftKey){ e.preventDefault(); const q=e.target.value; e.target.value=""; chatAsk(q); return; }
@@ -7424,6 +7668,8 @@ document.addEventListener("input", e => {
 });
 document.addEventListener("change", e => {
   const el = e.target;
+  if (el.dataset.trnC!=null || el.id==="trn-dpo" || el.id==="trn-up"){ trnSaveCfg(); return; }
+  if (el.dataset.trnFiles!=null){ const fs=[...(el.files||[])]; el.value=""; (async()=>{ let all=[]; for (const f of fs){ try{ all=all.concat(parseResults(await f.text())); }catch{} } await importResults(all); })(); return; }
   if (el.id==="sec-auto" && LS){ LS.setLockMinutes(el.value); toast(Number(el.value)?"Verrouillage automatique réglé":"Verrouillage automatique désactivé"); return; }
   if (el.dataset.orglogo!=null){ const f=el.files?.[0]; el.value=""; orgLogo(f); return; }
   if (el.dataset.org && S.orgDraft && el.tagName==="SELECT"){ S.orgDraft[el.dataset.org]=el.value; S.orgDirty=true; orgLive(); return; }
@@ -7461,6 +7707,7 @@ document.addEventListener("change", e => {
 });
 document.addEventListener("submit", async e => {
   e.preventDefault();
+  if (e.target.id==="tr-reg"){ trainSubmit(); return; }
   if (e.target.id==="chat-form"){ const i=$("#chat-in"); const q=i?.value||""; if (i) i.value=""; return chatAsk(q); }
   if (e.target.id==="edit-form") return saveDraft();
   if (e.target.id==="org-form"){
@@ -7573,7 +7820,7 @@ function renderWelcome(){
   if (!WEL.open){ el.hidden = true; el.innerHTML = ""; if (!P.open) document.body.style.overflow = ""; return; }
   el.hidden = false; el.classList.remove("out"); document.body.style.overflow = "hidden";
   const last = WEL.since ? new Date(WEL.since).toLocaleString("fr-FR",{weekday:"long", day:"numeric", month:"long", hour:"2-digit", minute:"2-digit"}) : "";
-  const sub = WEL.mode==="journal" ? "Journal d'activité" + (last?` depuis le ${last}`:"") : WEL.first ? "Bienvenue dans Égide, votre espace de conformité RGPD." : `Ravi de vous revoir. Dernière visite : ${last}.`;
+  const sub = WEL.mode==="journal" ? "Activité enregistrée" + (last?` depuis votre précédente ouverture, le ${last}`:"") : WEL.first ? "Bienvenue dans Égide, votre espace de conformité RGPD." : `Ravi de vous revoir. Dernière visite : ${last}.`;
   el.innerHTML = `<span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
     <div class="wbox">
       <div class="wlogo">${LOGO_ANIM}${WEL.burst?"":confettiHTML()}</div>
@@ -7604,15 +7851,17 @@ function welcomeReady(){
 
 /* ================= Démarrage ================= */
 try { S.prefs = JSON.parse(localStorage.getItem("egide-prefs")||"{}"); } catch { S.prefs = {}; }
+{ const av=$("#appver"); if (av) av.textContent = "version "+EGIDE_VERSION; }
+if (TRAIN){ WEL.open = false; document.title = "Formation RGPD · Égide"; }
 render(); renderWelcome();
-(async () => {
+(async () => { if (TRAIN) return;
   const [db, user, dl] = await Promise.all([claude.use("db"), claude.use("user"), claude.use("downloads")]);
   S.db = db; S.user = user; S.dl = dl;
   if (!db){ S.dbOk=false; MOD_KEYS.forEach(k=>S.loaded[k]=true); setSync("off"); WEL.since = S.prefs.lastVisit||null; WEL.first = !WEL.since; WEL.saved = true; render(); welcomeReady(); return; }
   S.dbOk = true; setSync("on");
   if (LOCAL){ LS.onChange = () => { setSync("on"); if (document.activeElement?.closest?.(".secp")) return; if (["backup","dashboard"].includes(S.view)) render(); }; await LS.init; setSync("on"); }
   if (user){ S.uid = await user.id(); const c = await user.can("data.write"); if (c===false) S.canWrite=false; try{ S.meName = (await user.me()).name || ""; }catch{} }
-  if (prefsPath()){ try { const ps = await db.doc(prefsPath()).get(); if (ps.exists) S.prefs = {...S.prefs, ...ps.data()}; } catch {} }
+  if (prefsPath()){ try { const ps = await db.doc(prefsPath()).get(); if (ps.exists){ const lv=[S.prefs.lastVisit, ps.data().lastVisit].filter(Boolean).sort().pop(); S.prefs = {...S.prefs, ...ps.data(), ...(lv?{lastVisit:lv}:{})}; } } catch {} }
   WEL.since = S.prefs.lastVisit || null; WEL.first = !WEL.since;
   if (S.prefs.skipWelcome && WEL.mode==="open" && WEL.open){ WEL.open = false; }
   renderWelcome();
@@ -7628,6 +7877,8 @@ render(); renderWelcome();
   claude.use("sample").then(sm=>{ S.sample=sm; if (S.view==="news" && !quiet()) render(); }).catch(()=>{});
   db.doc("config/veille").onSnapshot(snap => { if (snap.exists){ const d=snap.data(); if (!d || !d.genereLe || !Array.isArray(d.actions)) return; if (!S.np) S.np={}; if (!S.np.plan || (d.genereLe||"")>=(S.np.plan.genereLe||"")) { S.np.plan = {...d, actions:arr(d.actions)}; if (S.view==="news" && !quiet() && !S.np.busy) render(); } } }, () => {});
   claude.use("assets").then(a=>{ S.assets=a; if (!quiet() && ["detail","pieces"].includes(S.view)) render(); }).catch(()=>{});
+  db.collection("resultats").onSnapshot(snap => { S.results = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (S.view==="list" && S.mod==="formations" && !quiet() && !(document.activeElement?.matches?.("input,textarea,select") && document.activeElement.closest(".trn-adm,.trn-res"))) render(); }, () => {});
+  db.doc("config/formationDistance").onSnapshot(snap => { if (snap.exists) S.trainCfg = snap.data(); }, () => {});
   db.collection("campagnes").onSnapshot(snap => { S.camps = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (quiet()) renderNav(); else if (["revue","dashboard","detail"].includes(S.view)) render(); else renderNav(); }, () => {});
   db.collection("rapports").onSnapshot(snap => { S.rapports = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); S.rapportsLoaded = true; arAutoCheck(); if (!quiet() && ["rapport","dashboard"].includes(S.view)) render(); }, () => { S.rapportsLoaded = true; });
   db.collection("pieces").onSnapshot(snap => { S.pieces = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); S.piecesLoaded = true; if (quiet() || S.pjBusy || S.pjEdit || S.consDone) renderNav(); else if (["detail","pieces"].includes(S.view) || (S.view==="list" && S.mod==="soustraitants")) render(); else renderNav(); }, () => { S.piecesLoaded = true; });
