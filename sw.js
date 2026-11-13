@@ -1,7 +1,7 @@
 /* Égide : fonctionnement hors connexion.
    L'application elle-même est mise en cache ; vos données ne passent jamais par ici
    (elles restent dans le navigateur et dans votre fichier egide-donnees.json). */
-const VERSION = "egide-2026-11-13e";
+const VERSION = "egide-2026-11-13f";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "favicon-32.png"];
 
 self.addEventListener("install", e => {

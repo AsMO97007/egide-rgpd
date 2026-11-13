@@ -2392,7 +2392,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.13-c";
+const EGIDE_VERSION = "2026.11.13-d";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -2434,18 +2434,20 @@ function dirMatch(v, dirs = orgDirections()){
   return "";
 }
 /* Direction affichée et utilisée pour les regroupements : celle de l'organisation, sinon « à rattacher » */
-const dirOf = t => { const s=(t?.service||"").trim(); if (!s) return ""; return orgDirections().includes(s) ? s : (dirMatch(s) ? s : DIR_HORS); };
-const dirExact = t => { const s=(t?.service||"").trim(); return !!s && orgDirections().includes(s); };
-const dirLabel = t => { const s=(t?.service||"").trim(); return !s ? "" : orgDirections().includes(s) ? s : DIR_HORS; };
+/* Même direction si seuls des caractères invisibles diffèrent (espaces insécables, accents codés autrement, majuscules) */
+const dirCanon = v => { const k = norm2(dirClean(v)); return k ? (orgDirections().find(d=>norm2(d)===k) || "") : ""; };
+const dirOf = t => { const s=(t?.service||"").trim(); if (!s) return ""; return dirCanon(s) || (dirMatch(s) ? s : DIR_HORS); };
+const dirExact = t => !!dirCanon(t?.service);
+const dirLabel = t => { const s=(t?.service||"").trim(); return !s ? "" : (dirCanon(s) || DIR_HORS); };
 function respPick(r){
   const s = String(r||"").trim(); if (!s || /^dpo$/i.test(s)) return "DPO";
   const parts = s.split(/\s+(?:et|avec)\s+/i);
-  const hits = [...new Set(parts.map(p=>/\bdpo\b|délégué/i.test(p) ? "DPO" : (orgDirections().includes(p.trim()) ? p.trim() : dirMatch(p))).filter(Boolean))];
+  const hits = [...new Set(parts.map(p=>/\bdpo\b|délégué/i.test(p) ? "DPO" : (dirCanon(p) || dirMatch(p))).filter(Boolean))];
   return hits.length ? hits.join(" et ") : "DPO";
 }
 function dirOrphans(){
   const dirs = orgDirections(); const g = {};
-  ["traitements","conservation"].forEach(m=>items(m).forEach(t=>{ const s=(t.service||"").trim(); if (!s || dirs.includes(s)) return; (g[s] ||= {name:s, sugg:dirMatch(s,dirs), list:[]}).list.push([m,t]); }));
+  ["traitements","conservation"].forEach(m=>items(m).forEach(t=>{ const s=(t.service||"").trim(); if (!s || dirCanon(s)) return; (g[s] ||= {name:s, sugg:dirMatch(s,dirs), list:[]}).list.push([m,t]); }));
   return Object.values(g).sort((a,b)=>b.list.length-a.list.length);
 }
 function orgOrphansPanel(){
@@ -2468,7 +2470,8 @@ async function dirFixApply(){
 }
 function directionSelect(cur){
   const org = orgDirections(); cur = String(cur||"").trim();
-  const stray = cur && !org.includes(cur);
+  const canon = dirCanon(cur); if (canon){ cur = canon; if (S.draft && S.draft.service && S.draft.service!==canon && dirCanon(S.draft.service)===canon) S.draft.service = canon; }
+  const stray = cur && !canon;
   if (!org.length) return `<div class="notice warn" style="margin:0">${I.alert}<div>Aucune direction déclarée. Ajoutez vos directions dans la page <button class="lnk" type="button" data-action="nav" data-view="org">Organisation</button>.</div></div><input type="hidden" id="e-service" data-field="service" value="${esc(cur)}">`;
   return `<select id="e-service-sel" data-dirsel aria-label="Direction concernée"><option value="" ${!cur?"selected":""}>Choisir une direction</option>
     ${org.map(l=>`<option ${cur===l?"selected":""}>${esc(l)}</option>`).join("")}
@@ -3629,7 +3632,7 @@ MODS.traitements.alerts = t => {
   if (t.statut==="archive") return [];
   const a=[];
   if (arr(t.sensibles).length && !t.sensiblesJustif?.trim()) a.push({sev:"crit", t:"Données sensibles sans exception justifiée", s:"Indiquez l'exception de l'article 9.2 qui autorise ce traitement."});
-  if (t.service?.trim() && !orgDirections().includes(t.service.trim()) && orgDirections().length) a.push({sev:"warn", t:"Direction hors organisation", s:`« ${t.service.trim()} » ne fait pas partie des directions déclarées dans la page Organisation.`});
+  if (t.service?.trim() && !dirCanon(t.service) && orgDirections().length) a.push({sev:"warn", t:"Direction hors organisation", s:`« ${t.service.trim()} » ne fait pas partie des directions déclarées dans la page Organisation.`});
   { const sh = sensHints(t).filter(h=>!h.coche); if (sh.length) a.push({sev:"info", t:"Indice de données sensibles à vérifier", s:sh.map(h=>`« ${h.mot} » → ${h.cat}`).join(" ; ")}); }
   if (arr(t.donnees).includes("Infractions et condamnations") && !/art(icle)?\.? ?10|autoris|loi/i.test(String(t.baseLegaleDetail||"")+String(t.sensiblesJustif||""))) a.push({sev:"warn", t:"Données d'infractions : justifier l'article 10", s:"Ces données ne peuvent être traitées que dans les cas prévus par la loi : précisez le texte qui l'autorise dans la justification."});
   if (t.transfertHorsUE && !t.transfertGaranties?.trim()) a.push({sev:"crit", t:"Transfert hors UE sans garantie", s:"Précisez la garantie : décision d'adéquation, clauses contractuelles types…"});
@@ -3909,7 +3912,8 @@ function blankOf(mod){
 }
 
 /* --- Rôles, modèles, durées, champs d'import --- */
-const orgDirections = () => [...new Set(String(S.org.services||"").split(/[,;\n]/).map(x=>x.trim()).filter(Boolean))];
+const dirClean = x => String(x||"").normalize("NFC").replace(/[\u00A0\u202F\u2007\s]+/g," ").replace(/[\u2019\u2018]/g,"'").trim();
+const orgDirections = () => [...new Set(String(S.org.services||"").split(/[,;\n]/).map(dirClean).filter(Boolean))];
 const ROLES = {responsable:"Responsable du traitement", conjoint:"Responsable conjoint (art. 26)", soustraitant:"Sous-traitant pour le compte d'un client (art. 30.2)"};
 const SEC_BASE = ["Contrôle d'accès des utilisateurs","Traçabilité des accès (journalisation)","Sauvegardes régulières","Politique de mots de passe / MFA","Sensibilisation des utilisateurs"];
 const TPL = [
