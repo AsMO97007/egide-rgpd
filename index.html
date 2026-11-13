@@ -2001,6 +2001,15 @@ ul.senswhy li{display:flex;flex-direction:column;padding:6px 10px;border-radius:
 .nmore{display:flex;justify-content:center}
 .ncard .nres{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .ncard.feat .nres{-webkit-line-clamp:unset;display:block}
+
+/* --- Numérotation --- */
+.numpanel .chipbtn.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.num-r{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:8px}
+.numprev{margin:12px 0 8px;padding:10px 12px;border-radius:12px;background:var(--sunk,rgba(0,0,0,.03));font-size:.85rem}
+.numprev-l{margin-top:8px;max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:3px}
+.numprev-l>div{display:grid;grid-template-columns:120px 18px 120px minmax(0,1fr);gap:6px;align-items:baseline;font-family:var(--mono,ui-monospace,monospace);font-size:.8rem}
+.numprev-l s{color:var(--muted)}.numprev-l span{color:var(--primary)}.numprev-l small{font-family:inherit;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:system-ui,sans-serif}
+@media (max-width:640px){.numprev-l>div{grid-template-columns:auto 14px auto}.numprev-l small{grid-column:1/-1}}
 </style>
 
 <div class="app">
@@ -2392,7 +2401,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.13-d";
+const EGIDE_VERSION = "2026.11.13-e";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -4548,9 +4557,10 @@ function vTrtList(){
   ${roBanner()}
   <div class="head">
     ${pageTitle("traitements","Registre des traitements")}
-    <div class="actions">${exN&&W()?`<button class="btn" data-action="del-examples">Retirer tous les exemples (${exN})</button>`:""}<button class="btn" data-action="import-open" ${W()?"":"disabled"}>${I.up}Importer</button><button class="btn" data-action="xlsx-export" ${S.dl?"":"disabled"}>${I.dl}Excel</button><button class="btn" data-action="pdf-registre">${I.pdf}Registre PDF</button><button class="btn mod" data-action="new" data-mod="traitements" ${W()?"":"disabled"}>${I.plus}Nouveau traitement</button></div>
+    <div class="actions">${exN&&W()?`<button class="btn" data-action="del-examples">Retirer tous les exemples (${exN})</button>`:""}<button class="btn" data-action="num-open" ${W()?"":"disabled"} title="Harmoniser la numérotation des traitements">#&nbsp;Numérotation${refFormats("traitements").length>1?` <span class="pill t-warn">${refFormats("traitements").length} formats</span>`:""}</button><button class="btn" data-action="import-open" ${W()?"":"disabled"}>${I.up}Importer</button><button class="btn" data-action="xlsx-export" ${S.dl?"":"disabled"}>${I.dl}Excel</button><button class="btn" data-action="pdf-registre">${I.pdf}Registre PDF</button><button class="btn mod" data-action="new" data-mod="traitements" ${W()?"":"disabled"}>${I.plus}Nouveau traitement</button></div>
   </div>
   ${S.confirmEx?confirmBox(`Supprimer définitivement les ${exN} fiches d'exemple, dans tous les modules ?`,"confirm-ex-all","cancel-ex"):""}
+  ${S.numOpen?numPanel("traitements"):""}
   ${summaryStrip(BASES.map((b,i)=>({l:b.l, n:all.filter(t=>t.statut!=="archive"&&basesOf(t).includes(b.k)).length, c:["#0088CE","#003865","#97C7EC","#BA6AA7","#800064","#5C7FA3"][i]})), "Bases légales")}
   ${filterBar("traitements",{ph:"Rechercher un traitement, une donnée, un sous-traitant…", extra:`<span class="fsep" aria-hidden="true"></span><select id="f-service" class="fsel ${f.service?"on":""}" aria-label="Direction"><option value="">Toutes les directions</option>${services.map(s=>`<option ${f.service===s?"selected":""}>${esc(s)}</option>`).join("")}</select><select id="f-base" class="fsel ${f.base?"on":""}" aria-label="Base légale"><option value="">Toutes les bases légales</option>${BASES.map(b=>`<option value="${b.k}" ${f.base===b.k?"selected":""}>${b.l}</option>`).join("")}</select>`})}
   <div class="panel"><div class="list-h has-md" style="${colsStyle(TRT_COLS)}"><span>Réf.</span><span>Traitement</span><span class="hide-md">Base légale</span><span>Complétude</span><span>Statut</span></div><div class="list" id="rows"></div></div>`;
@@ -7538,7 +7548,7 @@ const CHAT = {open:false, msgs:[], busy:false, ctl:null, err:"", props:[], tools
 try{ const c = JSON.parse(localStorage.getItem("egide-chat")||"null"); if (c && Array.isArray(c.msgs)) CHAT.msgs = c.msgs.slice(-20); }catch{}
 const chatSave = () => { try{ localStorage.setItem("egide-chat", JSON.stringify({msgs:CHAT.msgs.slice(-20)})); }catch{} };
 const CHAT_SUGG = ["Que dois-je faire en priorité cette semaine ?","Quels traitements contiennent des données de santé ?","Résume l'état de notre conformité pour la direction","Comment répondre à une demande d'effacement d'un ancien salarié ?","Quels sous-traitants hébergent des données hors de l'Union européenne ?","Combien de temps garder les CV des candidats ?"];
-function findByRef(ref){ const r=String(ref||"").trim().toUpperCase(); for (const m of MOD_KEYS){ const t=items(m).find(x=>String(x.ref||"").toUpperCase()===r); if (t) return [m,t]; } return null; }
+function findByRef(ref){ const r=String(ref||"").trim().toUpperCase(); for (const m of MOD_KEYS){ const t=items(m).find(x=>String(x.ref||"").toUpperCase()===r) || items(m).find(x=>arr(x.refAnciennes).some(o=>String(o).toUpperCase()===r)); if (t) return [m,t]; } return null; }
 function ficheText(m, t){
   if (m==="traitements") return {ref:t.ref, module:"traitement", nom:t.nom, statut:optL(STATUTS,t.statut), direction:t.service, pilote:t.pilote, finalites:finText(t), baseLegale:[basesLabel(t),t.baseLegaleDetail].filter(Boolean).join(" — "), personnes:[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(", "), donnees:[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", "), sensibles:arr(t.sensibles).join(", "), destinatairesInternes:t.destinatairesInternes, destinatairesExternes:t.destinatairesExternes, sousTraitants:t.sousTraitants, horsUE:t.transfertHorsUE?`${t.transfertPays} (${t.transfertGaranties||"garanties à préciser"})`:"non", conservation:t.conservation, archivage:t.conservationArchivage, securite:arr(t.securite).join(", "), aipd:AIPD_FLAG[t.aipd], information:infoText(t), prochaineRevue:t.prochaineRevue, completude:completeness(t)+" %", points:MODS.traitements.alerts(t).map(a=>a.t)};
   const o = {ref:t.ref, module:MODS[m].single, titre:titleOf(m,t)}; MODS[m].sections.forEach(s=>s.fields.forEach(f=>{ if (f.t==="heading") return; const v=plainText(m,f,t); if (v && String(v).trim()) o[f.l]=String(v).slice(0,600); })); o.points = MODS[m].alerts(t).map(a=>a.t); return o;
@@ -8218,7 +8228,64 @@ function pdfEmargement(){
 }
 
 /* ================= Écritures ================= */
+/* ================= Numérotation des fiches ================= */
+const refSplit = r => { const m = String(r||"").trim().match(/^(.*?)(\d+)$/); return m ? {p:m[1], n:+m[2], w:m[2].length} : {p:String(r||"").trim(), n:0, w:0}; };
+function refFormats(mod){
+  const g = {}; items(mod).forEach(t=>{ const s=refSplit(t.ref); if (!s.w) return; const k=s.p+"|"+s.w; (g[k] ||= {p:s.p, w:s.w, n:0}).n++; });
+  return Object.values(g).sort((a,b)=>b.n-a.n);
+}
+const refFmt = mod => S.org?.refFormats?.[mod] || null;
+function numPlan(mod, p, w, mode){
+  const all = items(mod).slice().sort((a,b)=>{ const A=refSplit(a.ref), B=refSplit(b.ref); return (A.p===p?0:1)-(B.p===p?0:1) || A.p.localeCompare(B.p) || A.n-B.n || String(a.dateCreation||"").localeCompare(String(b.dateCreation||"")); });
+  const out = []; const used = new Set();
+  if (mode==="garder"){
+    all.forEach(t=>{ const s=refSplit(t.ref); if (s.p===p && s.n && !used.has(s.n)){ used.add(s.n); out.push([t, `${p}${String(s.n).padStart(w,"0")}`]); } });
+    let n = Math.max(0, ...used);
+    all.filter(t=>!out.some(o=>o[0]===t)).forEach(t=>{ n++; out.push([t, `${p}${String(n).padStart(w,"0")}`]); });
+  } else {
+    all.forEach((t,i)=>out.push([t, `${p}${String(i+1).padStart(w,"0")}`]));
+  }
+  return out.map(([t,nr])=>({t, old:t.ref||"", nr, chg:(t.ref||"")!==nr}));
+}
+function numPanel(mod){
+  const fm = refFormats(mod); if (!fm.length && !items(mod).length) return "";
+  const N = S.num || (S.num = {p:(refFmt(mod)?.p ?? fm[0]?.p ?? MODS[mod].prefix+"-"), w:(refFmt(mod)?.w ?? fm[0]?.w ?? 3), mode:"garder"});
+  const plan = numPlan(mod, N.p, +N.w||3, N.mode); const chg = plan.filter(x=>x.chg);
+  return `<section class="panel numpanel" id="numpanel"><div class="panel-h"><h2>Harmoniser la numérotation</h2><button class="btn sm ghost" data-action="num-close" aria-label="Fermer">${I.close}</button></div><div class="panel-b">
+    <p class="muted" style="margin:0 0 10px">Formats utilisés aujourd'hui : ${fm.map(f=>`<button type="button" class="chipbtn ${N.p===f.p&&+N.w===f.w?"on":""}" data-action="num-pick" data-p="${esc(f.p)}" data-w="${f.w}"><b>${esc(f.p)}${"0".repeat(f.w-1)}1</b> · ${f.n} fiche${f.n>1?"s":""}</button>`).join(" ")}</p>
+    <div class="fields">
+      <div class="f"><label for="num-p">Préfixe</label><input type="text" id="num-p" data-num="p" value="${esc(N.p)}" placeholder="Ex. : ALT-RT-"></div>
+      <div class="f"><label for="num-w">Nombre de chiffres</label><select id="num-w" data-num="w">${[2,3,4].map(x=>`<option ${+N.w===x?"selected":""}>${x}</option>`).join("")}</select></div>
+      <div class="f full"><span class="lbl">Méthode</span><div class="radios num-r">
+        <label><input type="radio" name="num-mode" data-num="mode" value="garder" ${N.mode==="garder"?"checked":""}><span><b>Garder les numéros existants de ce format</b><br><small>Les autres fiches prennent les numéros suivants. Recommandé : les références déjà citées dans vos documents restent valables.</small></span></label>
+        <label><input type="radio" name="num-mode" data-num="mode" value="tout" ${N.mode==="tout"?"checked":""}><span><b>Tout renuméroter à partir de 1</b><br><small>Numérotation continue, sans trou.</small></span></label>
+      </div></div>
+    </div>
+    <div class="numprev"><b>${chg.length} fiche${chg.length>1?"s":""} ${chg.length>1?"changent":"change"} de référence</b>${chg.length?`<div class="numprev-l">${chg.slice(0,60).map(x=>`<div><s>${esc(x.old||"(sans référence)")}</s><span>→</span><b>${esc(x.nr)}</b><small>${esc(x.t.nom||"")}</small></div>`).join("")}${chg.length>60?`<p class="muted">… et ${chg.length-60} autres</p>`:""}</div>`:""}</div>
+    <p class="hint">L'ancienne référence est gardée dans l'historique de chaque fiche et reste reconnue par la recherche. Les nouvelles fiches suivront ce format.</p>
+    <div class="actions"><button class="btn primary" data-action="num-apply" ${W()&&N.p.trim()?"":"disabled"}>${I.check}${chg.length?`Appliquer à ${chg.length} fiche${chg.length>1?"s":""}`:"Enregistrer ce format"}</button></div>
+  </div></section>`;
+}
+async function numApply(mod){
+  const N = S.num; const p = N.p.trim() ? N.p : ""; if (!p) return;
+  const plan = numPlan(mod, p, +N.w||3, N.mode).filter(x=>x.chg);
+  try{
+    for (const x of plan) await persist(mod, x.t._id, {...x.t, ref:x.nr, refAnciennes:[...new Set([...arr(x.t.refAnciennes), x.old].filter(Boolean))]}, `Référence ${x.old||"vide"} remplacée par ${x.nr}`);
+    const doc = {...S.org, refFormats:{...(S.org.refFormats||{}), [mod]:{p, w:+N.w||3}}};
+    await S.db.doc("config/org").set(doc); S.org = doc;
+  }catch(e){ writeError(e); return; }
+  S.numOpen = false; toast(plan.length ? `${plan.length} référence${plan.length>1?"s":""} harmonisée${plan.length>1?"s":""}` : "Format enregistré"); render();
+}
+const numActions = {
+  "num-open"(){ S.numOpen = !S.numOpen; S.num = null; render(); if (S.numOpen) setTimeout(()=>$("#numpanel")?.scrollIntoView({behavior:"smooth",block:"start"}),40); },
+  "num-close"(){ S.numOpen = false; render(); },
+  "num-pick"(el){ S.num = {...(S.num||{}), p:el.dataset.p, w:+el.dataset.w}; render(); },
+  async "num-apply"(){ if (W()) await numApply("traitements"); }
+};
+
 function nextRef(mod){
+  const F = refFmt(mod);
+  if (F && F.p){ const n = Math.max(0, ...items(mod).map(t=>{ const s=refSplit(t.ref); return s.p===F.p ? s.n : 0; })); return `${F.p}${String(n+1).padStart(F.w||3,"0")}`; }
   const y = new Date().getFullYear(); const p = MODS[mod].prefix;
   const n = Math.max(0,...items(mod).map(t=>{ const m=String(t.ref||"").match(new RegExp("^"+p+"-"+y+"-(\\d+)$")); return m?+m[1]:0; }));
   return `${p}-${y}-${String(n+1).padStart(3,"0")}`;
@@ -8496,7 +8563,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
@@ -8526,6 +8593,7 @@ document.addEventListener("click", e => {
 document.addEventListener("input", e => {
   const el = e.target;
   if (el.dataset?.gen!=null){ const g=genInit(); g[el.dataset.gen] = el.type==="checkbox" ? el.checked : el.value; if (el.type==="checkbox" || el.dataset.gen==="useReg") render(); return; }
+  if (el.dataset?.num!=null && S.num){ S.num[el.dataset.num] = el.value; const pos=el.selectionStart; render(); if (el.id==="num-p"){ const n=$("#num-p"); if(n){ n.focus(); try{ n.setSelectionRange(pos,pos); }catch{} } } return; }
   if (el.id==="doc-md" && S.docv?.draft){ S.docv.draft.md=el.value; const p=$("#doc-prev"); if (p) p.innerHTML=docHTML(mdToBlocks(el.value)); return; }
   if (el.id==="doc-titre" && S.docv?.draft){ S.docv.draft.titre=el.value; return; }
   if (el.dataset?.fin!=null && S.draft){ const L=S.draft.finalitesL||(S.draft.finalitesL=finL(S.draft)); const r=L[+el.dataset.fin]; if (r){ r[el.dataset.fk]=el.value; finSync(S.draft); S.dirty=true; refreshEdit(); } return; }
