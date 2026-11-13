@@ -1943,6 +1943,64 @@ body.train .rail,body.train #chatfab,body.train #welcome,body.train #savebtn{dis
 .arv-edhint{color:rgba(255,255,255,.75);font-size:.82rem;margin-right:6px}
 .pjv-btn.primary{background:#0088CE}.pjv-btn.primary:hover{background:#0a77b3}
 @media (max-width:640px){.arv-edhint{display:none}}
+/* --- Documents : aperçu --- */
+.docpaper{font-family:Calibri,"Segoe UI",Carlito,system-ui,sans-serif;color:#2B2F36;padding:56px 64px;line-height:1.55;font-size:.96rem}
+.docpaper h1{font-size:1.6rem;line-height:1.25;color:#003865;margin:0 0 6px;padding-bottom:10px;border-bottom:3px solid #0088CE}
+.docpaper p.sub{color:#6B7785;font-size:.86rem;margin:8px 0 22px}
+.docpaper h2{font-size:1.1rem;color:#003865;margin:24px 0 8px;padding-left:12px;border-left:4px solid #0088CE;line-height:1.3}
+.docpaper h3{font-size:.98rem;color:#800064;margin:16px 0 6px}
+.docpaper p{margin:0 0 9px;text-align:justify;hyphens:auto}
+.docpaper p.note{font-size:.84rem;color:#6B7785;font-style:italic;border-top:1px solid #D6DEE6;padding-top:8px;margin-top:14px;text-align:left}
+.docpaper ul{margin:0 0 10px;padding-left:22px}.docpaper li{margin:0 0 4px;text-align:justify}.docpaper li::marker{color:#0088CE}
+.docpaper table.dkv{width:100%;border-collapse:collapse;margin:4px 0 14px;font-size:.92rem;border-top:1px solid #D6DEE6}
+.docpaper table.dkv th{width:32%;text-align:left;vertical-align:top;background:#EEF4FA;color:#003865;font-weight:700;padding:7px 10px;border-bottom:1px solid #D6DEE6}
+.docpaper table.dkv td{vertical-align:top;padding:7px 10px;border-bottom:1px solid #D6DEE6}
+@media (max-width:640px){.docpaper{padding:28px 20px}.docpaper table.dkv th{width:40%}}
+/* --- Directions --- */
+.dirwarn{display:inline-block;font-size:.72rem;font-weight:700;color:#B86A06;background:rgba(224,162,59,.16);padding:1px 7px;border-radius:99px}
+.hint.warn-t{color:#B86A06}
+.dirfix{border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}
+.dirfix-l{display:flex;flex-direction:column;gap:8px}
+.dirfix-r{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(180px,280px);gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--sunk,rgba(0,0,0,.03))}
+.dirfix-n{display:flex;flex-direction:column;min-width:0}.dirfix-n s{color:var(--muted);font-weight:600}.dirfix-n small{color:var(--muted);font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dirfix-arrow{color:var(--primary);font-weight:700}
+@media (max-width:640px){.dirfix-r{grid-template-columns:minmax(0,1fr)}.dirfix-arrow{display:none}}
+/* --- Conservation et sécurité --- */
+.durref{padding:12px 14px;border-radius:14px;background:var(--primary-soft);border:1px solid color-mix(in srgb,var(--primary) 18%,transparent)}
+.durref-src{font-size:.8rem;color:var(--primary);min-height:0}
+.secg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
+.secg-b{border:1px solid var(--line);border-radius:14px;padding:10px 12px 12px;margin:0;min-width:0}
+.secg-b legend{font-size:.8rem;font-weight:700;color:var(--heading);padding:0 6px}.secg-b legend span{color:var(--muted);font-weight:600;margin-left:4px}
+.secg-b .checks{grid-template-columns:minmax(0,1fr)!important;display:grid;gap:4px}
+/* --- Données sensibles --- */
+.sensh,.riskh,.sensx{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:.84rem;display:flex;flex-direction:column;gap:6px}
+.sensh{background:rgba(128,0,100,.07);border:1px solid rgba(128,0,100,.22)}.sensh>b{color:var(--plum)}
+.sensh-r{display:flex;justify-content:space-between;align-items:center;gap:10px}.sensh-r i{color:var(--muted);font-style:normal}
+.sensh small{color:var(--muted)}
+.sensx{background:var(--sunk,rgba(0,0,0,.03))}.sensx p,.riskh p{margin:0}
+.riskh{background:rgba(224,162,59,.10);border:1px solid rgba(224,162,59,.35)}.riskh>b{color:#B86A06}
+ul.senswhy{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:.84rem}
+ul.senswhy li{display:flex;flex-direction:column;padding:6px 10px;border-radius:10px;background:var(--sunk,rgba(0,0,0,.03))}ul.senswhy li span{color:var(--muted)}
+/* --- Actualités --- */
+.nwrap{display:flex;flex-direction:column;gap:20px}
+.nhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.nsync-btn{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.8rem;font-weight:600;margin-top:6px}
+.nsync-btn:hover,.nsync-btn.on{color:var(--plum);border-color:color-mix(in srgb,var(--plum) 35%,var(--line))}
+.nsync-btn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.nsync{border:1px dashed color-mix(in srgb,var(--plum) 35%,var(--line));border-radius:14px;padding:12px 14px;background:var(--surface);display:flex;flex-direction:column;gap:8px;font-size:.86rem}
+.nsync p{margin:0;color:var(--muted)}.nsync-h{display:flex;justify-content:space-between;align-items:center}
+.nfbar{gap:10px}.nfrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg.nper{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.seg.nper button{all:unset;cursor:pointer;padding:5px 12px;border-radius:999px;font-size:.8rem;font-weight:600;color:var(--muted)}
+.seg.nper button[aria-pressed=true]{background:var(--plum);color:#fff}
+.seg.nper button:focus-visible{outline:2px solid var(--primary)}
+.nfeat-w{display:flex;flex-direction:column;gap:8px}.nfeat-w .eyebrow{--c:var(--plum)}
+.nmonth{display:flex;flex-direction:column;gap:12px}
+.nmonth-h{display:flex;align-items:baseline;gap:10px;font-size:1.02rem;color:var(--heading);text-transform:capitalize;margin:6px 0 0;padding-bottom:6px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg,var(--surface));z-index:1}
+.nmonth-h small{text-transform:none;font-size:.78rem;color:var(--muted);font-weight:600}
+.nmore{display:flex;justify-content:center}
+.ncard .nres{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.ncard.feat .nres{-webkit-line-clamp:unset;display:block}
 </style>
 
 <div class="app">
@@ -2334,7 +2392,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.13-b";
+const EGIDE_VERSION = "2026.11.13-c";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -2349,7 +2407,221 @@ const BASES = [
 const PERSONNES = ["Salariés","Candidats","Stagiaires et alternants","Intérimaires et prestataires","Clients","Prospects","Fournisseurs","Partenaires","Visiteurs des locaux","Utilisateurs du site ou de l'application"];
 const DONNEES = ["État civil, identité, identifiants","Coordonnées","Vie personnelle (habitudes, situation familiale…)","Vie professionnelle (CV, formation, carrière…)","Informations économiques et financières","Données de connexion (adresse IP, logs…)","Données de localisation","Images, photos, vidéos, voix","Numéro de sécurité sociale (NIR)","Infractions et condamnations"];
 const SENSIBLES = ["Origine raciale ou ethnique","Opinions politiques","Convictions religieuses ou philosophiques","Appartenance syndicale","Données génétiques","Données biométriques","Données de santé","Vie ou orientation sexuelle"];
-const SECURITE = ["Contrôle d'accès des utilisateurs","Traçabilité des accès (journalisation)","Sauvegardes régulières","Chiffrement des données","Pseudonymisation","Protection des logiciels (antivirus, mises à jour)","Sécurité physique des locaux","Politique de mots de passe / MFA","Sensibilisation des utilisateurs","Clauses contractuelles avec les sous-traitants"];
+/* ================= Directions : uniquement celles de l'organisation ================= */
+const DIR_HORS = "Direction à rattacher";
+const DIR_FAM = [
+  ["rh", /ressources humaines|\brh\b|personnel|paie|social|talent/],
+  ["si", /systemes? d.information|informatique|numerique|\bdsi\b|\bsi\b|digital|\bit\b|technologies/],
+  ["jur", /juridique|legal|conformite|compliance|risques|audit/],
+  ["com", /commercial|vente|ventes|business|relation client|clients?\b|commerce/],
+  ["mkt", /marketing|communication/],
+  ["ach", /achat|approvisionnement|procurement/],
+  ["fin", /financ|comptab|\bdaf\b|tresorerie|controle de gestion|administrati/],
+  ["dg", /direction generale|\bdg\b|presidence|executive/],
+  ["sur", /surete|services generaux|immobili|moyens generaux|securite des sites|batiment/],
+  ["ope", /operation|production|exploitation|technique|ingenierie|projets?|travaux|maintenance/],
+  ["qse", /qualite|\bqse\b|hse|environnement|rse/],
+  ["rd", /recherche|r&d|innovation|developpement produit/],
+  ["log", /logistique|supply|transport/]
+];
+const dirFam = s => { const n = norm(s); const f = DIR_FAM.find(([,re])=>re.test(n)); return f ? f[0] : ""; };
+function dirMatch(v, dirs = orgDirections()){
+  const s = String(v||"").trim(); if (!s) return "";
+  const n = norm2(s);
+  let m = dirs.find(d=>norm2(d)===n); if (m) return m;
+  m = dirs.find(d=>{ const a=norm2(d); return a.length>3 && n.length>3 && (a.includes(n) || n.includes(a)); }); if (m) return m;
+  const f = dirFam(s); if (f){ m = dirs.find(d=>dirFam(d)===f); if (m) return m; }
+  return "";
+}
+/* Direction affichée et utilisée pour les regroupements : celle de l'organisation, sinon « à rattacher » */
+const dirOf = t => { const s=(t?.service||"").trim(); if (!s) return ""; return orgDirections().includes(s) ? s : (dirMatch(s) ? s : DIR_HORS); };
+const dirExact = t => { const s=(t?.service||"").trim(); return !!s && orgDirections().includes(s); };
+const dirLabel = t => { const s=(t?.service||"").trim(); return !s ? "" : orgDirections().includes(s) ? s : DIR_HORS; };
+function respPick(r){
+  const s = String(r||"").trim(); if (!s || /^dpo$/i.test(s)) return "DPO";
+  const parts = s.split(/\s+(?:et|avec)\s+/i);
+  const hits = [...new Set(parts.map(p=>/\bdpo\b|délégué/i.test(p) ? "DPO" : (orgDirections().includes(p.trim()) ? p.trim() : dirMatch(p))).filter(Boolean))];
+  return hits.length ? hits.join(" et ") : "DPO";
+}
+function dirOrphans(){
+  const dirs = orgDirections(); const g = {};
+  ["traitements","conservation"].forEach(m=>items(m).forEach(t=>{ const s=(t.service||"").trim(); if (!s || dirs.includes(s)) return; (g[s] ||= {name:s, sugg:dirMatch(s,dirs), list:[]}).list.push([m,t]); }));
+  return Object.values(g).sort((a,b)=>b.list.length-a.list.length);
+}
+function orgOrphansPanel(){
+  const dirs = orgDirections(); const orph = dirOrphans();
+  if (!orph.length) return "";
+  return `<section class="panel dirfix" id="dirfix"><div class="panel-h"><h2>Directions à rattacher <span class="pill t-warn">${orph.reduce((s,o)=>s+o.list.length,0)} fiche${orph.reduce((s,o)=>s+o.list.length,0)>1?"s":""}</span></h2></div><div class="panel-b">
+    <p class="muted" style="margin:0 0 12px">Ces fiches sont rattachées à des directions qui ne figurent pas dans votre liste. Choisissez la direction de l'entreprise qui les reprend : Égide ne garde que les directions que vous avez déclarées.</p>
+    ${dirs.length?`<div class="dirfix-l">${orph.map((o,i)=>`<div class="dirfix-r"><div class="dirfix-n"><s>${esc(o.name)}</s><small>${o.list.length} fiche${o.list.length>1?"s":""} : ${esc(o.list.slice(0,3).map(([,t])=>t.ref||t.nom||t.titre).join(", "))}${o.list.length>3?"…":""}</small></div><span class="dirfix-arrow" aria-hidden="true">→</span><select data-dirfix="${i}" aria-label="Nouvelle direction pour ${esc(o.name)}"><option value="">Choisir…</option>${dirs.map(d=>`<option ${o.sugg===d?"selected":""}>${esc(d)}</option>`).join("")}<option value="__vide">Aucune (laisser vide)</option></select></div>`).join("")}</div>
+    <div class="actions" style="margin-top:12px"><button class="btn primary" data-action="dir-fix" ${W()?"":"disabled"}>${I.check}Rattacher les fiches</button></div>`:`<div class="notice warn">${I.alert}<div>Ajoutez d'abord vos directions ci-dessus.</div></div>`}
+  </div></section>`;
+}
+async function dirFixApply(){
+  const orph = dirOrphans(); let n = 0;
+  for (const [i,o] of orph.entries()){
+    const sel = document.querySelector(`[data-dirfix="${i}"]`); const v = sel?.value; if (!v) continue;
+    const nv = v==="__vide" ? "" : v;
+    for (const [m,t] of o.list){ const {_id, ...rest} = t; try{ await S.db.collection(m).doc(_id).set({...rest, service:nv}); n++; }catch(e){ writeError(e); return; } }
+  }
+  toast(n ? `${n} fiche${n>1?"s":""} rattachée${n>1?"s":""}` : "Choisissez une direction pour au moins une ligne.");
+}
+function directionSelect(cur){
+  const org = orgDirections(); cur = String(cur||"").trim();
+  const stray = cur && !org.includes(cur);
+  if (!org.length) return `<div class="notice warn" style="margin:0">${I.alert}<div>Aucune direction déclarée. Ajoutez vos directions dans la page <button class="lnk" type="button" data-action="nav" data-view="org">Organisation</button>.</div></div><input type="hidden" id="e-service" data-field="service" value="${esc(cur)}">`;
+  return `<select id="e-service-sel" data-dirsel aria-label="Direction concernée"><option value="" ${!cur?"selected":""}>Choisir une direction</option>
+    ${org.map(l=>`<option ${cur===l?"selected":""}>${esc(l)}</option>`).join("")}
+    ${stray?`<option value="${esc(cur)}" selected disabled>${esc(cur)} (hors organisation)</option>`:""}</select>
+    <input type="hidden" id="e-service" data-field="service" value="${esc(cur)}">
+    ${stray?`<span class="hint warn-t">« ${esc(cur)} » ne fait pas partie de vos directions : choisissez-en une dans la liste.${dirMatch(cur)?` Suggestion : ${esc(dirMatch(cur))}.`:""}</span>`:""}`;
+}
+
+/* ================= Durées de conservation de référence ================= */
+const DUREES = ["Durée du contrat de travail","Durée de la relation commerciale","Durée du processus de recrutement","Jusqu'au retrait du consentement","3 ans après le dernier contact","2 ans après le dernier contact","1 an","6 mois","3 mois","1 mois maximum","Jusqu'à la fin de la mission","Durée de l'habilitation","Durée de l'abonnement","Jusqu'à la clôture du dossier"];
+const ARCHIVES = ["Aucun archivage","5 ans après la fin de la relation","5 ans après le départ du salarié","10 ans (pièces comptables)","6 ans (pièces à valeur fiscale)","5 ans (prescription civile)","3 ans (prescription des créances salariales)","Jusqu'à la fin du contentieux","13 mois (contestation d'un paiement)","Jusqu'aux 75 ans du salarié (bulletins dématérialisés)"];
+const DUREES_REF = [
+  ["Ressources humaines", [
+    ["Dossier du personnel","Durée du contrat de travail","5 ans après le départ du salarié","Prescription civile (art. 2224 C. civ.)"],
+    ["Bulletins de paie (double remis au salarié)","Durée du contrat de travail","5 ans après leur émission","Art. L3243-4 C. trav."],
+    ["Éléments de calcul de la paie et des cotisations","Année en cours","6 ans (contrôle fiscal), 3 ans (créances salariales)","Art. L102 B LPF, art. L3245-1 C. trav."],
+    ["Registre unique du personnel","Durée du contrat de travail","5 ans après le départ du salarié","Art. R1221-26 C. trav."],
+    ["Candidatures non retenues","Durée du processus de recrutement","2 ans après le dernier contact, avec l'accord du candidat","Référentiel CNIL recrutement"],
+    ["Décompte de la durée du travail","1 an","3 ans (créances salariales)","Art. D3171-16 C. trav."],
+    ["Sanctions disciplinaires","3 ans maximum","Aucun archivage","Art. L1332-5 C. trav."],
+    ["Entretiens annuels et évaluations","Durée du contrat de travail","5 ans après le départ du salarié","Pratique recommandée"],
+    ["Formation professionnelle","Durée du contrat de travail","6 ans (entretien professionnel récapitulatif)","Art. L6315-1 C. trav."],
+    ["Accidents du travail (dossiers)","Durée du contrat de travail","5 ans","Pratique recommandée (prescription)"],
+    ["Alertes professionnelles non suivies d'effet","2 mois après la clôture","Aucun archivage","Référentiel CNIL alertes professionnelles"],
+    ["Notes de frais et justificatifs","Exercice en cours","10 ans (pièces comptables)","Art. L123-22 C. com."]
+  ]],
+  ["Clients, prospects et marketing", [
+    ["Clients (gestion de la relation)","Durée de la relation commerciale","5 ans (prescription civile)","Art. 2224 C. civ."],
+    ["Prospection auprès des clients","Durée de la relation + 3 ans","Aucun archivage","Référentiel CNIL gestion commerciale"],
+    ["Prospects","3 ans après le dernier contact","Aucun archivage","Référentiel CNIL gestion commerciale"],
+    ["Liste d'opposition à la prospection","3 ans","Aucun archivage","Référentiel CNIL gestion commerciale"],
+    ["Contrats conclus en ligne (120 € et plus)","Durée de la relation commerciale","10 ans après la livraison","Art. L213-1 C. conso."],
+    ["Factures et pièces comptables","Exercice en cours","10 ans (pièces comptables)","Art. L123-22 C. com."],
+    ["Coordonnées bancaires (paiement unique)","Jusqu'au paiement","13 mois (contestation d'un paiement)","Recommandation CNIL paiement à distance"],
+    ["Cookies et traceurs","13 mois maximum","Aucun archivage","Lignes directrices CNIL cookies"],
+    ["Choix de l'internaute sur les cookies","6 mois","Aucun archivage","Recommandation CNIL cookies"],
+    ["Mesure d'audience (statistiques)","25 mois maximum","Aucun archivage","Recommandation CNIL mesure d'audience"],
+    ["Preuve du consentement","Durée du traitement","5 ans (prescription civile)","Art. 7.1 RGPD"],
+    ["Demandes d'exercice des droits","Jusqu'à la réponse","5 ans (preuve de la réponse)","Pratique recommandée"]
+  ]],
+  ["Fournisseurs et partenaires", [
+    ["Contacts fournisseurs","Durée de la relation commerciale","5 ans (prescription civile)","Art. 2224 C. civ."],
+    ["Contrats fournisseurs","Durée du contrat","5 ans après la fin du contrat (10 ans si contrat électronique ≥ 120 €)","Art. 2224 C. civ."],
+    ["Évaluation des tiers (lutte anticorruption)","Durée de la relation","5 ans après la fin de la relation","Référentiel CNIL dispositifs anticorruption"]
+  ]],
+  ["Sécurité et sûreté", [
+    ["Images de vidéoprotection","1 mois maximum","Jusqu'à la fin du contentieux","Art. L252-5 CSI, CNIL"],
+    ["Badges d'accès aux locaux","3 mois","Aucun archivage","Référentiel CNIL contrôle d'accès"],
+    ["Badges utilisés pour le temps de travail","5 ans","Aucun archivage","Norme CNIL contrôle d'accès"],
+    ["Géolocalisation des véhicules","2 mois","1 an (preuve des interventions), 5 ans (temps de travail)","Recommandation CNIL géolocalisation"],
+    ["Registre des visiteurs","3 mois","Aucun archivage","Pratique recommandée"],
+    ["Biométrie (gabarit)","Durée de l'habilitation","Aucun archivage","Règlement type CNIL biométrie"]
+  ]],
+  ["Informatique et communications", [
+    ["Journaux de connexion (logs)","6 mois à 1 an","Aucun archivage","Recommandation CNIL journalisation"],
+    ["Comptes utilisateurs","Durée de l'habilitation","Aucun archivage","Pratique recommandée"],
+    ["Messagerie d'un salarié parti","Fermeture au départ","Aucun archivage (sauf messages professionnels utiles)","Recommandation CNIL"],
+    ["Enregistrement des appels (formation, qualité)","6 mois","1 an (documents d'analyse)","Recommandation CNIL écoute des appels"],
+    ["Tickets d'assistance","Durée de la relation","1 an","Pratique recommandée"],
+    ["Sauvegardes","Rotation (ex. 30 jours)","Aucun archivage","Pratique recommandée"]
+  ]],
+  ["Juridique et gouvernance", [
+    ["Dossiers contentieux","Jusqu'à la fin du contentieux","Durée de prescription des voies de recours","Pratique recommandée"],
+    ["Assemblées, procès-verbaux","Durée de vie de la société","Archivage définitif possible","C. com."],
+    ["Registre des violations de données","Durée de vie du traitement","5 ans","Pratique recommandée (art. 33.5 RGPD)"],
+    ["Analyses d'impact (AIPD)","Durée de vie du traitement","Archivage définitif possible","Art. 35 RGPD"]
+  ]]
+];
+const durRefOpts = () => DUREES_REF.map(([g,l],gi)=>`<optgroup label="${esc(g)}">${l.map(([n,a,ar],i)=>`<option value="${gi}.${i}">${esc(n)} : ${esc(a)}${ar&&ar!=="Aucun archivage"?" puis "+esc(ar):""}</option>`).join("")}</optgroup>`).join("");
+function durRefPicker(){ return `<div class="f full durref"><label for="e-durref">Partir d'une durée de référence</label><select id="e-durref" data-durref><option value="">Choisir un type de données (${DUREES_REF.reduce((s,g)=>s+g[1].length,0)} références)…</option>${durRefOpts()}</select><span class="hint">Remplit la base active et l'archivage. Vérifiez qu'ils correspondent à votre usage.</span><div id="durref-src" class="durref-src"></div></div>`; }
+
+/* ================= Mesures de sécurité ================= */
+const SECURITE_G = [
+  ["Accès et identification", ["Contrôle d'accès des utilisateurs","Politique de mots de passe / MFA","Gestion des habilitations (moindre privilège)","Revue périodique des habilitations","Comptes nominatifs (pas de comptes partagés)","Comptes administrateurs dédiés et protégés","Suppression des accès au départ"]],
+  ["Traçabilité et incidents", ["Traçabilité des accès (journalisation)","Analyse régulière des journaux et alertes","Procédure de gestion des incidents et violations"]],
+  ["Postes de travail et mobilité", ["Protection des logiciels (antivirus, mises à jour)","Verrouillage automatique des sessions","Chiffrement des postes nomades et supports amovibles","Gestion des smartphones (MDM)","Effacement sécurisé du matériel réformé"]],
+  ["Réseau et échanges", ["Chiffrement des données","Chiffrement des échanges (TLS)","VPN pour l'accès à distance","Pare-feu et cloisonnement du réseau","Filtrage des e-mails (anti-hameçonnage)","Envoi sécurisé des fichiers sensibles"]],
+  ["Données et applications", ["Pseudonymisation","Minimisation et purge automatique","Sauvegardes régulières","Sauvegardes déconnectées et tests de restauration","Plan de continuité et de reprise d'activité","Environnements de test sans données réelles","Développement sécurisé et tests d'intrusion"]],
+  ["Prestataires et hébergement", ["Clauses contractuelles avec les sous-traitants","Hébergement dans l'Union européenne","Hébergeur certifié (ISO 27001, HDS, SecNumCloud)","Évaluation de la sécurité des prestataires"]],
+  ["Organisation et locaux", ["Sensibilisation des utilisateurs","Charte informatique","Engagement de confidentialité","Sécurité physique des locaux","Contrôle d'accès aux locaux","Destruction sécurisée des documents papier","Impressions sécurisées et bureau propre"]]
+];
+const SECURITE = SECURITE_G.flatMap(g=>g[1]);
+function secChecks(d){
+  const sel = arr(d.securite);
+  return `<div class="secg">${SECURITE_G.map(([g,l])=>{ const n=l.filter(x=>sel.includes(x)).length; return `<fieldset class="secg-b"><legend>${esc(g)} <span>${n}/${l.length}</span></legend><div class="checks">${l.map(o=>`<label><input type="checkbox" data-arr="securite" value="${esc(o)}" ${sel.includes(o)?"checked":""}>${esc(o)}</label>`).join("")}</div></fieldset>`; }).join("")}</div>
+  ${sel.filter(x=>!SECURITE.includes(x)).length?`<p class="hint">Autres mesures déjà cochées : ${esc(sel.filter(x=>!SECURITE.includes(x)).join(", "))}</p>`:""}`;
+}
+
+/* ================= Données sensibles : indices et explications ================= */
+const SENS_INFO = {
+  "Origine raciale ou ethnique":"Origine, couleur de peau, appartenance ethnique. La nationalité seule n'est pas une donnée sensible.",
+  "Opinions politiques":"Engagement ou sympathie politique, mandat électif, participation à une manifestation.",
+  "Convictions religieuses ou philosophiques":"Religion, pratiques (régime alimentaire confessionnel, congés pour fêtes religieuses), appartenance à une association de conviction.",
+  "Appartenance syndicale":"Adhésion à un syndicat, mandat syndical ou de représentant du personnel désigné par un syndicat, heures de délégation syndicale.",
+  "Données génétiques":"Résultats de tests ADN ou de caractéristiques génétiques.",
+  "Données biométriques":"Empreinte digitale, reconnaissance faciale, contour de la main ou voix utilisés pour identifier une personne.",
+  "Données de santé":"Arrêts maladie, accidents du travail, aptitude ou inaptitude, handicap (RQTH), aménagement de poste, grossesse, mutuelle détaillée, certificats médicaux.",
+  "Vie ou orientation sexuelle":"Orientation sexuelle, vie sexuelle."
+};
+const SENS_RULES = [
+  ["Données de santé", /arr[eê]ts? (de travail|maladie)|maladie|m[eé]dic|sant[eé]|handicap|rqth|invalidit|inaptitud|aptitud|accident(s)? du travail|maternit[eé]|grossesse|mutuelle|pr[eé]voyance|th[eé]rap|soins?\b|hospital|allergi|pathologi|mi-temps th[eé]rapeutique|visite m[eé]dicale|certificat m[eé]dical/],
+  ["Appartenance syndicale", /syndic|d[eé]l[eé]gu[eé] syndical|heures de d[eé]l[eé]gation|gr[eè]ve/],
+  ["Données biométriques", /biom[eé]tri|empreinte|reconnaissance faciale|gabarit|iris|contour de la main/],
+  ["Convictions religieuses ou philosophiques", /relig|confession|culte|cultuel|halal|casher|aum[oô]n|philosophique/],
+  ["Opinions politiques", /opinion politique|politique\b.*(engagement|mandat|parti)|parti politique|militant|[eé]lu local|mandat [eé]lectif/],
+  ["Origine raciale ou ethnique", /ethni|origine raciale|couleur de peau|diversit[eé]/],
+  ["Données génétiques", /g[eé]n[eé]tique|adn\b/],
+  ["Vie ou orientation sexuelle", /orientation sexuelle|vie sexuelle|lgbt/]
+];
+const RISK_RULES = [
+  ["Numéro de sécurité sociale (NIR)", /\bnir\b|s[eé]curit[eé] sociale|num[eé]ro de s[eé]cu/, "Encadré par le décret-cadre NIR : usage limité aux finalités autorisées (paie, déclarations sociales, santé)."],
+  ["Infractions et condamnations", /infraction|condamnation|casier judiciaire|antécédents judiciaires|bulletin n.?\s?3|plainte p[eé]nale/, "Article 10 du RGPD : traitement réservé aux cas prévus par la loi (ex. vérification du casier pour certains métiers, défense en justice)."],
+  ["Données de localisation", /g[eé]oloc|gps|localisation|trajet|t[eé]l[eé]matique/, "Données hautement personnelles : elles révèlent les déplacements et les habitudes ; durée courte et information renforcée."],
+  ["Données financières", /iban|rib\b|carte bancaire|coordonn[eé]es bancaires|salaire|r[eé]mun[eé]ration|revenus?/, "Données hautement personnelles : risque de fraude en cas de fuite ; accès restreint et chiffrement."],
+  ["Mineurs ou personnes vulnérables", /mineur|enfant|[eé]l[eè]ve|stagiaire de 3e|patient|personne [aâ]g[eé]e|vuln[eé]rable/, "Personnes vulnérables : critère du CEPD qui renforce le besoin d'une analyse d'impact."],
+  ["Surveillance des salariés", /vid[eé]o|cam[eé]ra|keylogger|enregistrement des appels|[eé]coute|surveillance|contr[oô]le de l'activit[eé]/, "Surveillance systématique : critère du CEPD ; information préalable des salariés et consultation du CSE."]
+];
+function trtText(t){ return String([t.nom,t.finalites,arr(t.finalitesL).map(x=>x.f).join(" "),arr(t.donnees).join(" "),t.donneesAutres,arr(t.personnes).join(" "),t.personnesAutres,t.source,t.destinatairesExternes].filter(Boolean).join(" \n ")).toLowerCase(); }
+function sensHints(t){
+  const txt = trtText(t), out = [];
+  SENS_RULES.forEach(([cat,re])=>{ const m = txt.match(new RegExp(re.source,"i")); if (m) out.push({cat, mot:m[0], coche:arr(t.sensibles).includes(cat)}); });
+  return out;
+}
+function riskHints(t){
+  const txt = trtText(t), out = [];
+  RISK_RULES.forEach(([cat,re,why])=>{ const m = txt.match(new RegExp(re.source,"i")) || (arr(t.donnees).some(x=>norm(x).includes(norm(cat).slice(0,12))) ? [cat] : null); if (m) out.push({cat, mot:m[0], why}); });
+  return out;
+}
+const SENS_EXC = [
+  ["9.2.a","Consentement explicite de la personne"],
+  ["9.2.b","Obligations en matière de droit du travail, de la sécurité sociale et de la protection sociale"],
+  ["9.2.c","Sauvegarde des intérêts vitaux de la personne"],
+  ["9.2.d","Activité d'une fondation, association ou syndicat (membres)"],
+  ["9.2.e","Données manifestement rendues publiques par la personne"],
+  ["9.2.f","Constatation, exercice ou défense d'un droit en justice"],
+  ["9.2.g","Motif d'intérêt public important prévu par la loi"],
+  ["9.2.h","Médecine du travail, appréciation de la capacité de travail, prise en charge sanitaire"],
+  ["9.2.i","Intérêt public dans le domaine de la santé publique"],
+  ["9.2.j","Archives d'intérêt public, recherche scientifique ou statistiques"]
+];
+function sensPanel(d){
+  const hints = sensHints(d).filter(h=>!h.coche), risks = riskHints(d);
+  const sel = arr(d.sensibles);
+  return `${hints.length?`<div class="sensh"><b>Indices de données sensibles relevés dans la fiche</b>${hints.map(h=>`<div class="sensh-r"><span>« ${esc(h.mot)} » <i>→</i> <b>${esc(h.cat)}</b></span><button type="button" class="btn sm" data-action="sens-add" data-v="${esc(h.cat)}">Cocher</button></div>`).join("")}<small>Ces indices viennent des mots employés dans le nom, les finalités, les données ou les personnes. Cochez seulement si le traitement porte réellement sur ces informations.</small></div>`:""}
+  ${sel.length?`<div class="sensx">${sel.map(s=>`<p><b>${esc(s)}</b> : ${esc(SENS_INFO[s]||"")}</p>`).join("")}</div>`:""}
+  ${risks.length?`<div class="riskh"><b>Données à risque élevé (hors article 9)</b>${risks.map(r=>`<p><b>${esc(r.cat)}</b> : ${esc(r.why)}</p>`).join("")}</div>`:""}`;
+}
+function sensWhy(t){
+  const sel = arr(t.sensibles); if (!sel.length) return "";
+  const h = sensHints(t);
+  return sel.map(s=>{ const m = h.find(x=>x.cat===s); return `<li><b>${esc(s)}</b><span>${m?`la fiche mentionne « ${esc(m.mot)} »`:"coché manuellement dans la fiche"}${t.sensiblesJustif?` · exception : ${esc(t.sensiblesJustif)}`:""}</span></li>`; }).join("");
+}
+
 const STATUTS = {actif:{l:"Actif",tone:"ok"}, brouillon:{l:"Brouillon",tone:"warn"}, archive:{l:"Archivé",tone:"neutral"}};
 const AIPD_FLAG = {non_requise:"Non requise", requise:"Requise", realisee:"Réalisée"};
 const SCALE = {1:"Négligeable",2:"Limitée",3:"Importante",4:"Maximale"};
@@ -3158,7 +3430,7 @@ function vTrain(){
       <div class="f"><label for="tr-prenom">Prénom</label><input type="text" id="tr-prenom" autocomplete="given-name" value="${esc(me.prenom || "")}" required></div>
       <div class="f"><label for="tr-nom">Nom</label><input type="text" id="tr-nom" autocomplete="family-name" value="${esc(me.nom || "")}" required></div>
       <div class="f"><label for="tr-email">E-mail professionnel</label><input id="tr-email" type="email" autocomplete="email" value="${esc(me.email || "")}" required></div>
-      <div class="f"><label for="tr-service">Service ou direction</label><input type="text" id="tr-service" list="tr-dirs" value="${esc(me.service || "")}" required><datalist id="tr-dirs">${dirs.map(d => `<option value="${esc(d)}">`).join("")}</datalist></div>
+      <div class="f"><label for="tr-service">Service ou direction</label>${dirs.length ? `<select id="tr-service" required><option value="">Choisir votre direction</option>${dirs.map(d => `<option ${me.service===d?"selected":""}>${esc(d)}</option>`).join("")}</select>` : `<input type="text" id="tr-service" value="${esc(me.service || "")}" required>`}</div>
     </div>
     <div id="tr-err" class="tr-err" role="alert"></div>
     <details class="tr-info"><summary>Comment vos informations sont utilisées</summary><p>${esc(org)} utilise vos nom, prénom, e-mail et service, ainsi que vos résultats aux quiz, pour suivre les formations à la protection des données de ses équipes. Ces informations restent dans votre navigateur ; elles ne sont transmises au délégué à la protection des données (DPO) que lorsque vous lui envoyez votre résultat. Elles sont conservées le temps de votre présence dans l'entreprise. Vous pouvez y accéder, les faire rectifier ou effacer en écrivant au DPO${TRAIN.dpo ? ` : ${esc(TRAIN.dpo)}` : ""}.</p></details>
@@ -3357,6 +3629,9 @@ MODS.traitements.alerts = t => {
   if (t.statut==="archive") return [];
   const a=[];
   if (arr(t.sensibles).length && !t.sensiblesJustif?.trim()) a.push({sev:"crit", t:"Données sensibles sans exception justifiée", s:"Indiquez l'exception de l'article 9.2 qui autorise ce traitement."});
+  if (t.service?.trim() && !orgDirections().includes(t.service.trim()) && orgDirections().length) a.push({sev:"warn", t:"Direction hors organisation", s:`« ${t.service.trim()} » ne fait pas partie des directions déclarées dans la page Organisation.`});
+  { const sh = sensHints(t).filter(h=>!h.coche); if (sh.length) a.push({sev:"info", t:"Indice de données sensibles à vérifier", s:sh.map(h=>`« ${h.mot} » → ${h.cat}`).join(" ; ")}); }
+  if (arr(t.donnees).includes("Infractions et condamnations") && !/art(icle)?\.? ?10|autoris|loi/i.test(String(t.baseLegaleDetail||"")+String(t.sensiblesJustif||""))) a.push({sev:"warn", t:"Données d'infractions : justifier l'article 10", s:"Ces données ne peuvent être traitées que dans les cas prévus par la loi : précisez le texte qui l'autorise dans la justification."});
   if (t.transfertHorsUE && !t.transfertGaranties?.trim()) a.push({sev:"crit", t:"Transfert hors UE sans garantie", s:"Précisez la garantie : décision d'adéquation, clauses contractuelles types…"});
   if (t.aipd==="requise"){ const l=linkedTo("aipd",t._id); if(!l.length) a.push({sev:"warn", t:"AIPD requise mais non lancée", s:"Lancez l'analyse d'impact depuis la fiche du traitement."}); else if(!l.some(x=>x.statut==="validee")) a.push({sev:"info", t:"AIPD en cours", s:"L'analyse d'impact n'est pas encore validée."}); }
   if (t.prochaineRevue && t.prochaineRevue < today()) a.push({sev:"warn", t:"Revue annuelle dépassée", s:"Prévue le "+fmtD(t.prochaineRevue)+". Relisez la fiche puis marquez-la comme revue."});
@@ -3634,24 +3909,8 @@ function blankOf(mod){
 }
 
 /* --- Rôles, modèles, durées, champs d'import --- */
-const DIRECTIONS = ["Direction générale","Direction des ressources humaines","Direction administrative et financière","Direction juridique","Direction de la conformité et des risques","Direction de l'audit interne","Direction commerciale","Direction marketing et communication","Direction de la relation client","Direction des systèmes d'information","Direction des opérations","Direction de la production","Direction technique et ingénierie","Direction de la recherche et du développement","Direction des achats","Direction de la logistique et de la supply chain","Direction qualité, sécurité et environnement","Direction de la sûreté et des services généraux","Direction immobilière","Direction de la stratégie et de la transformation","Direction RSE"];
 const orgDirections = () => [...new Set(String(S.org.services||"").split(/[,;\n]/).map(x=>x.trim()).filter(Boolean))];
-function directionSelect(cur){
-  const org = orgDirections();
-  const std = DIRECTIONS.filter(x=>!org.includes(x));
-  const used = [...new Set(items("traitements").map(t=>t.service?.trim()).filter(Boolean))].filter(x=>!org.includes(x) && !DIRECTIONS.includes(x));
-  if (cur && !org.includes(cur) && !DIRECTIONS.includes(cur) && !used.includes(cur)) used.push(cur);
-  const o = l => `<option ${cur===l?"selected":""}>${esc(l)}</option>`;
-  return `<select id="e-service-sel" data-dirsel aria-label="Direction concernée"><option value="" ${!cur?"selected":""}>Choisir une direction</option>
-    ${org.length?`<optgroup label="Directions de l'entreprise">${org.map(o).join("")}</optgroup>`:""}
-    <optgroup label="${org.length?"Autres directions courantes":"Directions courantes"}">${std.map(o).join("")}</optgroup>
-    ${used.length?`<optgroup label="Déjà utilisées dans le registre">${used.map(o).join("")}</optgroup>`:""}
-    <option value="__autre">Autre direction…</option></select>
-    <input type="text" id="e-service" data-field="service" value="${esc(cur)}" placeholder="Nom de la direction" hidden aria-label="Autre direction">`;
-}
 const ROLES = {responsable:"Responsable du traitement", conjoint:"Responsable conjoint (art. 26)", soustraitant:"Sous-traitant pour le compte d'un client (art. 30.2)"};
-const DUREES = ["Durée du contrat de travail","Durée du processus de recrutement","Durée de la relation commerciale","3 ans après le dernier contact","1 mois maximum","3 mois","6 mois à 1 an","Durée de l'habilitation"];
-const ARCHIVES = ["5 ans après la fin de la relation","5 ans après le départ du salarié","2 ans après le dernier contact","10 ans (pièces comptables)","Aucun archivage"];
 const SEC_BASE = ["Contrôle d'accès des utilisateurs","Traçabilité des accès (journalisation)","Sauvegardes régulières","Politique de mots de passe / MFA","Sensibilisation des utilisateurs"];
 const TPL = [
  {n:"Paie et gestion du personnel", d:{nom:"Gestion administrative du personnel et paie", service:"Direction des ressources humaines", finalites:"Gestion des dossiers du personnel, calcul et versement des salaires, déclarations sociales et fiscales, gestion des absences et des congés.", baseLegale:"obligation_legale", baseLegaleDetail:"Code du travail (registre unique du personnel, bulletins de paie) et Code de la sécurité sociale (déclaration sociale nominative).", personnes:["Salariés","Stagiaires et alternants"], donnees:["État civil, identité, identifiants","Coordonnées","Vie professionnelle (CV, formation, carrière…)","Informations économiques et financières","Numéro de sécurité sociale (NIR)"], sensibles:["Données de santé"], sensiblesJustif:"Art. 9.2.b : obligations en matière de droit du travail et de sécurité sociale (arrêts maladie, aptitude médicale).", source:"Collecte directe auprès du salarié", destinatairesInternes:"Service RH, paie, managers pour les données utiles à leur mission", destinatairesExternes:"URSSAF, caisses de retraite, organismes de prévoyance et mutuelle, administration fiscale, médecine du travail", conservation:"Durée du contrat de travail", conservationArchivage:"5 ans après le départ du salarié (bulletins de paie : 5 ans)", securite:[...SEC_BASE,"Chiffrement des données","Clauses contractuelles avec les sous-traitants"], informationPersonnes:"Notice d'information remise à l'embauche et disponible sur l'intranet."}},
@@ -4089,7 +4348,7 @@ function searchHay(t){ return norm(Object.entries(t).filter(([k])=>!["history","
 function matches(mod,t){
   const f=S.filters;
   if (f.statut && t.statut!==f.statut) return false;
-  if (mod==="traitements"){ if (f.service && (t.service||"").trim()!==f.service) return false; if (f.base && !basesOf(t).includes(f.base)) return false; }
+  if (mod==="traitements"){ if (f.service && dirLabel(t)!==f.service) return false; if (f.base && !basesOf(t).includes(f.base)) return false; }
   if (f.alerts && !MODS[mod].alerts(t).some(a=>a.sev!=="info")) return false;
   if (f.q){ const h=searchHay(t); if (!norm(f.q).split(/\s+/).filter(Boolean).every(w=>h.includes(w))) return false; }
   return true;
@@ -4263,7 +4522,7 @@ function vEdit(){
   </div>`;
 }
 function refreshEdit(){
-  if (S.mod==="traitements"){ TRT_SECTIONS.forEach((s,i)=>{ const el=$("#ck-"+s.id); if(!el) return; const ok=trtSectionDone(S.draft,s); el.classList.toggle("done",ok); el.textContent=ok?"✓":i+1; }); const c=$("#draft-cmp"); if(c) c.textContent="Complétude "+completeness(S.draft)+" %"; return; }
+  if (S.mod==="traitements"){ const sp=$("#sens-panel"); if (sp && S.draft) sp.innerHTML=sensPanel(S.draft); TRT_SECTIONS.forEach((s,i)=>{ const el=$("#ck-"+s.id); if(!el) return; const ok=trtSectionDone(S.draft,s); el.classList.toggle("done",ok); el.textContent=ok?"✓":i+1; }); const c=$("#draft-cmp"); if(c) c.textContent="Complétude "+completeness(S.draft)+" %"; return; }
   MODS[S.mod].sections.forEach((s,i)=>{ const el=$("#ck-"+s.id); if(el){ const ok=secDone(s,S.draft); el.classList.toggle("done",ok); el.textContent=ok?"✓":i+1; } s.fields.forEach(f=>{ if(f.showIf){ const w=$("#w-"+f.k); if(w) w.hidden=!f.showIf(S.draft); } }); });
 }
 
@@ -4273,14 +4532,14 @@ function trtRow(t){
   const al = MODS.traitements.alerts(t).filter(a=>a.sev!=="info"); const crit = al.some(a=>a.sev==="crit");
   return `<button class="row-i has-md" style="${colsStyle(TRT_COLS)}" data-action="open" data-mod="traitements" data-id="${esc(t._id)}">
     <span class="c-ref mono">${esc(t.ref)}</span>
-    <span class="nm">${esc(t.nom||"Sans titre")}${exTag(t)}${al.length?`<span class="flag ${crit?"crit":"warn"}">● ${al.length}</span>`:""}<small>${esc([t.service,t.finalites].filter(Boolean).join(" · "))}</small></span>
+    <span class="nm">${esc(t.nom||"Sans titre")}${exTag(t)}${al.length?`<span class="flag ${crit?"crit":"warn"}">● ${al.length}</span>`:""}<small>${dirLabel(t)===DIR_HORS?`<span class="dirwarn" title="« ${esc(t.service)} » ne fait pas partie des directions de l'organisation">${DIR_HORS}</span> · `:""}${esc([dirLabel(t)===DIR_HORS?"":t.service,t.finalites].filter(Boolean).join(" · "))}</small></span>
     <span class="hide-md hide-sm">${esc(basesLabel(t)||"—")}</span>
     <span class="hide-sm">${meter(completeness(t))}</span>
     <span class="c-st">${pill(STATUTS,t.statut)}</span></button>`;
 }
 function vTrtList(){
   const all = items("traitements"); const f = S.filters; const exN = MOD_KEYS.reduce((n,m)=>n+items(m).filter(t=>t.exemple).length,0);
-  const services = [...new Set(all.map(t=>t.service?.trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
+  const services = [...orgDirections(), ...(all.some(t=>dirLabel(t)===DIR_HORS)?[DIR_HORS]:[])];
   return `
   ${roBanner()}
   <div class="head">
@@ -4319,7 +4578,7 @@ function vTrtDetail(){
   <div class="plain">
     <div class="sect"><h3>Identification</h3><dl class="kv"><dt>Rôle de l'entreprise</dt><dd>${esc(ROLES[t.role||"responsable"])}${t.roleClient?` · ${esc(t.roleClient)}`:""}</dd><dt>Direction concernée</dt><dd>${val(t.service)}</dd><dt>Pilote opérationnel</dt><dd>${val(t.pilote)}</dd><dt>Source des données</dt><dd>${val(t.source)}</dd></dl></div>
     <div class="sect"><h3>Finalité et base légale<small>Art. 30.1.b · art. 6</small></h3><dl class="kv"><dt>Finalités et bases légales</dt><dd>${finDetail(t)}</dd><dt>Justification</dt><dd>${val(t.baseLegaleDetail)}</dd><dt>Information des personnes</dt><dd>${arr(t.infoModes).length||t.informationPersonnes?chips(t.infoModes,t.informationPersonnes):val("")}</dd></dl></div>
-    <div class="sect"><h3>Personnes et données<small>Art. 30.1.c · art. 9</small></h3><dl class="kv"><dt>Personnes concernées</dt><dd>${chips(t.personnes,t.personnesAutres)}</dd><dt>Catégories de données</dt><dd>${chips(t.donnees,t.donneesAutres)}</dd><dt>Données sensibles</dt><dd>${arr(t.sensibles).length?chips(t.sensibles,"","sens"):"Aucune"}</dd>${arr(t.sensibles).length?`<dt>Exception art. 9.2</dt><dd>${val(t.sensiblesJustif)}</dd>`:""}</dl></div>
+    <div class="sect"><h3>Personnes et données<small>Art. 30.1.c · art. 9</small></h3><dl class="kv"><dt>Personnes concernées</dt><dd>${chips(t.personnes,t.personnesAutres)}</dd><dt>Catégories de données</dt><dd>${chips(t.donnees,t.donneesAutres)}</dd><dt>Données sensibles</dt><dd>${arr(t.sensibles).length?`${chips(t.sensibles,"","sens")}<ul class="senswhy">${sensWhy(t)}</ul>`:"Aucune"}</dd>${arr(t.sensibles).length?`<dt>Exception art. 9.2</dt><dd>${val(t.sensiblesJustif)}</dd>`:""}${riskHints(t).length?`<dt>Données à risque élevé</dt><dd><ul class="senswhy">${riskHints(t).map(r=>`<li><b>${esc(r.cat)}</b><span>${esc(r.why)}</span></li>`).join("")}</ul></dd>`:""}</dl></div>
     <div class="sect"><h3>Destinataires et transferts<small>Art. 30.1.d · 30.1.e</small></h3><dl class="kv"><dt>Destinataires internes</dt><dd>${val(t.destinatairesInternes)}</dd><dt>Destinataires externes</dt><dd>${val(t.destinatairesExternes)}</dd><dt>Sous-traitants (texte libre)</dt><dd>${val(t.sousTraitants)}</dd><dt>Transfert hors UE</dt><dd>${t.transfertHorsUE?`Oui · ${val(t.transfertPays)}`:"Non"}</dd>${t.transfertHorsUE?`<dt>Garanties</dt><dd>${val(t.transfertGaranties)}</dd>`:""}</dl></div>
     <div class="sect"><h3>Conservation et sécurité<small>Art. 30.1.f · 30.1.g</small></h3><dl class="kv"><dt>Durée en base active</dt><dd>${val(t.conservation)}</dd><dt>Archivage intermédiaire</dt><dd>${val(t.conservationArchivage)}</dd>${consTrtBlock(t)}<dt>Mesures de sécurité</dt><dd>${chips(t.securite,t.securiteAutres)}</dd></dl></div>
     <div class="sect"><h3>Suivi et conformité</h3><dl class="kv"><dt>Décision automatisée</dt><dd>${t.decisionAuto?"Oui":"Non"}</dd><dt>AIPD</dt><dd>${esc(AIPD_FLAG[t.aipd]||"—")}</dd><dt>Dernière revue</dt><dd>${fmtD(t.derniereRevue)}</dd><dt>Prochaine revue</dt><dd>${fmtD(t.prochaineRevue)}</dd><dt>Notes</dt><dd>${val(t.notes)}</dd></dl></div>
@@ -4361,8 +4620,8 @@ function vTrtEdit(){
         ${T("personnesAutres","Autres personnes concernées","","Ex. : ayants droit")}
         <div class="f full"><span class="lbl">Catégories de données</span>${C("donnees",DONNEES)}</div>
         ${T("donneesAutres","Autres données","","Ex. : numéro de badge")}
-        <div class="f full"><span class="lbl">Données sensibles (art. 9)</span><span class="hint">Leur traitement est interdit sauf exception prévue par l'article 9.2.</span>${C("sensibles",SENSIBLES,"sens")}</div>
-        <div class="f full" id="wrap-sens" ${arr(d.sensibles).length?"":"hidden"}><label for="e-sensiblesJustif">Exception de l'article 9.2 applicable</label><textarea id="e-sensiblesJustif" data-field="sensiblesJustif" placeholder="Ex. : 9.2.b, obligations en matière de droit du travail">${esc(d.sensiblesJustif)}</textarea></div>`)}
+        <div class="f full"><span class="lbl">Données sensibles (art. 9)</span><span class="hint">Leur traitement est interdit sauf exception prévue par l'article 9.2.</span>${C("sensibles",SENSIBLES,"sens")}<div id="sens-panel">${sensPanel(d)}</div></div>
+        <div class="f full" id="wrap-sens" ${arr(d.sensibles).length?"":"hidden"}><label for="e-sensiblesJustif">Exception de l'article 9.2 applicable</label><textarea id="e-sensiblesJustif" data-field="sensiblesJustif" placeholder="Ex. : 9.2.b, obligations en matière de droit du travail">${esc(d.sensiblesJustif)}</textarea><div class="sugg">${SENS_EXC.map(([k,l])=>`<button type="button" class="sg" data-action="sens-exc" data-v="${esc(`Art. ${k} : ${l}`)}" title="${esc(l)}">${k} · ${esc(l.length>46?l.slice(0,44)+"…":l)}</button>`).join("")}</div></div>`)}
       ${sec("s-dest","Destinataires et transferts","Art. 30.1.d · 30.1.e",`
         ${A("destinatairesInternes","Destinataires internes","Services ou fonctions qui ont accès aux données.","Ex. : service RH, direction financière",false)}
         ${A("destinatairesExternes","Destinataires externes","Organismes et partenaires qui reçoivent les données.","Ex. : URSSAF, caisses de retraite",false)}
@@ -4371,9 +4630,10 @@ function vTrtEdit(){
         <div class="f" data-tr ${d.transfertHorsUE?"":"hidden"}><label for="e-transfertPays">Pays de destination</label><input type="text" id="e-transfertPays" data-field="transfertPays" value="${esc(d.transfertPays)}" placeholder="Ex. : États-Unis"></div>
         <div class="f" data-tr ${d.transfertHorsUE?"":"hidden"}><label for="e-transfertGaranties">Garanties encadrant le transfert</label><input type="text" id="e-transfertGaranties" data-field="transfertGaranties" value="${esc(d.transfertGaranties)}" placeholder="Ex. : clauses contractuelles types"></div>`)}
       ${sec("s-cons","Conservation et sécurité","Art. 30.1.f · 30.1.g",`
+        ${durRefPicker()}
         <div class="f"><label for="e-conservation">Durée de conservation en base active</label><input type="text" id="e-conservation" data-field="conservation" value="${esc(d.conservation)}" placeholder="Ex. : durée du contrat de travail"><div class="sugg">${DUREES.map(x=>`<button type="button" class="sg" data-action="sugg" data-k="conservation" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>
         <div class="f"><label for="e-conservationArchivage">Archivage intermédiaire</label><input type="text" id="e-conservationArchivage" data-field="conservationArchivage" value="${esc(d.conservationArchivage)}" placeholder="Ex. : 5 ans après le départ"><div class="sugg">${ARCHIVES.map(x=>`<button type="button" class="sg" data-action="sugg" data-k="conservationArchivage" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>
-        <div class="f full"><span class="lbl">Mesures de sécurité</span>${C("securite",SECURITE)}</div>
+        <div class="f full"><span class="lbl">Mesures de sécurité</span><span class="hint">Classées selon le guide de la sécurité des données personnelles de la CNIL.</span>${secChecks(d)}</div>
         ${T("securiteAutres","Autres mesures","","Ex. : habilitations revues chaque semestre")}`)}
       ${sec("s-suivi","Suivi et conformité","",`
         <div class="f full"><label class="switch"><input type="checkbox" id="e-decisionAuto" data-field="decisionAuto" ${d.decisionAuto?"checked":""}>Le traitement produit une décision automatisée ou un profilage</label><span class="hint">Par exemple un score qui accepte ou refuse automatiquement une candidature ou un crédit (art. 22).</span></div>
@@ -4685,27 +4945,54 @@ function newsCard(n, big){
     ${(()=>{ const x=npCardExtra(n); return x.startsWith("<button")?"":x; })()}
   </article>`;
 }
+const NEWS_PER = [["","Tout"],["30","30 jours"],["90","3 mois"],["365","12 mois"]];
+const NEWS_MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function newsSyncPanel(all){
+  const imp = S.newsImp;
+  if (LOCAL) return `<section class="nsync" id="nsync">
+    <div class="nsync-h"><b>Reprendre les actualités d'Égide en ligne</b><button class="btn sm ghost" data-action="nimp-toggle" aria-label="Fermer">${I.close}</button></div>
+    <p>Dans Égide en ligne, page Actualités, cliquez sur <b>Copier pour l'édition locale</b>, puis ici sur <b>Coller les actualités</b>. Résumés, catégories et plan d'action sont repris ; seules les nouveautés sont ajoutées.${imp?.le?` Dernière reprise le ${fmtD(imp.le.slice(0,10))}.`:""}</p>
+    <div class="actions"><button class="btn sm primary" data-action="news-paste" ${W()?"":"disabled"}>${I.clip}Coller les actualités</button><button class="btn sm" data-action="news-import" ${W()?"":"disabled"}>${I.up}Importer un fichier</button><button class="btn sm" data-action="cop-news" ${W()?"":"disabled"}>✦ Mettre à jour avec Copilot</button></div>
+    ${S.newsPaste?`<div class="nimp-paste"><label for="news-txt">Collez ici le texte copié depuis Égide en ligne (Ctrl + V)</label><textarea id="news-txt" rows="3" placeholder='{"app":"egide-news", …}'></textarea><div class="actions"><button class="btn sm primary" data-action="news-paste-ok">Importer</button><button class="btn sm ghost" data-action="news-paste-x">Annuler</button></div></div>`:""}
+  </section>`;
+  return `<section class="nsync" id="nsync">
+    <div class="nsync-h"><b>Utiliser ces actualités dans Égide sur votre PC</b><button class="btn sm ghost" data-action="nimp-toggle" aria-label="Fermer">${I.close}</button></div>
+    <p>Copiez-les ici, puis dans l'édition installée sur votre ordinateur : Actualités › ⇅ › Coller les actualités.</p>
+    <div class="actions"><button class="btn sm primary" data-action="news-copy" ${all.length?"":"disabled"}>${I.clip}Copier pour l'édition locale</button><button class="btn sm" data-action="news-export" ${S.dl&&all.length?"":"disabled"}>${I.dl}Exporter un fichier</button></div>
+  </section>`;
+}
 function vNews(){
-  const all = newsItems(); const nf = S.newsFilter || {cat:"", q:""};
+  const all = newsItems(); const nf = S.newsFilter || {cat:"", q:"", per:"", lim:24};
   const words = norm(nf.q).split(/\s+/).filter(Boolean);
-  const list = all.filter(n=>(!nf.cat || n.categorie===nf.cat) && words.every(w=>norm([n.titre,n.resume,n.source,n.aRetenir].join(" ")).includes(w)));
+  const since = nf.per ? addDays(-(+nf.per)) : "";
+  const inPer = n => !since || String(n.date||"") >= since;
+  const list = all.filter(n=>inPer(n) && (!nf.cat || n.categorie===nf.cat) && words.every(w=>norm([n.titre,n.resume,n.source,n.aRetenir].join(" ")).includes(w)));
   const latest = all.reduce((m,n)=>(n.ajouteLe||"")>m?(n.ajouteLe||""):m, "");
   const nNew = all.filter(isNewNews).length;
-  const cats = Object.entries(NEWS_CATS).filter(([k])=>all.some(n=>n.categorie===k));
-  const [first, ...rest] = list;
-  return `<div class="m-news" style="display:flex;flex-direction:column;gap:22px">
-    <div class="phead"><span class="pico">${I.news}</span><div><h1>Actualités</h1><p class="psub">Protection des données et vie privée${latest?` · mise à jour le ${fmtD(latest.slice(0,10))}`:""}${nNew?` · <span class="psub-new">${nNew} nouvelle${nNew>1?"s":""}</span>`:""}</p></div></div>
-    ${LOCAL?newsLocalBox():""}
+  const base = all.filter(inPer);
+  const cats = Object.entries(NEWS_CATS).filter(([k])=>base.some(n=>n.categorie===k));
+  const lim = nf.lim || 24;
+  const featured = !nf.q && !nf.cat ? list.find(n=>["sanction","cnil","legislation","europe","jurisprudence"].includes(n.categorie)) || list[0] : null;
+  const rest = list.filter(n=>n!==featured);
+  const shown = rest.slice(0, lim);
+  const groups = []; shown.forEach(n=>{ const k=String(n.date||"").slice(0,7); let g=groups[groups.length-1]; if (!g || g.k!==k){ g={k, l:k?`${NEWS_MOIS[+k.slice(5,7)-1]} ${k.slice(0,4)}`:"Sans date", items:[]}; groups.push(g); } g.items.push(n); });
+  const monthN = k => list.filter(n=>String(n.date||"").startsWith(k)).length;
+  return `<div class="m-news nwrap">
+    <div class="nhead"><div class="phead"><span class="pico">${I.news}</span><div><h1>Actualités</h1><p class="psub">Protection des données et vie privée${latest?` · mise à jour le ${fmtD(latest.slice(0,10))}`:""}${nNew?` · <span class="psub-new">${nNew} nouvelle${nNew>1?"s":""}</span>`:""}</p></div></div>
+      <button class="nsync-btn ${S.nimpOpen?"on":""}" data-action="nimp-toggle" title="${LOCAL?"Reprendre les actualités d'Égide en ligne":"Utiliser ces actualités sur votre PC"}" aria-expanded="${!!S.nimpOpen}">⇅ <span>${LOCAL?"Reprendre d'Égide en ligne":"Vers la version PC"}</span></button></div>
+    ${S.nimpOpen||S.newsPaste?newsSyncPanel(all):""}
     ${S.newsLoaded?npBlock():""}
-    <div class="fbar">
+    <div class="fbar nfbar">
       <div class="search big">${I.search}<input type="search" id="n-q" placeholder="Rechercher une actualité, une autorité, un sujet…" value="${esc(nf.q)}" aria-label="Rechercher dans les actualités" autocomplete="off"></div>
-      <div class="frow"><button class="fchip" data-action="ncat" data-v="" aria-pressed="${!nf.cat}">Toutes <span class="n">${all.length}</span></button>${cats.map(([k,c])=>`<button class="fchip" data-action="ncat" data-v="${k}" aria-pressed="${nf.cat===k}" style="--c:${c.c}"><i class="tdot" style="background:${c.c}"></i>${esc(c.l)} <span class="n">${all.filter(n=>n.categorie===k).length}</span></button>`).join("")}</div>
+      <div class="nfrow"><div class="seg nper" role="group" aria-label="Période">${NEWS_PER.map(([v,l])=>`<button data-action="nper" data-v="${v}" aria-pressed="${(nf.per||"")===v}">${l}</button>`).join("")}</div>
+      <div class="frow"><button class="fchip" data-action="ncat" data-v="" aria-pressed="${!nf.cat}">Toutes <span class="n">${base.length}</span></button>${cats.map(([k,c])=>`<button class="fchip" data-action="ncat" data-v="${k}" aria-pressed="${nf.cat===k}" style="--c:${c.c}"><i class="tdot" style="background:${c.c}"></i>${esc(c.l)} <span class="n">${base.filter(n=>n.categorie===k).length}</span></button>`).join("")}</div></div>
     </div>
     ${!S.newsLoaded ? `<div class="panel"><div class="skel"></div><div class="skel" style="width:60%"></div></div>`
-      : !all.length ? `<div class="empty"><span class="big">${I.news}</span><p>Aucune actualité pour le moment. La sélection est mise à jour chaque semaine.</p></div>`
+      : !all.length ? `<div class="empty"><span class="big">${I.news}</span><p>Aucune actualité pour le moment.${LOCAL?` Utilisez ⇅ pour reprendre celles d'Égide en ligne.`:""}</p></div>`
       : !list.length ? `<p class="muted">Aucune actualité ne correspond à cette recherche.</p>`
-      : `${newsCard(first, true)}<div class="ngrid">${rest.map(n=>newsCard(n)).join("")}</div>`}
-    ${LOCAL?"":`<section class="nimp"><div class="nimp-h"><span class="nimp-ic">⇅</span><div><b>Utiliser ces actualités dans Égide sur votre PC</b><span>Copiez-les ici, puis dans l'édition installée sur votre ordinateur : Actualités › Coller les actualités. Les résumés, catégories et le plan d'action sont repris.</span></div></div><div class="actions"><button class="btn sm primary" data-action="news-copy" ${all.length?"":"disabled"}>${I.clip}Copier pour l'édition locale</button><button class="btn sm" data-action="news-export" ${S.dl&&all.length?"":"disabled"}>${I.dl}Exporter un fichier</button></div></section>`}
+      : `${featured?`<div class="nfeat-w"><span class="eyebrow">À la une</span>${newsCard(featured, true)}</div>`:""}
+         ${groups.map(g=>`<section class="nmonth"><h2 class="nmonth-h"><span>${esc(g.l)}</span><small>${monthN(g.k)} actualité${monthN(g.k)>1?"s":""}</small></h2><div class="ngrid">${g.items.map(n=>newsCard(n)).join("")}</div></section>`).join("")}
+         ${rest.length>shown.length?`<div class="nmore"><button class="btn" data-action="nmore">Afficher plus d'actualités <span class="muted">(${rest.length-shown.length} restantes)</span></button></div>`:""}`}
     <p class="muted nnote">Sélection et résumés rédigés par ${LOCAL?"Copilot ou Claude":"Claude"} à partir de sources publiques (CNIL, CEPD, Commission européenne, presse spécialisée), ${LOCAL?"mis à jour à votre demande":"mis à jour chaque jour ouvré"}. Consultez toujours la source avant de vous appuyer sur une information.</p>
   </div>`;
 }
@@ -4724,7 +5011,7 @@ const NP_TPL = {
 };
 function npContext(){
   const trt = items("traitements").filter(t=>t.statut!=="archive");
-  const dirs = Object.entries(trt.reduce((o,t)=>{ const d=(t.service||"").trim()||"Non renseignée"; o[d]=(o[d]||0)+1; return o; },{})).map(([d,n])=>`${d} (${n})`).join(", ");
+  const dirs = orgDirections().map(d=>`${d} (${trt.filter(t=>dirLabel(t)===d).length})`).join(", ");
   const st = items("soustraitants").filter(t=>t.statut!=="termine");
   const fo = items("formations").filter(t=>t.statut==="realisee" && t.date>=addDays(-365));
   return `Entreprise : ${S.org.raisonSociale||"PME française d'environ 50 salariés"}.
@@ -4752,11 +5039,11 @@ Propose les actions concrètes que cette entreprise doit mettre en œuvre à la 
 
 FORMAT
 Réponds uniquement avec un objet JSON de cette forme :
-{"synthese":"2 à 3 phrases pour la direction","actions":[{"titre":"verbe à l'infinitif, 80 caractères maximum","pourquoi":"1 à 2 phrases reliant l'action à l'actualité et à nos traitements","etapes":["2 à 4 étapes courtes et concrètes"],"responsable":"direction ou rôle porteur","priorite":"haute|moyenne|basse","echeance":"AAAA-MM-JJ","effort":"ex. 2 h, 1 jour, 3 jours","module":"traitements|soustraitants|demandes|violations|conservation|formations|aipd|general","newsIds":["identifiant entre crochets"]}]}
+{"synthese":"2 à 3 phrases pour la direction","actions":[{"titre":"verbe à l'infinitif, 80 caractères maximum","pourquoi":"1 à 2 phrases reliant l'action à l'actualité et à nos traitements","etapes":["2 à 4 étapes courtes et concrètes"],"responsable":"DPO ou l'une des directions de l'entreprise listées ci-dessus, à l'exclusion de toute autre","priorite":"haute|moyenne|basse","echeance":"AAAA-MM-JJ","effort":"ex. 2 h, 1 jour, 3 jours","module":"traitements|soustraitants|demandes|violations|conservation|formations|aipd|general","newsIds":["identifiant entre crochets"]}]}
 Règles : ${news.length===1?"1 à 3":"3 à 8"} actions ; échéances réalistes et étalées entre le ${addDays(7)} et le ${addMonths(T,6)}, les priorités hautes sous un mois ; français clair, sans jargon inutile.`;
 }
 function npRules(news){
-  const out = news.map(n=>{ const t = NP_TPL[n.categorie] || NP_TPL.cnil; return {titre:t[0], pourquoi:n.aRetenir||n.resume||"", etapes:t[1], responsable:t[2], priorite:t[3], echeance:addDays(t[4]), effort:t[3]==="haute"?"1 jour":"½ journée", module:t[5], newsIds:[n._id]}; });
+  const out = news.map(n=>{ const t = NP_TPL[n.categorie] || NP_TPL.cnil; return {titre:t[0], pourquoi:n.aRetenir||n.resume||"", etapes:t[1], responsable:respPick(t[2]), priorite:t[3], echeance:addDays(t[4]), effort:t[3]==="haute"?"1 jour":"½ journée", module:t[5], newsIds:[n._id]}; });
   return {synthese:`${news.length} actualité${news.length>1?"s":""} analysée${news.length>1?"s":""} selon des règles simples par catégorie. Ajustez les actions à votre contexte avant de les ajouter au plan.`, actions:out.slice(0,10)};
 }
 function npClean(r, news){
@@ -4765,7 +5052,7 @@ function npClean(r, news){
     let d = /^\d{4}-\d{2}-\d{2}$/.test(String(a.echeance||"")) ? a.echeance : addDays(30);
     if (d<lo) d=lo; if (d>hi) d=hi;
     return {id:"np"+Date.now().toString(36)+i, titre:String(a.titre).slice(0,140), pourquoi:String(a.pourquoi||"").slice(0,600), etapes:arr(a.etapes).map(x=>String(x).slice(0,200)).slice(0,5),
-      responsable:String(a.responsable||"DPO").slice(0,80), priorite:NP_PRIO[a.priorite]?a.priorite:"moyenne", echeance:d, effort:String(a.effort||"").slice(0,30), module:NP_MOD[a.module]?a.module:"general",
+      responsable:respPick(String(a.responsable||"DPO")).slice(0,80), priorite:NP_PRIO[a.priorite]?a.priorite:"moyenne", echeance:d, effort:String(a.effort||"").slice(0,30), module:NP_MOD[a.module]?a.module:"general",
       newsIds:arr(a.newsIds).map(String).filter(x=>ids.has(x)), ajoute:null};
   }).sort((a,b)=>a.echeance.localeCompare(b.echeance));
   return {synthese:String(r?.synthese||"").slice(0,800), actions:acts};
@@ -4852,8 +5139,8 @@ function npBlock(){
   const acts = plan.actions; const view = np.view||"list";
   const hi = acts.filter(a=>a.priorite==="haute").length, added = acts.filter(a=>a.ajoute && S.data.actions.has(a.ajoute)).length;
   return `<section class="npp" id="np-plan">
-    <div class="npp-h">${head}<div class="nph-a"><button class="btn sm ghost" data-action="np-toggle">${np.open===false?"Afficher":"Réduire"}</button></div></div>
-    ${np.open===false?"":`
+    <div class="npp-h">${head}<div class="nph-a"><button class="btn sm ${np.open===true?"ghost":""}" data-action="np-toggle" aria-expanded="${np.open===true}">${np.open===true?"Réduire":`Voir le plan (${plan.actions.length} action${plan.actions.length>1?"s":""})`}</button></div></div>
+    ${np.open!==true?"":`
     <div class="npp-syn"><div><span class="eyebrow" style="--c:var(--plum)">Synthèse · ${plan.source==="ia"?"analyse par Claude":plan.source==="copilot"?"analyse par Copilot":"règles par catégorie"} · ${fmtDT(plan.genereLe)}</span><p>${esc(plan.synthese||"")}</p></div>
       <div class="npp-k"><div><b class="num">${acts.length}</b><span>actions</span></div><div><b class="num">${hi}</b><span>priorité haute</span></div><div><b class="num">${added}</b><span>dans le plan</span></div></div></div>
     <div class="npp-bar"><div class="seg" role="tablist"><button role="tab" data-action="np-view" data-v="list" aria-selected="${view==="list"}">Actions</button><button role="tab" data-action="np-view" data-v="cal" aria-selected="${view==="cal"}">Calendrier</button></div>
@@ -5935,7 +6222,7 @@ function arCompute(Y, P){
   const pj = typeof pjItems==="function" ? pjItems() : []; k.pj = pj.length; k.pjNew = pj.filter(p=>inP(p.ajouteLe,P)).length; k.pjCats = Object.entries(pj.reduce((o,p)=>(o[p.categorie]=(o[p.categorie]||0)+1,o),{})).sort((a,b)=>b[1]-a[1]);
   const al = allAlerts(); k.crit = al.filter(a=>a.sev==="crit").length; k.warn = al.filter(a=>a.sev==="warn").length; k.alerts = al.filter(a=>a.sev!=="info");
   k.score = scoreInfo().score ?? 0;
-  k.dirs = Object.entries(trt.reduce((o,t)=>{ const d=(t.service||"").trim()||"Non renseignée"; o[d]=(o[d]||0)+1; return o; },{})).sort((a,b)=>b[1]-a[1]);
+  k.dirs = Object.entries(trt.reduce((o,t)=>{ const d=dirLabel(t)||"Non renseignée"; o[d]=(o[d]||0)+1; return o; },{})).sort((a,b)=>b[1]-a[1]);
   k.bases = Object.entries(trt.reduce((o,t)=>{ const L=basesOf(t).map(x=>baseOf(x)?.l).filter(Boolean); (L.length?L:["Non renseignée"]).forEach(b=>o[b]=(o[b]||0)+1); return o; },{})).sort((a,b)=>b[1]-a[1]);
   // activité mensuelle : toutes les mises à jour consignées dans les historiques
   const months = []; for (let i=0;i<12;i++){ const d=new Date(Y-1, 11+i, 1); months.push([arIso(d).slice(0,7), d.toLocaleDateString("fr-FR",{month:"short"}).replace(".","")]); }
@@ -6159,7 +6446,7 @@ const newsActions = {
   "news-export"(){ save(`egide-actualites-${today()}.json`, JSON.stringify(newsPack(),null,1)); },
   async "news-paste"(){
     try{ const t = await navigator.clipboard.readText(); const d = newsParse(t); await newsImportData(d); }
-    catch(e){ S.newsPaste = true; render(); setTimeout(()=>$("#news-txt")?.focus(),30); if (e?.message==="format") toast("Le presse-papiers ne contient pas d'actualités d'Égide : collez-les ci-dessous."); }
+    catch(e){ S.newsPaste = true; S.nimpOpen = true; render(); setTimeout(()=>$("#news-txt")?.focus(),30); if (e?.message==="format") toast("Le presse-papiers ne contient pas d'actualités d'Égide : collez-les ci-dessous."); }
   },
   async "news-paste-ok"(){ try{ await newsImportData(newsParse($("#news-txt")?.value)); }catch{ toast("Ce texte n'est pas un export d'actualités d'Égide."); } },
   "news-paste-x"(){ S.newsPaste=false; render(); },
@@ -6364,18 +6651,60 @@ function zipStore(files){
   const end = new Uint8Array([...u32(0x06054b50),...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(cenLen),...u32(off),...u16(0)]);
   return new Blob([...parts, ...cen, end], {type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
 }
-function docxFrom(blocks){
+function docxFrom(blocks, meta={}){
   const x = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"");
-  const p = (t, st, b) => `<w:p>${st?`<w:pPr><w:pStyle w:val="${st}"/></w:pPr>`:""}<w:r>${b?"<w:rPr><w:b/></w:rPr>":""}<w:t xml:space="preserve">${x(t)}</w:t></w:r></w:p>`;
-  const body = blocks.map(([k,t,v])=> k==="h1"?p(t,"Heading1"):k==="h2"?p(t,"Heading2"):k==="h3"?p(t,"Heading3"):k==="kv"?`<w:p><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${x(t)} : </w:t></w:r><w:r><w:t xml:space="preserve">${x(v)}</w:t></w:r></w:p>`:p(t)).join("");
-  const doc = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
-  const sty = (id,name,sz,col) => `<w:style w:type="paragraph" w:styleId="${id}"><w:name w:val="${name}"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="240" w:after="80"/><w:outlineLvl w:val="${id.slice(-1)-1}"/></w:pPr><w:rPr><w:b/><w:color w:val="${col}"/><w:sz w:val="${sz}"/></w:rPr></w:style>`;
-  const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="21"/><w:lang w:val="fr-FR"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="60"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>${sty("Heading1","heading 1",36,"003865")}${sty("Heading2","heading 2",28,"0088CE")}${sty("Heading3","heading 3",23,"800064")}</w:styles>`;
+  const run = (t, rpr="") => String(t??"").split("\n").map((l,i)=>`${i?"<w:r><w:br/></w:r>":""}<w:r>${rpr?`<w:rPr>${rpr}</w:rPr>`:""}<w:t xml:space="preserve">${x(l)}</w:t></w:r>`).join("");
+  const rich = t => String(t??"").split(/(\*\*[^*]+\*\*)/).map(p=>/^\*\*[^*]+\*\*$/.test(p)?run(p.slice(2,-2),"<w:b/>"):run(p)).join("");
+  const p = (t, st, ppr="") => `<w:p><w:pPr>${st?`<w:pStyle w:val="${st}"/>`:""}${ppr}</w:pPr>${rich(t)}</w:p>`;
+  const W = 9638, L = 3100;
+  const cell = (w, inner, fill) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${fill?`<w:shd w:val="clear" w:color="auto" w:fill="${fill}"/>`:""}<w:tcMar><w:top w:w="70" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="70" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tcMar></w:tcPr>${inner}</w:tc>`;
+  const kvTable = rows => `<w:tbl><w:tblPr><w:tblW w:w="${W}" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:color="D6DEE6"/><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:color="D6DEE6"/><w:right w:val="nil"/><w:insideH w:val="single" w:sz="4" w:color="D6DEE6"/><w:insideV w:val="nil"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="${L}"/><w:gridCol w:w="${W-L}"/></w:tblGrid>${rows.map(([,k,v])=>`<w:tr><w:trPr><w:cantSplit/></w:trPr>${cell(L, `<w:p><w:pPr><w:pStyle w:val="KvLabel"/></w:pPr>${run(k)}</w:p>`, "EEF4FA")}${cell(W-L, `<w:p><w:pPr><w:pStyle w:val="KvValue"/></w:pPr>${rich(v)}</w:p>`)}</w:tr>`).join("")}</w:tbl><w:p><w:pPr><w:spacing w:after="60"/></w:pPr></w:p>`;
+  const out = []; let kv = [];
+  const flush = () => { if (kv.length){ out.push(kvTable(kv)); kv=[]; } };
+  blocks.forEach(b=>{
+    const [k,t,v] = b;
+    if (k==="kv"){ kv.push(b); return; }
+    flush();
+    if (k==="h1") out.push(p(t,"Title"));
+    else if (k==="h2") out.push(p(t,"Heading1"));
+    else if (k==="h3") out.push(p(t,"Heading2"));
+    else if (k==="ul") arr(t).forEach(it=>out.push(p(it,"Puce","<w:numPr><w:ilvl w:val=\"0\"/><w:numId w:val=\"1\"/></w:numPr>")));
+    else if (k==="p" && v==="sub") out.push(p(t,"Subtitle"));
+    else if (k==="p" && v==="note") out.push(p(t,"Note"));
+    else out.push(p(t,"Corps"));
+  });
+  flush();
+  const org = S.org?.raisonSociale || "";
+  const title = meta.title || (blocks.find(b=>b[0]==="h1")||[])[1] || "Document";
+  const fld = f => `<w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> ${f} </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>1</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r>`;
+  const NS = `xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"`;
+  const header = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:hdr ${NS}><w:p><w:pPr><w:pStyle w:val="Entete"/><w:tabs><w:tab w:val="right" w:pos="${W}"/></w:tabs></w:pPr>${run(org||"Protection des données","<w:b/><w:color w:val=\"003865\"/>")}<w:r><w:tab/></w:r>${run(title.length>70?title.slice(0,68)+"…":title)}</w:p></w:hdr>`;
+  const footer = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:ftr ${NS}><w:p><w:pPr><w:pStyle w:val="Pied"/><w:tabs><w:tab w:val="right" w:pos="${W}"/></w:tabs></w:pPr>${run((org?org+" · ":"")+"Document établi par le délégué à la protection des données · "+fmtD(today()))}<w:r><w:tab/></w:r>${run("Page ")}${fld("PAGE")}${run(" / ")}${fld("NUMPAGES")}</w:p></w:ftr>`;
+  const doc = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${NS}><w:body>${out.join("")}<w:sectPr><w:headerReference w:type="default" r:id="rId3"/><w:footerReference w:type="default" r:id="rId4"/><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1418" w:right="1134" w:bottom="1247" w:left="1134" w:header="567" w:footer="567" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const ps = (id, name, ppr, rpr, extra="") => `<w:style w:type="paragraph" w:styleId="${id}"><w:name w:val="${name}"/><w:basedOn w:val="Normal"/>${extra}<w:qFormat/><w:pPr>${ppr}</w:pPr><w:rPr>${rpr}</w:rPr></w:style>`;
+  const F = `<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>`;
+  const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr>${F}<w:color w:val="2B2F36"/><w:sz w:val="21"/><w:szCs w:val="21"/><w:lang w:val="fr-FR"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="100" w:line="276" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>
+<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>
+${ps("Title","Title",`<w:keepNext/><w:pBdr><w:bottom w:val="single" w:sz="18" w:space="6" w:color="0088CE"/></w:pBdr><w:spacing w:before="0" w:after="80"/>`,`<w:b/><w:color w:val="003865"/><w:sz w:val="40"/><w:szCs w:val="40"/>`,`<w:next w:val="Subtitle"/>`)}
+${ps("Subtitle","Subtitle",`<w:spacing w:before="60" w:after="280"/>`,`<w:color w:val="6B7785"/><w:sz w:val="19"/>`)}
+${ps("Heading1","heading 1",`<w:keepNext/><w:keepLines/><w:pBdr><w:left w:val="single" w:sz="24" w:space="8" w:color="0088CE"/></w:pBdr><w:spacing w:before="320" w:after="120"/><w:ind w:left="170"/><w:outlineLvl w:val="0"/>`,`<w:b/><w:color w:val="003865"/><w:sz w:val="27"/><w:szCs w:val="27"/>`,`<w:next w:val="Corps"/>`)}
+${ps("Heading2","heading 2",`<w:keepNext/><w:keepLines/><w:spacing w:before="200" w:after="80"/><w:outlineLvl w:val="1"/>`,`<w:b/><w:color w:val="800064"/><w:sz w:val="23"/><w:szCs w:val="23"/>`,`<w:next w:val="Corps"/>`)}
+${ps("Corps","Corps de texte",`<w:spacing w:after="120"/><w:jc w:val="both"/>`,``)}
+${ps("Puce","Liste à puces",`<w:spacing w:after="60"/><w:ind w:left="397" w:hanging="227"/><w:jc w:val="both"/>`,``)}
+${ps("Note","Note",`<w:pBdr><w:top w:val="single" w:sz="4" w:space="4" w:color="D6DEE6"/></w:pBdr><w:spacing w:before="120" w:after="120"/>`,`<w:i/><w:color w:val="6B7785"/><w:sz w:val="18"/><w:szCs w:val="18"/>`)}
+${ps("KvLabel","Libellé",`<w:spacing w:after="0"/>`,`<w:b/><w:color w:val="003865"/><w:sz w:val="19"/><w:szCs w:val="19"/>`)}
+${ps("KvValue","Valeur",`<w:spacing w:after="0"/>`,`<w:sz w:val="20"/><w:szCs w:val="20"/>`)}
+${ps("Entete","En-tête Égide",`<w:pBdr><w:bottom w:val="single" w:sz="4" w:space="4" w:color="D6DEE6"/></w:pBdr><w:spacing w:after="0"/>`,`<w:color w:val="6B7785"/><w:sz w:val="16"/><w:szCs w:val="16"/>`)}
+${ps("Pied","Pied Égide",`<w:pBdr><w:top w:val="single" w:sz="4" w:space="4" w:color="D6DEE6"/></w:pBdr><w:spacing w:after="0"/>`,`<w:color w:val="8A949F"/><w:sz w:val="15"/><w:szCs w:val="15"/>`)}
+<w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
+  const numbering = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:abstractNum w:abstractNumId="0"><w:multiLevelType w:val="singleLevel"/><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="397" w:hanging="227"/></w:pPr><w:rPr><w:color w:val="0088CE"/></w:rPr></w:lvl></w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num></w:numbering>`;
+  const core = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${x(title)}</dc:title><dc:creator>${x(S.org?.dpoNom||"Égide")}</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`;
+  const CT = "application/vnd.openxmlformats-officedocument.wordprocessingml";
   return zipStore([
-    ["[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`],
-    ["_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`],
-    ["word/_rels/document.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
-    ["word/document.xml", doc], ["word/styles.xml", styles]
+    ["[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}.styles+xml"/><Override PartName="/word/numbering.xml" ContentType="${CT}.numbering+xml"/><Override PartName="/word/header1.xml" ContentType="${CT}.header+xml"/><Override PartName="/word/footer1.xml" ContentType="${CT}.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
+    ["_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`],
+    ["word/_rels/document.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/><Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/></Relationships>`],
+    ["word/document.xml", doc], ["word/styles.xml", styles], ["word/numbering.xml", numbering], ["word/header1.xml", header], ["word/footer1.xml", footer], ["docProps/core.xml", core]
   ]);
 }
 function copKnowledge(){
@@ -6460,7 +6789,7 @@ function finEditor(key, d){
     case "donnees": return checks("donnees", DONNEES);
     case "destinataires": return `<label class="lbl" for="e-destinatairesInternes">En interne</label>${ta("destinatairesInternes","Ex. : service RH, managers")}<label class="lbl" for="e-destinatairesExternes" style="margin-top:6px">À l'extérieur</label>${ta("destinatairesExternes","Ex. : URSSAF, expert-comptable, éditeur du logiciel")}`;
     case "conservation": return `<input type="text" data-field="conservation" id="e-conservation" value="${esc(d.conservation)}" placeholder="Ex. : durée du contrat de travail"><div class="sugg">${DUREES.map(x=>`<button type="button" class="sg" data-action="sugg" data-k="conservation" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div>`;
-    case "securite": return checks("securite", SECURITE);
+    case "securite": return secChecks(d);
   }
   return "";
 }
@@ -6819,7 +7148,7 @@ function docClauseTravail(){
 }
 function docPolitique(){
   const o = docOrg(); const trt = items("traitements").filter(t=>t.statut!=="archive");
-  const dirs = [...new Set(trt.map(t=>t.service).filter(Boolean))];
+  const dirs = orgDirections();
   return [["h1","Politique de protection des données personnelles"],ver(o),
     ["h2","1. Notre engagement"],["p",`${o.rs} s'engage à traiter les données personnelles de ses salariés, candidats, clients, prospects, fournisseurs et partenaires dans le respect du règlement général sur la protection des données (RGPD) et de la loi Informatique et Libertés. Cette politique, approuvée par la direction générale, s'applique à toutes les directions et à toute personne agissant pour le compte de l'entreprise.`],
     ["h2","2. Organisation et responsabilités"],["kv","Direction générale",`${o.rep} : porte la politique, arbitre et donne les moyens.`],["kv","Délégué à la protection des données",`${o.dpo} : informe, conseille, contrôle, coopère avec la CNIL ; il dispose de l'indépendance et des moyens prévus aux articles 38 et 39.`],["kv","Directions",`Chaque direction${dirs.length?" ("+dirs.length+" concernées)":""} désigne un correspondant qui tient à jour ses traitements et applique les durées de conservation.`],["kv","Managers","Veillent à l'application des règles dans leurs équipes et signalent les nouveaux projets."],["kv","Chaque salarié","Applique la charte informatique et signale tout incident."],
@@ -6976,14 +7305,15 @@ function vDocs(){
 }
 const docCur = () => { const D=S.docv; if (!D) return null; return D.kind==="custom" ? {title:D.draft?.titre||"Document", blocks:mdToBlocks(D.draft?.md||"")} : docBuild(D.kind, D.id); };
 
-function docHTML(blocks){ return blocks.map(b=>{ const [k,t,c]=b; if (k==="h1") return `<h1>${esc(t)}</h1>`; if (k==="h2") return `<h2>${esc(t)}</h2>`; if (k==="h3") return `<h3>${esc(t)}</h3>`; if (k==="ul") return `<ul>${t.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`; if (k==="kv") return `<p><b>${esc(t)} :</b> ${esc(c)}</p>`; return `<p class="${c||""}">${esc(t)}</p>`; }).join(""); }
+function docHTML(blocks){ let out="", kv=[]; const fl=()=>{ if(kv.length){ out+=`<table class="dkv">${kv.map(([,k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table>`; kv=[]; } }; blocks.forEach(b=>{ const [k,t,c]=b; if (k==="kv"){ kv.push(b); return; } fl(); out += k==="h1"?`<h1>${esc(t)}</h1>`:k==="h2"?`<h2>${esc(t)}</h2>`:k==="h3"?`<h3>${esc(t)}</h3>`:k==="ul"?`<ul>${arr(t).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:`<p class="${c||""}">${esc(t)}</p>`; }); fl(); return out; }
 function docText(blocks){ return blocks.map(b=>{ const [k,t,c]=b; if (k==="h1") return t.toUpperCase()+"\n"; if (k==="h2") return "\n"+t; if (k==="h3") return "\n"+t; if (k==="ul") return t.map(x=>"• "+x).join("\n"); if (k==="kv") return `${t} : ${c}`; return t; }).join("\n"); }
-const docDocx = blocks => docxFrom(blocks.flatMap(b=>b[0]==="ul" ? b[1].map(x=>["p","•  "+x]) : b[0]==="p" ? [["p",b[1]]] : [b]));
+const docDocx = (blocks, title) => docxFrom(blocks, {title});
 
 /* ================= Correspondants et revue annuelle ================= */
 const APP_URL = "https://claude.ai/artifact/5bb4FgntY4zVFTMyjkcanC";
-const revDirs = () => { const ds = [...new Set(items("traitements").filter(t=>t.statut!=="archive").map(t=>(t.service||"").trim()||"Direction non renseignée"))]; return ds.sort((a,b)=>a.localeCompare(b,"fr")); };
-const revFiches = dir => items("traitements").filter(t=>t.statut!=="archive" && ((t.service||"").trim()||"Direction non renseignée")===dir);
+const revKey = t => dirLabel(t) || "Direction non renseignée";
+const revDirs = () => { const used = new Set(items("traitements").filter(t=>t.statut!=="archive").map(revKey)); const org = orgDirections().filter(d=>used.has(d)); return [...org, ...[DIR_HORS,"Direction non renseignée"].filter(d=>used.has(d))]; };
+const revFiches = dir => items("traitements").filter(t=>t.statut!=="archive" && revKey(t)===dir);
 const revCamp = () => [...(S.camps?.values()||[])].sort((a,b)=>String(b.lanceLe).localeCompare(String(a.lanceLe)))[0] || null;
 const revActive = () => { const c = revCamp(); return c && c.statut!=="close" ? c : null; };
 const revSt = (c, id) => c?.fiches?.[id]?.statut || "a_revoir";
@@ -7039,8 +7369,8 @@ function revBanner(t){
 /* ================= Carte des flux ================= */
 function vFlux(){
   const F = S.fluxf || (S.fluxf = {dir:"", ext:true});
-  const trt = items("traitements").filter(t=>t.statut!=="archive" && (!F.dir || (t.service||"").trim()===F.dir));
-  const dirs = [...new Set(trt.map(t=>(t.service||"").trim()||"Non renseignée"))];
+  const trt = items("traitements").filter(t=>t.statut!=="archive" && (!F.dir || dirLabel(t)===F.dir));
+  const dirs = [...new Set(trt.map(t=>dirLabel(t)||"Non renseignée"))];
   const sts = items("soustraitants").filter(s=>s.statut!=="termine" && arr(s.traitementIds).some(id=>trt.some(t=>t._id===id)));
   const extCount = {}; if (F.ext) trt.forEach(t=>String(t.destinatairesExternes||"").split(/[,;\n]/).map(x=>x.trim().replace(/\.$/,"")).filter(x=>x && x.length<60).forEach(x=>{ const k=x[0].toUpperCase()+x.slice(1); extCount[k]=(extCount[k]||0)+1; }));
   const exts = Object.entries(extCount).sort((a,b)=>b[1]-a[1]).slice(0,14).map(x=>x[0]);
@@ -7055,7 +7385,7 @@ function vFlux(){
   rightNodes.forEach((n,i)=>pos[n.k]=[colX[2], ypos(rightNodes.length,i)]);
   pays.forEach((p,i)=>pos["p:"+p]=[colX[3], ypos(pays.length,i)]);
   const links = [];
-  trt.forEach(t=>{ links.push(["d:"+((t.service||"").trim()||"Non renseignée"), "t:"+t._id, ""]);
+  trt.forEach(t=>{ links.push(["d:"+(dirLabel(t)||"Non renseignée"), "t:"+t._id, ""]);
     sts.filter(s=>arr(s.traitementIds).includes(t._id)).forEach(s=>links.push(["t:"+t._id, "st:"+s._id, s.horsUE?"hors":""]));
     if (F.ext) String(t.destinatairesExternes||"").split(/[,;\n]/).map(x=>x.trim().replace(/\.$/,"")).filter(Boolean).forEach(x=>{ const k="ex:"+x[0].toUpperCase()+x.slice(1); if (pos[k]) links.push(["t:"+t._id, k, ""]); });
     if (t.transfertHorsUE) links.push(["t:"+t._id, "p:"+(t.transfertPays||"Pays à préciser"), "hors"]); });
@@ -7074,7 +7404,7 @@ function vFlux(){
   </svg>`;
   return `${roBanner()}
   <div class="head"><div class="phead"><span class="pico" style="--c:#2E7DB8">${I.flow}</span><div><h1>Carte des flux de données</h1><p class="psub">Qui traite quoi, et où vont les données</p></div></div></div>
-  <div class="fluxbar"><select id="flux-dir" aria-label="Filtrer par direction"><option value="">Toutes les directions</option>${[...new Set(items("traitements").map(t=>(t.service||"").trim()).filter(Boolean))].sort().map(d=>`<option ${F.dir===d?"selected":""}>${esc(d)}</option>`).join("")}</select>
+  <div class="fluxbar"><select id="flux-dir" aria-label="Filtrer par direction"><option value="">Toutes les directions</option>${orgDirections().map(d=>`<option ${F.dir===d?"selected":""}>${esc(d)}</option>`).join("")}</select>
     <label class="switch"><input type="checkbox" id="flux-ext" ${F.ext?"checked":""}>Destinataires externes</label>
     <div class="legend"><span style="--lc:var(--primary)">Traitement</span><span style="--lc:var(--plum)">Données sensibles</span><span style="--lc:var(--m-st)">Sous-traitant</span><span style="--lc:var(--crit)">Hors UE</span></div></div>
   <div class="fluxwrap">${trt.length?svg:`<p class="muted" style="padding:20px">Aucun traitement à afficher.</p>`}</div>
@@ -7222,7 +7552,7 @@ function chatTools(){
     {name:"synthese", description:"Chiffres clés de la conformité : score, nombre de fiches par module, fiches en brouillon, points urgents, organisation (raison sociale, DPO).", inputSchema:{type:"object", properties:{}},
       execute:()=>{ const sc=scoreInfo(); return {score:sc.score, completudeMoyenne:sc.avg, fichesValidees:sc.valid+" %", points:{urgents:allAlerts().filter(a=>a.sev==="crit").length, importants:allAlerts().filter(a=>a.sev==="warn").length}, modules:Object.fromEntries(MOD_KEYS.map(m=>[MODS[m].long, items(m).length])), brouillons:items("traitements").filter(t=>t.statut==="brouillon").length, organisation:{raisonSociale:S.org.raisonSociale||"non renseignée", dpo:S.org.dpoNom||"non renseigné", dpoEmail:S.org.dpoEmail||""}}; }},
     {name:"proposer_action", description:"Propose à l'utilisateur d'ajouter une action à son plan d'actions. L'action n'est créée que s'il clique sur le bouton affiché. À utiliser quand une action concrète découle de la conversation.", inputSchema:{type:"object", properties:{titre:{type:"string"}, description:{type:"string"}, responsable:{type:"string"}, echeance:{type:"string", description:"AAAA-MM-JJ"}, priorite:{type:"string", enum:["haute","moyenne","basse"]}}, required:["titre"]},
-      execute:(a)=>{ const p={id:"cp"+Date.now().toString(36)+Math.random().toString(36).slice(2,5), titre:String(a.titre).slice(0,140), description:String(a.description||"").slice(0,800), responsable:String(a.responsable||"").slice(0,80), echeance:/^\d{4}-\d{2}-\d{2}$/.test(a.echeance)?a.echeance:addDays(30), priorite:NP_PRIO[a.priorite]?a.priorite:"moyenne", done:null}; CHAT.props.push(p); CHAT.pendingProps=(CHAT.pendingProps||[]).concat(p.id); return "Proposition affichée à l'utilisateur sous ta réponse, avec un bouton pour l'ajouter."; }}
+      execute:(a)=>{ const p={id:"cp"+Date.now().toString(36)+Math.random().toString(36).slice(2,5), titre:String(a.titre).slice(0,140), description:String(a.description||"").slice(0,800), responsable:respPick(String(a.responsable||"")).slice(0,80), echeance:/^\d{4}-\d{2}-\d{2}$/.test(a.echeance)?a.echeance:addDays(30), priorite:NP_PRIO[a.priorite]?a.priorite:"moyenne", done:null}; CHAT.props.push(p); CHAT.pendingProps=(CHAT.pendingProps||[]).concat(p.id); return "Proposition affichée à l'utilisateur sous ta réponse, avec un bouton pour l'ajouter."; }}
   ];
 }
 function chatRules(){
@@ -7390,7 +7720,7 @@ function vOrg(){
       </div>`,"#1F8A52")}
     <div class="savebar"><span class="muted" style="font-size:.85rem" id="org-state">${S.orgDirty?"<b style=\"color:var(--warn)\">Modifications non enregistrées</b>":S.org.majLe?"Dernière mise à jour le "+fmtD(S.org.majLe.slice(0,10)):"Non enregistré"}</span>
       <span class="actions"><button type="submit" class="btn" ${W()?"":"disabled"}>${I.check}Enregistrer</button><button type="submit" class="btn primary" data-back="1" ${W()?"":"disabled"}>Enregistrer et revenir à l'accueil</button></span></div>
-  </form>`;
+  </form>${orgOrphansPanel()}`;
 }
 function orgLive(){
   const o=S.orgDraft; if (!o) return;
@@ -7969,8 +8299,8 @@ const actions = {
   async "doc-del"(){ const v=S.docv; if(!v?.id || !W()) return; if (!confirmTwice("doc-del","Cliquez à nouveau pour supprimer ce document")) return; try{ await S.db.collection("documents").doc(v.id).delete(); S.docs?.delete(v.id); S.docv={kind:"gen", id:""}; toast("Document supprimé"); }catch(e){ writeError(e); } render(); },
   "gen-run"(){ genRun(); },
   async "doc-copy"(){ const r=docCur(); if(!r) return; try{ await navigator.clipboard.writeText(docText(r.blocks)); toast("Texte copié"); }catch{ toast("Copie impossible : utilisez le téléchargement Word."); } },
-  "doc-word"(){ const r=docCur(); if(!r) return; save(`${slugOrg()}-${slug(r.title).slice(0,60)}.docx`, docDocx(r.blocks)); },
-  async "doc-pj"(){ const r=docCur(); if(!r) return; const f=new File([docDocx(r.blocks)], `${slug(r.title).slice(0,60)}.docx`, {type:PJ_TYPES.docx.m}); const mod = S.docv.kind==="mention"&&S.docv.id ? "traitements" : S.docv.kind==="art28"&&S.docv.id ? "soustraitants" : ""; await pjUpload([f], mod, mod?S.docv.id:"", S.docv.kind==="art28"?"dpa":S.docv.kind==="mention"?"information":"procedure"); },
+  "doc-word"(){ const r=docCur(); if(!r) return; save(`${slugOrg()}-${slug(r.title).slice(0,60)}.docx`, docDocx(r.blocks, r.title)); },
+  async "doc-pj"(){ const r=docCur(); if(!r) return; const f=new File([docDocx(r.blocks, r.title)], `${slug(r.title).slice(0,60)}.docx`, {type:PJ_TYPES.docx.m}); const mod = S.docv.kind==="mention"&&S.docv.id ? "traitements" : S.docv.kind==="art28"&&S.docv.id ? "soustraitants" : ""; await pjUpload([f], mod, mod?S.docv.id:"", S.docv.kind==="art28"?"dpa":S.docv.kind==="mention"?"information":"procedure"); },
   async "rev-refs"(){ if(!W()) return; const dirs=revDirs(); const refs={...(S.org.referents||{})}; document.querySelectorAll("[data-ref]").forEach(i=>{ const d=dirs[+i.dataset.ref]; if(!d) return; refs[d]={...(refs[d]||{}), [i.dataset.k]:i.value.trim()}; }); const doc={...S.org, referents:refs}; try{ await S.db.doc("config/org").set(doc); S.org=doc; S.refDirty=false; toast("Correspondants enregistrés"); }catch(e){ writeError(e); } render(); },
   async "rev-launch"(){ if(!W()) return; const ech=$("#rev-ech")?.value||addDays(30); const y=new Date().getFullYear(); const id=`revue-${y}-${Date.now().toString(36)}`; const doc={titre:`Revue ${y}`, lanceLe:new Date().toISOString(), echeance:ech, statut:"ouverte", fiches:{}}; try{ await S.db.collection("campagnes").doc(id).set(doc); S.camps.set(id,{...doc,_id:id}); toast("Campagne lancée : envoyez la demande à chaque correspondant"); }catch(e){ writeError(e); } render(); },
   async "rev-ok"(el){ await revMark(el.dataset.id, "confirmee"); toast("Fiche confirmée"); render(); },
@@ -8006,7 +8336,10 @@ const actions = {
   "ics-export"(){ icsExport(); },
   "np-gen"(){ npGenerate($("#np-scope")?.value||"recent"); },
   "np-regen"(){ const sc=S.np?.plan?.scope; npGenerate(sc && sc!=="selection" ? sc : "recent", true); },
-  "np-toggle"(){ S.np.open = S.np.open===false; render(); },
+  "np-toggle"(){ S.np.open = S.np.open!==true; render(); },
+  "nimp-toggle"(){ S.nimpOpen = !S.nimpOpen; if (!S.nimpOpen) S.newsPaste=false; render(); },
+  nper(el){ S.newsFilter = {...(S.newsFilter||{cat:"",q:""}), per:el.dataset.v, lim:24}; render(); },
+  nmore(){ const f=S.newsFilter||(S.newsFilter={cat:"",q:"",per:""}); f.lim=(f.lim||24)+24; render(); },
   "np-view"(el){ S.np.view = el.dataset.v; render(); },
   "np-one"(el){ npGenerate([el.dataset.id]); },
   "np-one-close"(el){ if (S.np?.single) delete S.np.single[el.dataset.id]; render(); },
@@ -8061,7 +8394,7 @@ const actions = {
   "run-import"(){ runImport(); },
   "xlsx-export"(){ exportXLSX(S.mod, false); },
   "xlsx-template"(){ exportXLSX(S.imp?.mod||S.mod, true); },
-  "use-tpl"(el){ const tp=TPL[+el.dataset.i]; if(!tp) return; Object.assign(S.draft, structuredClone(tp.d)); S.dirty=true; S.tplHidden=true; render(); toast("Modèle « "+tp.n+" » appliqué. Adaptez-le à votre entreprise."); $("#e-nom")?.focus(); },
+  "use-tpl"(el){ const tp=TPL[+el.dataset.i]; if(!tp) return; Object.assign(S.draft, structuredClone(tp.d)); S.draft.service = dirMatch(tp.d.service) || ""; S.dirty=true; S.tplHidden=true; render(); toast("Modèle « "+tp.n+" » appliqué. Adaptez-le à votre entreprise."); $("#e-nom")?.focus(); },
   "tpl-hide"(){ S.tplHidden=true; render(); $("#e-nom")?.focus(); },
   sugg(el){ const k=el.dataset.k; S.draft[k]=el.dataset.v; const inp=$("#e-"+k); if(inp) inp.value=el.dataset.v; S.dirty=true; refreshEdit(); },
   "save-draft"(){ saveDraft(); },
@@ -8077,7 +8410,7 @@ const actions = {
   falerts(){ S.filters.alerts = !S.filters.alerts; render(); },
   fclear(){ S.filters = {q:"", statut:"", service:"", base:"", alerts:false}; render(); },
   "fq-clear"(){ S.filters.q = ""; render(); $("#f-q")?.focus(); },
-  ncat(el){ S.newsFilter = {...(S.newsFilter||{q:""}), cat:el.dataset.v}; render(); },
+  ncat(el){ S.newsFilter = {...(S.newsFilter||{q:""}), cat:el.dataset.v, lim:24}; render(); },
   "w-news"(){ WEL.open=false; renderWelcome(); go("news"); },
   "game-start"(el){ startGame(el.dataset.m); },
   "game-answer"(el){ const v=el.dataset.v; answerGame(G.mode==="vf" ? v==="true" : G.mode==="sc" ? +v : v); setTimeout(()=>$("#g-next")?.focus(),30); },
@@ -8116,6 +8449,9 @@ const actions = {
   "news-import"(){ $("#news-file").value=""; $("#news-file").click(); },
   "toggle-add"(){ S.addOpen=!S.addOpen; render(); },
   "open-edit"(el){ S.mod=el.dataset.mod; S.selId=el.dataset.id; S.view="detail"; actions.edit(); },
+  async "dir-fix"(){ if (!W()) return; await dirFixApply(); render(); },
+  "sens-add"(el){ if (!S.draft) return; const v=el.dataset.v; S.draft.sensibles=[...new Set([...arr(S.draft.sensibles), v])]; S.dirty=true; render(); },
+  "sens-exc"(el){ if (!S.draft) return; const v=el.dataset.v; const cur=String(S.draft.sensiblesJustif||"").trim(); if (cur.includes(v.split(" : ")[0])) return; S.draft.sensiblesJustif = cur ? cur+"\n"+v : v; const ta=$("#e-sensiblesJustif"); if (ta) ta.value=S.draft.sensiblesJustif; S.dirty=true; refreshEdit(); },
   "org-dir-add"(el){ const inp=$("#o-dirnew"); const v=el.dataset.v||inp?.value||""; if(!v.trim()){ inp?.focus(); return; } orgAddDir(v); orgRerender(el.dataset.v?null:"o-dirnew"); },
   "org-dir-del"(el){ const o=S.orgDraft; if(!o) return; const d=orgDirs(o); d.splice(+el.dataset.i,1); o.services=d.join(", "); S.orgDirty=true; orgRerender(); },
   "org-me"(el){ const o=S.orgDraft; if(!o) return; const t=el.dataset.t; if (t==="dpo"){ o.dpoNom=S.meName||""; } else if (t==="ref"){ o.referentNom=S.meName||""; } else { o.referentNom=o.dpoNom||""; o.referentEmail=o.dpoEmail||""; } S.orgDirty=true; orgRerender(t==="dpo"?"o-dpoEmail":"o-referentEmail"); },
@@ -8217,7 +8553,8 @@ document.addEventListener("change", e => {
   if (el.id==="flux-ext"){ S.fluxf={...S.fluxf, ext:el.checked}; render(); return; }
   if (el.id==="pj-cat"){ S.pjFilter={...(S.pjFilter||{q:"",mod:"*"}), cat:el.value}; render(); return; }
   if (el.dataset.cg!=null){ const n=document.querySelectorAll("[data-cg]:checked").length; const c=$("#cg-n"); if(c) c.textContent=`${n} traitement(s) sélectionné(s)`; return; }
-  if (el.dataset.dirsel!=null && S.draft){ const inp=$("#e-service"); if (el.value==="__autre"){ inp.hidden=false; inp.value=""; S.draft.service=""; inp.focus(); } else { inp.hidden=true; inp.value=el.value; S.draft.service=el.value; } S.dirty=true; refreshEdit(); return; }
+  if (el.dataset.dirsel!=null && S.draft){ const inp=$("#e-service"); if (inp) inp.value=el.value; S.draft.service=el.value; S.dirty=true; refreshEdit(); return; }
+  if (el.dataset.durref!=null && S.draft){ const [g,i]=String(el.value).split(".").map(Number); const r=DUREES_REF[g]?.[1]?.[i]; if (!r) return; S.draft.conservation=r[1]; S.draft.conservationArchivage=r[2]; const a=$("#e-conservation"), b=$("#e-conservationArchivage"); if(a) a.value=r[1]; if(b) b.value=r[2]; const src=$("#durref-src"); if (src) src.innerHTML=`<b>${esc(r[0])}</b> · référence : ${esc(r[3])}`; S.dirty=true; refreshEdit(); return; }
   if (el.id==="w-skip"){ savePrefs({skipWelcome:!el.checked}); return; }
   if (S.draft && (el.dataset.arr || el.dataset.field)) S.dirty = true;
   if (el.id==="e-role" && $("#w-roleClient")){ $("#w-roleClient").hidden = !["soustraitant","conjoint"].includes(el.value); const lb=$("#w-roleClient label"); if(lb) lb.textContent = el.value==="conjoint"?"Responsable(s) conjoint(s)":"Pour le compte de"; }
