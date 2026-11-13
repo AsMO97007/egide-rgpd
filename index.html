@@ -2010,6 +2010,54 @@ ul.senswhy li{display:flex;flex-direction:column;padding:6px 10px;border-radius:
 .numprev-l>div{display:grid;grid-template-columns:120px 18px 120px minmax(0,1fr);gap:6px;align-items:baseline;font-family:var(--mono,ui-monospace,monospace);font-size:.8rem}
 .numprev-l s{color:var(--muted)}.numprev-l span{color:var(--primary)}.numprev-l small{font-family:inherit;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:system-ui,sans-serif}
 @media (max-width:640px){.numprev-l>div{grid-template-columns:auto 14px auto}.numprev-l small{grid-column:1/-1}}
+
+/* --- Recommandations : transfert, pilotage, contrats, IA, profils, visite --- */
+.m-ia{--c:#6B4FBB;--cs:rgba(107,79,187,.1)}
+.xfer-s{margin:0;padding-left:20px;display:grid;gap:4px;font-size:.88rem}
+.vbadge{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:99px;background:var(--sunk,rgba(0,0,0,.05));color:var(--muted);margin-left:4px}
+.vbadge.ok{background:var(--ok-soft,rgba(31,138,82,.12));color:var(--ok)}.vbadge.bad{background:rgba(200,36,61,.1);color:var(--crit)}
+.pdirs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.pdir a.btn{text-decoration:none}
+.pdir{border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.pdir-h{display:flex;justify-content:space-between;align-items:center;gap:10px}.pdir-h h3{margin:0;font-size:1rem;color:var(--heading)}
+.pdir-sc{min-width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:var(--sc)}
+.pdir-ref{margin:0;font-size:.82rem}
+.pdir-k{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0}
+.pdir-k div{background:var(--sunk,rgba(0,0,0,.03));border-radius:10px;padding:6px 8px}.pdir-k dt{font-size:.7rem;color:var(--muted)}.pdir-k dd{margin:0;font-weight:800;font-size:1.05rem;color:var(--heading)}
+.pdir-k dd.w{color:#B86A06}.pdir-k dd.c{color:var(--crit)}
+.prel{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.prel a.btn{text-decoration:none}
+.prel li{display:grid;grid-template-columns:10px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--sunk,rgba(0,0,0,.03));font-size:.88rem}
+.pctl-sum{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.pctl{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pctl summary{cursor:pointer;display:flex;gap:10px;align-items:center}.pctl summary b{flex:1}
+.pctl p{margin:8px 0 4px;font-size:.84rem}.pctl ul{margin:0;padding-left:20px;font-size:.86rem;display:grid;gap:3px}
+.pctl.crit{border-color:rgba(200,36,61,.35)}.pctl.warn{border-color:rgba(224,162,59,.4)}
+.hchart{width:100%;max-width:760px;height:auto;color:var(--ink)}
+.hleg{display:flex;gap:14px;font-size:.8rem;color:var(--muted);margin:4px 0 12px}.hleg span::before{content:"";display:inline-block;width:12px;height:3px;border-radius:2px;background:var(--lc);margin-right:6px;vertical-align:middle}
+.pcnil-h{display:flex;gap:16px;align-items:center;margin-bottom:12px}.pcnil-h p{margin:0;color:var(--muted);font-size:.88rem}
+.pcnil-sc{min-width:92px;padding:10px;border-radius:14px;background:var(--primary-soft);text-align:center}.pcnil-sc b{display:block;font-size:1.5rem;color:var(--heading)}.pcnil-sc span{font-size:.72rem;color:var(--muted)}
+.pcnil{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.pcnil li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;border:1px solid var(--line)}
+.pcnil li div{display:flex;flex-direction:column}.pcnil li small{color:var(--muted)}
+.pcnil-i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center}.pcnil-i svg{width:15px;height:15px}
+.pcnil li.ok .pcnil-i{background:var(--ok-soft,rgba(31,138,82,.12));color:var(--ok)}.pcnil li.ko .pcnil-i{background:rgba(224,162,59,.15);color:#B86A06}
+.art28{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-direction:column;gap:5px}
+.art28 li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;font-size:.86rem;padding:6px 8px;border-radius:10px}
+.art28 li>span{font-weight:800}.art28 li.ok>span{color:var(--ok)}.art28 li.ko{background:rgba(200,36,61,.06)}.art28 li.ko>span{color:var(--crit)}.art28 li.opt>span{color:var(--muted)}
+.art28 small{display:block;color:var(--muted);font-size:.78rem}
+.profil{position:relative;margin-top:10px;border-top:1px solid var(--rail-line,var(--line));padding-top:8px}
+.profil-b{all:unset;cursor:pointer;display:flex;gap:8px;align-items:center;font-size:.8rem;color:var(--rail-muted,var(--muted));padding:6px 8px;border-radius:10px;width:100%;box-sizing:border-box}
+.profil-b:hover{background:var(--sunk,rgba(0,0,0,.04))}.profil-b svg{width:16px;height:16px}
+.profil-b:focus-visible{outline:2px solid var(--primary)}
+.profil-m{margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:flex;flex-direction:column;gap:6px;font-size:.8rem}
+.profil-m p{margin:0}.profil-o{all:unset;cursor:pointer;padding:6px 8px;border-radius:8px;border:1px solid var(--line)}.profil-o.on{border-color:var(--primary);color:var(--primary);font-weight:700}
+.profil-dpo{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+#tour{position:fixed;inset:0;z-index:9000;pointer-events:none}
+.tour-spot{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,20,40,.55);border:2px solid #0088CE;transition:all .25s ease}
+.tour-card{position:fixed;width:360px;max-width:calc(100vw - 32px);background:var(--surface,#fff);color:var(--ink);border-radius:16px;padding:16px 18px;box-shadow:0 20px 50px rgba(0,0,0,.3);pointer-events:auto;display:flex;flex-direction:column;gap:6px}
+.tour-card h3{margin:0;color:var(--heading)}.tour-card p{margin:0;font-size:.9rem;line-height:1.5}
+@media (max-width:640px){.prel li{grid-template-columns:10px minmax(0,1fr)}.prel li .btn{grid-column:2}.pdir-k{grid-template-columns:repeat(2,1fr)}}
 </style>
 
 <div class="app">
@@ -2359,9 +2407,10 @@ window.__EGIDE_LOCAL__ = true;
 <script>
 const LOCAL = !!window.__EGIDE_LOCAL__;
 const LS = window.__LOCAL || null;
-const TRAIN = (() => { const h = location.hash || ""; if (!/^#formation(&|$)/.test(h)) return null; const q = new URLSearchParams(h.replace(/^#formation&?/, "")); const up = q.get("up") || ""; return {c:(q.get("c") || "").split(",").filter(Boolean), org:q.get("org") || "", dpo:q.get("dpo") || "", up:/^https:\/\//.test(up) ? up : "", dir:(q.get("dir") || "").split("|").filter(Boolean)}; })();
+const TRAIN = (() => { const h = location.hash || ""; if (!/^#formation(&|$)/.test(h)) return null; const q = new URLSearchParams(h.replace(/^#formation&?/, "")); const up = q.get("up") || ""; return {c:(q.get("c") || "").split(",").filter(Boolean), org:q.get("org") || "", dpo:q.get("dpo") || "", up:/^https:\/\//.test(up) ? up : "", dir:(q.get("dir") || "").split("|").filter(Boolean), k:(q.get("k") || "").replace(/[^A-Za-z0-9]/g, "").slice(0, 32)}; })();
 /* ================= Icônes ================= */
 const I = {
+  gauge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 18 4-6"/><circle cx="12" cy="18" r="1.4" fill="currentColor"/></svg>',
   lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
   copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>',
   home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 19z" fill="currentColor" fill-opacity=".28"/><path d="M10 20.5V15h4v5.5"/></svg>',
@@ -2401,7 +2450,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.13-e";
+const EGIDE_VERSION = "2026.11.13-f";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -2674,6 +2723,7 @@ const MODS = {
   actions:{label:"Plan d'actions", long:"Plan d'actions", single:"action", newL:"Nouvelle action", icon:"todo", cls:"m-act", prefix:"ACT", closed:["fait"], navc:"#5C554E"},
   formations:{label:"Formation", long:"Formation et sensibilisation", single:"session", newL:"Enregistrer une session", icon:"learn", cls:"m-for", prefix:"FOR", closed:["realisee"], navc:"#2E7DB8"}
 };
+MODS.ia = {label:"Outils d'IA", long:"Outils d'intelligence artificielle", single:"outil d'IA", newL:"Nouvel outil d'IA", icon:"spark", cls:"m-ia", prefix:"IA", closed:["abandonne"], navc:"#6B4FBB"};
 const MOD_KEYS = Object.keys(MODS);
 
 /* --- AIPD --- */
@@ -3430,7 +3480,8 @@ function tPacket(cid){
   return {v:1, type:"egide-formation", prenom:TS.me.prenom, nom:TS.me.nom, email:TS.me.email, service:TS.me.service, cours:cid, coursTitre:c ? c.t : cid,
     score:r.score, total:r.total, pct:r.pct, reussi:r.pct >= PASS, date:r.date, dureeMin:r.dureeMin, org:TRAIN.org || ""};
 }
-const tCode = p => "EGIDE1." + b64u(JSON.stringify(p));
+const tSign = p => (TRAIN && TRAIN.k ? {...p, sig:tSig(TRAIN.k, p)} : p);
+const tCode = p => "EGIDE1." + b64u(JSON.stringify(tSign(p)));
 function vTrain(){
   const org = TRAIN.org || "votre entreprise";
   const brand = `<div class="tr-brand"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="trg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0088CE"/><stop offset="1" stop-color="#003865"/></linearGradient></defs><path d="M20 3 6 8.5v10.2C6 27.6 12 34.4 20 37c8-2.6 14-9.4 14-18.3V8.5z" fill="url(#trg)"/><path d="m13.5 20.5 4.5 4.5 8.5-9.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Égide · Formation RGPD</b><span>${esc(org)}</span></div></div>`;
@@ -3504,7 +3555,7 @@ function trainMail(cid){
   TS.res[cid].sent = true; tSave(); renderTrain();
 }
 function trainDrop(cid){
-  const p = tPacket(cid), blob = new Blob([JSON.stringify(p, null, 1)], {type:"application/json"}), a = document.createElement("a");
+  const p = tSign(tPacket(cid)), blob = new Blob([JSON.stringify(p, null, 1)], {type:"application/json"}), a = document.createElement("a");
   a.href = URL.createObjectURL(blob); a.download = `resultat-formation-${p.prenom}-${p.nom}-${cid}.json`.replace(/\s+/g, "-"); document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => window.open(TRAIN.up, "_blank", "noopener"), 400);
   TS.res[cid].sent = true; tSave(); renderTrain();
@@ -3537,7 +3588,8 @@ function trainLink(cfg){
   if (S.org.raisonSociale) q.set("org", S.org.raisonSociale);
   if (cfg.dpo) q.set("dpo", cfg.dpo);
   if (cfg.up) q.set("up", cfg.up);
-  const dirs = orgDirs(S.org); if (dirs.length) q.set("dir", dirs.join("|"));
+  const dirs = orgDirections(); if (dirs.length) q.set("dir", dirs.join("|"));
+  if (cfg.cle) q.set("k", cfg.cle);
   return trainBase().replace(/#.*$/, "") + "#formation&" + q.toString();
 }
 function parseResults(text){
@@ -3552,7 +3604,7 @@ async function importResults(list){
   for (const r of list) {
     const id = qhash(`${r.email.toLowerCase()}|${r.cours}|${r.date}`).slice(1);
     if (S.results?.has(id)) continue;
-    await S.db.collection("resultats").doc(id).set({prenom:r.prenom, nom:r.nom, email:r.email, service:r.service || "", cours:r.cours, coursTitre:r.coursTitre || r.cours, score:+r.score, total:+r.total, pct:+r.pct, reussi:!!r.reussi, date:r.date, dureeMin:+r.dureeMin || null, importeLe:new Date().toISOString()});
+    await S.db.collection("resultats").doc(id).set({prenom:r.prenom, nom:r.nom, email:r.email, service:r.service || "", cours:r.cours, coursTitre:r.coursTitre || r.cours, score:+r.score, total:+r.total, pct:+r.pct, reussi:!!r.reussi, date:r.date, dureeMin:+r.dureeMin || null, importeLe:new Date().toISOString(), sig:r.sig || "", verifie:resVerif(r)});
     n++;
   }
   toast(n ? `${n} résultat${n > 1 ? "s" : ""} importé${n > 1 ? "s" : ""}` : "Ces résultats étaient déjà importés.");
@@ -3581,12 +3633,12 @@ function vTrainAdmin(){
     <div class="panel-b">
       <div class="trn-imp"><textarea id="trn-paste" rows="3" placeholder="Collez ici le contenu d'un ou plusieurs e-mails de résultat (le code commence par EGIDE1.)"></textarea>
         <div class="actions"><button class="btn primary" data-action="trn-paste" ${W() ? "" : "disabled"}>${I.check}Importer le texte collé</button><label class="btn ${W() ? "" : "disabled"}">${I.up}Importer des fichiers .json<input type="file" accept=".json,application/json,.txt" multiple data-trn-files hidden></label>${rs.length ? `<button class="btn ghost" data-action="trn-csv">${I.down || I.pdf}Exporter (Excel)</button>` : ""}</div></div>
-      ${rs.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Collaborateur</th><th>Service</th><th>Module</th><th>Score</th><th>Date</th><th></th></tr></thead><tbody>${rs.map(r => `<tr><td><b>${esc(r.prenom)} ${esc(r.nom)}</b><br><small class="muted">${esc(r.email)}</small></td><td>${esc(r.service)}</td><td>${esc(r.coursTitre)}</td><td><span class="pill ${r.reussi ? "t-ok" : "t-warn"}">${r.score}/${r.total} · ${r.pct} %</span></td><td>${fmtD((r.date || "").slice(0, 10))}</td><td>${W() ? `<button class="btn ghost sm" data-action="trn-del" data-id="${esc(r._id)}" aria-label="Supprimer">${I.close}</button>` : ""}</td></tr>`).join("")}</tbody></table></div>`
+      ${rs.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Collaborateur</th><th>Service</th><th>Module</th><th>Score</th><th>Date</th><th></th></tr></thead><tbody>${rs.map(r => `<tr><td><b>${esc(r.prenom)} ${esc(r.nom)}</b><br><small class="muted">${esc(r.email)}</small></td><td>${esc(r.service)}</td><td>${esc(r.coursTitre)}</td><td><span class="pill ${r.reussi ? "t-ok" : "t-warn"}">${r.score}/${r.total} · ${r.pct} %</span> ${verifBadge(r.verifie ?? null)}</td><td>${fmtD((r.date || "").slice(0, 10))}</td><td>${W() ? `<button class="btn ghost sm" data-action="trn-del" data-id="${esc(r._id)}" aria-label="Supprimer">${I.close}</button>` : ""}</td></tr>`).join("")}</tbody></table></div>`
       : `<p class="muted" style="margin:12px 0 0">Aucun résultat importé pour l'instant.</p>`}
     </div></section>`;
 }
 function trnCfgFromDom(){
-  return {cours:[...document.querySelectorAll("[data-trn-c]")].filter(x => x.checked).map(x => x.dataset.trnC), dpo:($("#trn-dpo")?.value || "").trim(), up:($("#trn-up")?.value || "").trim(), base:(S.trainCfg || {}).base || ""};
+  return {cours:[...document.querySelectorAll("[data-trn-c]")].filter(x => x.checked).map(x => x.dataset.trnC), dpo:($("#trn-dpo")?.value || "").trim(), up:($("#trn-up")?.value || "").trim(), base:(S.trainCfg || {}).base || "", cle:trnKey(), anciennesCles:arr((S.trainCfg || {}).anciennesCles)};
 }
 async function trnSaveCfg(){
   const cfg = trnCfgFromDom(); S.trainCfg = cfg; const l = $("#trn-link"); if (l) l.textContent = trainLink(cfg);
@@ -4028,18 +4080,20 @@ function renderNav(){
     return `<button data-action="${view==="mod"?"list":"nav"}" data-view="${view}" ${mod?`data-mod="${mod}"`:""} ${cur?'aria-current="page"':""}><span class="ic" style="--navc:${color}">${I[icon]}</span>${label}${cnt}</button>`;
   };
   const nNew = S.newsLoaded ? newsItems().filter(isNewNews).length : 0;
+  if (CORR()){ $("#nav").innerHTML = b("dashboard",null,"Accueil","home","#0088CE") + b("news",null,"Actualités","news","#800064") + `<div class="grp">Ma direction</div>` + ["traitements","conservation"].map(m=>b("mod",m,MODS[m].label,MODS[m].icon,MODS[m].navc)).join("") + b("flux",null,"Carte des flux","flow","#2E7DB8") + `<div class="grp">Sensibilisation</div>` + b("docs",null,"Modèles de documents","report","#4A6B8A") + b("mod","formations",MODS.formations.label,MODS.formations.icon,MODS.formations.navc) + b("jeu",null,"Académie RGPD","game","#D08A1E") + profilBox(); $("#org-name-rail").textContent = (S.org.raisonSociale ? "RGPD · "+S.org.raisonSociale : "Conformité RGPD"); return; }
   $("#nav").innerHTML = b("dashboard",null,"Accueil","home","#0088CE") + b("news",null,`Actualités${nNew?`<span class="cnt"><i style="background:var(--primary)"></i>${nNew}</span>`:""}`,"news","#800064")
-    + `<div class="grp">Registre</div>` + ["traitements","aipd","soustraitants","conservation"].map(m=>b("mod",m,MODS[m].label,MODS[m].icon,MODS[m].navc)).join("")
+    + `<div class="grp">Registre</div>` + ["traitements","aipd","soustraitants","ia","conservation"].map(m=>b("mod",m,MODS[m].label,MODS[m].icon,MODS[m].navc)).join("")
     + (S.loaded.traitements && items("traitements").some(t=>t.statut==="brouillon") ? b("finaliser",null,`À valider<span class="cnt"><i style="background:var(--warn)"></i>${items("traitements").filter(t=>t.statut==="brouillon").length}</span>`,"check","#1F8A52") : "")
     + b("flux",null,"Carte des flux","flow","#2E7DB8")
     + `<div class="grp">Suivi</div>` + ["demandes","violations","actions"].map(m=>b("mod",m,MODS[m].label,MODS[m].icon,MODS[m].navc)).join("")
+    + b("pilotage",null,`Pilotage${S.loaded.traitements&&coherence().some(r=>r.sev==="crit")?`<span class="cnt"><i title="Incohérence critique"></i></span>`:""}`,"gauge","#003865")
     + b("revue",null,`Revue annuelle${revActive()?`<span class="cnt" title="Campagne en cours"><i style="background:var(--ok)"></i></span>`:""}`,"cal","#1F8A52")
     + `<div class="grp">Preuves et sensibilisation</div>`
     + b("pieces",null,`Pièces justificatives${S.piecesLoaded&&S.pieces.size?`<span class="cnt">${S.pieces.size}</span>`:""}`,"clip","#4A6B8A")
     + b("docs",null,"Modèles de documents","report","#4A6B8A")
     + b("mod","formations",MODS.formations.label,MODS.formations.icon,MODS.formations.navc)
     + b("jeu",null,"Académie RGPD","game","#D08A1E")
-    + `<div class="grp">Administration</div>` + (LOCAL ? b("copilot",null,"Copilot","spark","#2B5BB8") : "") + b("rapport",null,"Rapport annuel","report","#003865") + b("org",null,"Organisation","org","#4A6B8A") + b("backup",null,"Sauvegarde","save","#4A6B8A");
+    + `<div class="grp">Administration</div>` + (LOCAL ? b("copilot",null,"Copilot","spark","#2B5BB8") : "") + b("rapport",null,"Rapport annuel","report","#003865") + b("org",null,"Organisation","org","#4A6B8A") + b("backup",null,"Sauvegarde","save","#4A6B8A") + profilBox();
   $("#org-name-rail").textContent = (S.org.raisonSociale ? "RGPD · "+S.org.raisonSociale : "Conformité RGPD") + (LOCAL?" · édition locale":"");
 }
 function render(){
@@ -4061,6 +4115,7 @@ function render(){
   else if (S.view==="import") html = vImport();
   else if (S.view==="org") html = vOrg();
   else if (S.view==="backup") html = vBackup();
+  else if (S.view==="pilotage") html = vPilotage();
   else if (S.mod==="traitements") html = {list:vTrtList, detail:vTrtDetail, edit:vTrtEdit}[S.view]();
   else if (S.mod==="formations" && S.view==="list") html = vFormList();
   else html = {list:vList, detail:vDetail, edit:vEdit}[S.view]();
@@ -4071,6 +4126,7 @@ function render(){
   if (S.view==="jeu") mountGame();
   if (S.view==="dashboard") scoreAnimate();
   chatRender();
+  if (S.tour) setTimeout(tourRender, 30);
   if (S.view==="pieces" && !PJV.usageAsked){ PJV.usageAsked=true; pjRefreshUsage(); }
   if (S.view==="jeu" && S.user){ const els=[...document.querySelectorAll("[data-guid]")].filter(x=>x.dataset.guid!==S.uid); if (els.length) S.user.profiles(els.map(x=>x.dataset.guid)).then(ps=>els.forEach(x=>{ x.textContent = ps[x.dataset.guid]?.name || "Un collègue"; })).catch(()=>{}); }
 }
@@ -4079,7 +4135,7 @@ function roBanner(){
   if (!S.canWrite) return `<div class="notice warn">${I.info}<div><b>Lecture seule.</b> Pour modifier le registre, demandez au propriétaire le rôle Éditeur.</div></div>`;
   return "";
 }
-const W = () => S.canWrite && S.dbOk;
+const W = () => S.canWrite && S.dbOk && corrCanWrite();
 const meter = p => `<div class="meter"><span><i style="width:${p}%;background:${p===100?"var(--ok)":p>=60?"var(--primary)":"var(--warn)"}"></i></span>${p} %</div>`;
 const statusPill = (mod,t) => mod==="traitements" ? pill(STATUTS,t.statut) : pill(MODS[mod].opts.statut,t.statut);
 
@@ -4360,6 +4416,7 @@ function vList(){
 function searchHay(t){ return norm(Object.entries(t).filter(([k])=>!["history","_id"].includes(k)).map(([,v])=>Array.isArray(v)?v.join(" "):typeof v==="string"?v:"").join(" ")+" "+linkNames(t.traitementIds)); }
 function matches(mod,t){
   const f=S.filters;
+  if (CORR() && ["traitements","conservation"].includes(mod) && dirLabel(t)!==CORR()) return false;
   if (f.statut && t.statut!==f.statut) return false;
   if (mod==="traitements"){ if (f.service && dirLabel(t)!==f.service) return false; if (f.base && !basesOf(t).includes(f.base)) return false; }
   if (f.alerts && !MODS[mod].alerts(t).some(a=>a.sev!=="info")) return false;
@@ -7510,7 +7567,8 @@ MODS.violations.extra = t => {
 /* ================= Évaluation sécurité des sous-traitants ================= */
 const STQ = [["certif","Le prestataire dispose-t-il d'une certification de sécurité (ISO 27001, HDS, SecNumCloud…) ?",2],["ue","Les données sont-elles hébergées dans l'Union européenne ?",2],["chiffr","Les données sont-elles chiffrées au repos et en transit ?",2],["mfa","L'accès à la solution exige-t-il une double authentification ?",2],["habil","Les accès de son personnel aux données sont-ils limités et tracés ?",1],["sauv","Des sauvegardes régulières et testées sont-elles réalisées ?",1],["sst","La liste de ses propres sous-traitants est-elle communiquée et encadrée ?",1],["notif","S'engage-t-il à notifier les violations sous 48 heures ?",1],["fin","Les données sont-elles supprimées ou restituées en fin de contrat ?",1],["audit","Accepte-t-il les audits ou fournit-il des rapports d'audit ?",1]];
 function stScore(a){ let tot=0, got=0; STQ.forEach(([k,,w])=>{ const v=a[k]; if (!v || v==="na") return; tot+=w; got += v==="oui"?w:v==="partiel"?w/2:0; }); return tot ? Math.round(100*got/tot) : null; }
-MODS.soustraitants.extra = t => {
+MODS.soustraitants.extra = t => stEvalExtra(t) + stContratPanel(t);
+const stEvalExtra = t => {
   const a = S.stEval?.id===t._id ? S.stEval.a : (t.evalSec || {});
   const sc = stScore(a); const lvl = sc==null?null:sc>=80?["Risque faible","ok"]:sc>=50?["Risque modéré","warn"]:["Risque élevé","crit"];
   const dirty = S.stEval?.id===t._id;
@@ -7815,19 +7873,19 @@ function vBackup(){
       ${LS.supported?`<div class="actions">${LS.needsPerm?`<button class="btn primary" data-action="local-reconnect">Reconnecter « ${esc(LS.fileName)} »</button>`:""}${!LS.file?`<button class="btn ${LS.needsPerm?"":"primary"}" data-action="local-create">Créer un fichier de données</button><button class="btn" data-action="local-open">Ouvrir un fichier existant</button>`:`<button class="btn" data-action="local-open">Changer de fichier</button><button class="btn ghost" data-action="local-forget">Ne plus utiliser de fichier</button>`}</div>`:""}
       <p class="muted" style="font-size:.84rem">Pour reprendre les données de la version en ligne : exportez une sauvegarde complète depuis Égide sur claude.ai, puis importez-la ci-dessous avec « Restaurer une sauvegarde ».</p>
     </div></div>${vSecLocal()}`:""}
+  ${backupPanels(can)}
   <div class="backup-grid">
-    <div class="panel"><h2>Sauvegarde complète</h2><p class="muted">Fichier <span class="mono">.json</span> avec tous les modules, l'historique et l'organisation. Il permet de tout restaurer.</p><button class="btn primary" data-action="export-json" ${can?"":"disabled"}>${I.dl}Exporter la sauvegarde</button></div>
     <div class="panel"><h2>Registre en PDF</h2><p class="muted">Le registre des traitements mis en page, avec l'annexe des sous-traitants. À remettre en cas de contrôle de la CNIL.</p><button class="btn" data-action="pdf-registre" ${can?"":"disabled"}>${I.pdf}Télécharger le registre</button></div>
     <div class="panel"><h2>Tout le registre en Excel</h2><p class="muted">Un classeur unique : synthèse, un onglet par module et la liste des points à traiter.</p><button class="btn" data-action="xlsx-all" ${can?"":"disabled"}>${I.dl}Télécharger le classeur</button></div>
     <div class="panel"><h2>Rapport de conformité</h2><p class="muted">Une synthèse en PDF pour la direction : indice, points d'attention, échéances et plan d'actions.</p><button class="btn" data-action="pdf-rapport" ${can?"":"disabled"}>${I.pdf}Télécharger le rapport</button></div>
   </div>
   <div class="panel"><div class="panel-h"><h2>Reprendre un registre existant</h2></div><div class="panel-b" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><p class="muted" style="max-width:62ch">Importez un fichier Excel (.xlsx, .xls) ou CSV : traitements, sous-traitants, demandes, actions… Les colonnes sont reconnues automatiquement.</p><button class="btn primary" data-action="import-open" data-mod="traitements" ${W()?"":"disabled"}>${I.up}Importer un fichier Excel</button></div></div>
   <div class="panel"><div class="panel-h"><h2>Restaurer une sauvegarde</h2></div><div class="panel-b" style="display:flex;flex-direction:column;gap:12px">
-    <p class="muted" style="max-width:70ch">Importez un fichier <span class="mono">.json</span> exporté depuis cette application. Les fiches ayant le même identifiant sont remplacées, les autres ajoutées. Rien n'est supprimé.</p>
-    ${imp?`<div class="confirm" style="background:var(--primary-soft);color:var(--ink)"><span>Sauvegarde du ${fmtD((imp.exporteLe||"").slice(0,10))} : <b>${MOD_KEYS.filter(m=>imp.collections[m].length).map(m=>imp.collections[m].length+" "+MODS[m].label.toLowerCase()).join(", ")||"aucune fiche"}</b>${imp.org?", organisation":""}.</span><span class="actions"><button class="btn sm" data-action="cancel-import">Annuler</button><button class="btn sm primary" data-action="confirm-import" ${S.busy?"disabled":""}>Importer</button></span></div>`
+    <p class="muted" style="max-width:70ch">Importez un fichier <span class="mono">.json</span> exporté depuis cette application. Les fiches absentes sont ajoutées ; pour une fiche présente des deux côtés, la version modifiée le plus récemment est conservée. Rien n'est supprimé. Les sauvegardes protégées demandent leur mot de passe.</p>
+    ${S.importLocked?importLockedBox():imp?`<div class="confirm" style="background:var(--primary-soft);color:var(--ink)"><span>${imp.source?`Données de la version ${imp.source==="pc"?"PC":"en ligne"}`:"Sauvegarde"} du ${fmtD((imp.exporteLe||"").slice(0,10))} : <b>${MOD_KEYS.filter(m=>imp.collections[m].length).map(m=>imp.collections[m].length+" "+MODS[m].label.toLowerCase()).join(", ")||"aucune fiche"}</b>${imp.org?", organisation":""}.</span><span class="actions"><button class="btn sm" data-action="cancel-import">Annuler</button><button class="btn sm primary" data-action="confirm-import" ${S.busy?"disabled":""}>Importer</button></span></div>`
       :`<div><button class="btn" data-action="pick-import" ${W()?"":"disabled"}>${I.up}Choisir un fichier…</button></div>`}
   </div></div>
-  <div class="panel"><div class="panel-h"><h2>Le jour de votre départ</h2></div><div class="panel-b">
+  <div class="panel"><div class="panel-h"><h2>Le jour de votre départ</h2><button class="btn sm" data-action="tour-start">${I.play||""}Visite guidée pour votre successeur</button></div><div class="panel-b">
     <ol class="steps-pass">
       ${LOCAL?`<li><b>Donnez à votre successeur l'accès au dossier SharePoint</b> qui contient Égide, le fichier de données et le dossier des pièces. Il ouvre Égide et reconnecte le fichier depuis cette page.</li>`:`<li><b>Partagez l'application avec votre successeur</b> depuis le bouton Partager de claude.ai, avec le rôle <b>Éditeur</b>. Il retrouvera toutes les fiches.</li>`}
       <li><b>Mettez à jour le gestionnaire du registre</b> dans la page Organisation.</li>
@@ -7837,6 +7895,447 @@ function vBackup(){
     <p class="muted" style="margin-top:14px;font-size:.85rem">Au quotidien, exportez une sauvegarde chaque mois. Le tableau de bord vous le rappelle au-delà de 30 jours.</p>
   </div></div>`;
 }
+
+/* =====================================================================
+   Recommandations 1 à 13 : transfert, chiffrement, signature, pilotage,
+   contrôle du registre, historique, dossier CNIL, contrats, IA, profils,
+   visite guidée
+   ===================================================================== */
+
+/* ---------- 1. Transfert complet entre la version en ligne et la version PC ---------- */
+const EXTRA_COLS = [["documents","docs"],["rapportsTextes","arEdits"],["actualites","news"],["resultats","results"]];
+const b64e = u8 => { let s=""; for (let i=0;i<u8.length;i+=8192) s+=String.fromCharCode.apply(null, u8.subarray(i,i+8192)); return btoa(s); };
+const b64d = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+async function egKey(pw, salt, iter){ const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]); return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]); }
+async function egEncrypt(obj, pw){
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12)), iter = 310000;
+  const key = await egKey(pw, salt, iter);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, new TextEncoder().encode(JSON.stringify(obj))));
+  return {app:"egide-chiffre", v:1, algo:"AES-GCM-256/PBKDF2-SHA256", iter, salt:b64e(salt), iv:b64e(iv), data:b64e(ct), exporteLe:new Date().toISOString()};
+}
+async function egDecrypt(pkg, pw){
+  const key = await egKey(pw, b64d(pkg.salt), pkg.iter||310000);
+  const pt2 = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64d(pkg.iv)}, key, b64d(pkg.data));
+  return JSON.parse(new TextDecoder().decode(pt2));
+}
+function backupData(){
+  return {app:"registre-rgpd", version:3, source:LOCAL?"pc":"en-ligne", exporteLe:new Date().toISOString(), org:S.org,
+    collections:Object.fromEntries(MOD_KEYS.map(m=>[m, items(m).map(clean)])),
+    extras:Object.fromEntries(EXTRA_COLS.map(([c,k])=>[c, [...(S[k]||new Map()).values()].map(clean)])),
+    config:{veille:S.np?.plan||null, formationDistance:S.trainCfg||null}};
+}
+async function exportJSON(){
+  const B = S.bk || {}; const data = backupData();
+  if (B.on){
+    if (!B.pw || B.pw.length < 10) return toast("Mot de passe : 10 caractères au moins.");
+    if (B.pw !== B.pw2) return toast("Les deux mots de passe ne correspondent pas.");
+    toast("Chiffrement en cours…");
+    const enc = await egEncrypt(data, B.pw);
+    await save(`${slugOrg()}-sauvegarde-protegee-${today()}.json`, JSON.stringify(enc), true);
+    S.bk = {on:true}; render(); return;
+  }
+  save(`${slugOrg()}-sauvegarde-rgpd-${today()}.json`, JSON.stringify(data,null,2), true);
+}
+function backupFromObj(d){
+  if (d?.app!=="registre-rgpd") throw 0;
+  const cols = d.version>=2 && d.collections ? d.collections : {traitements:arr(d.traitements)};
+  const out = {}; MOD_KEYS.forEach(m=>{ out[m] = arr(cols[m]).filter(t=>t && typeof t==="object" && !Array.isArray(t)); });
+  const extras = {}; EXTRA_COLS.forEach(([c])=>{ extras[c] = arr(d.extras?.[c]).filter(t=>t && typeof t==="object"); });
+  S.importData = {exporteLe:d.exporteLe, source:d.source||"", org:d.org, collections:out, extras, config:d.config||{}};
+  S.importLocked = null; render();
+}
+function readImport(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try{ const d = JSON.parse(r.result); if (d?.app==="egide-chiffre"){ S.importLocked = d; render(); setTimeout(()=>$("#imp-pw")?.focus(),40); return; } backupFromObj(d); }
+    catch{ toast("Ce fichier n'est pas une sauvegarde de cette application."); }
+  };
+  r.readAsText(file);
+}
+const stampOf = x => String(x?.dateMaj || x?.majLe || x?.importeLe || x?.ajouteLe || x?.dateCreation || "");
+async function confirmImportMerge(){
+  const d = S.importData; if (!d) return; S.busy = true; render();
+  let add=0, upd=0, kept=0, same=0;
+  try{
+    for (const m of MOD_KEYS){ for (const t of d.collections[m]){
+      const {id, _id, ...body} = t; const docId = (typeof id==="string" && /^[A-Za-z0-9_\-.~:@+]{1,200}$/.test(id)) ? id : S.db.collection(m).doc().id;
+      const cur = S.data[m].get(docId);
+      if (cur && stampOf(cur) > stampOf(body)){ kept++; continue; }
+      if (cur && stampOf(cur) === stampOf(body) && stampOf(body)){ same++; continue; }
+      const doc = {...body, history:[...arr(body.history), {at:new Date().toISOString(), by:S.uid||null, action:d.source?`Reprise depuis la version ${d.source==="pc"?"PC":"en ligne"}`:"Restauration depuis une sauvegarde"}].slice(-40)};
+      await S.db.collection(m).doc(docId).set(doc); S.data[m].set(docId,{...doc,_id:docId}); cur ? upd++ : add++;
+    } }
+    for (const [c,k] of EXTRA_COLS){ for (const t of arr(d.extras?.[c])){
+      const {id, _id, ...body} = t; if (typeof id!=="string" || !/^[A-Za-z0-9_\-.~:@+]{1,200}$/.test(id)) continue;
+      const cur = S[k]?.get(id); if (cur && stampOf(cur) > stampOf(body)){ kept++; continue; } if (cur && stampOf(cur) === stampOf(body)){ same++; continue; }
+      await S.db.collection(c).doc(id).set(body); cur ? upd++ : add++;
+    } }
+    const v = d.config?.veille; if (v && v.genereLe && Array.isArray(v.actions) && (!S.np?.plan || v.genereLe > (S.np.plan.genereLe||""))) await S.db.doc("config/veille").set(v);
+    const f = d.config?.formationDistance; if (f && !S.trainCfg) await S.db.doc("config/formationDistance").set(f);
+    if (d.org && typeof d.org==="object" && !Array.isArray(d.org)){ const o = (S.org.majLe||"") > (d.org.majLe||"") ? {...d.org, ...S.org} : {...S.org, ...d.org}; await S.db.doc("config/org").set(o); S.org=o; }
+    toast(`${add} ajout${add>1?"s":""}, ${upd} mise${upd>1?"s":""} à jour${same?`, ${same} déjà à jour`:""}${kept?`, ${kept} conservée${kept>1?"s":""} (plus récente${kept>1?"s":""} ici)`:""}`); S.importData = null;
+  }catch(e){ writeError(e); }
+  S.busy = false; render();
+}
+function backupPanels(can){
+  const B = S.bk || (S.bk = {on:false});
+  return `<div class="panel xfer"><div class="panel-h"><h2>Transférer entre Égide en ligne et Égide sur votre PC</h2></div><div class="panel-b">
+    <ol class="xfer-s"><li><b>Ici :</b> exportez la sauvegarde complète ci-dessous (protégée par mot de passe si elle doit circuler).</li><li><b>Dans l'autre version :</b> page Sauvegarde › Restaurer une sauvegarde.</li><li><b>Fusion :</b> les fiches absentes sont ajoutées ; pour une même fiche, la version modifiée le plus récemment l'emporte. Rien n'est supprimé.</li></ol>
+    <p class="muted" style="margin:6px 0 0;font-size:.82rem">Le transfert comprend tous les modules, les documents sur mesure, les textes du rapport annuel, les actualités, le plan d'action et les résultats de formation. Les pièces justificatives (fichiers joints) restent à copier à part.</p>
+  </div></div>
+  <div class="panel"><div class="panel-h"><h2>Sauvegarde complète</h2></div><div class="panel-b">
+    <p class="muted" style="margin:0 0 10px">Fichier <span class="mono">.json</span> avec tous les modules, l'historique et l'organisation.</p>
+    <label class="chk"><input type="checkbox" data-bk="on" ${B.on?"checked":""}> Protéger par un mot de passe (chiffrement AES-256)</label>
+    ${B.on?`<div class="fields" style="margin-top:8px"><div class="f"><label for="bk-pw">Mot de passe (10 caractères au moins)</label><input type="password" id="bk-pw" data-bk="pw" autocomplete="new-password"></div><div class="f"><label for="bk-pw2">Confirmer</label><input type="password" id="bk-pw2" data-bk="pw2" autocomplete="new-password"></div></div><p class="hint">Sans ce mot de passe, la sauvegarde est illisible : notez-le dans un coffre-fort de mots de passe. Égide ne peut pas le retrouver.</p>`:""}
+    <div class="actions" style="margin-top:10px"><button class="btn primary" data-action="export-json" ${can?"":"disabled"}>${I.dl}Exporter la sauvegarde${B.on?" protégée":""}</button></div>
+  </div></div>`;
+}
+function importLockedBox(){
+  return `<div class="confirm" style="background:var(--primary-soft);color:var(--ink);flex-wrap:wrap;gap:10px"><span>${I.lock} Sauvegarde protégée du ${fmtD(String(S.importLocked.exporteLe||"").slice(0,10))}. Saisissez son mot de passe.</span>
+    <span class="actions"><input type="password" id="imp-pw" aria-label="Mot de passe de la sauvegarde" style="min-width:220px"><button class="btn sm primary" data-action="import-unlock">Déverrouiller</button><button class="btn sm" data-action="cancel-import">Annuler</button></span></div>`;
+}
+
+/* ---------- 3. Résultats de formation signés ---------- */
+const tSig = (k, p) => qhash(k+"|"+[String(p.email).toLowerCase(),p.cours,p.score,p.total,p.pct,p.date].join("|")).slice(1) + qhash([p.date,p.cours,k,p.pct].join("#")).slice(1);
+const trnKey = () => { const c = S.trainCfg || {}; if (c.cle) return c.cle; const k = b64e(crypto.getRandomValues(new Uint8Array(12))).replace(/[^A-Za-z0-9]/g,"").slice(0,16); return k; };
+function resVerif(r){ if (!r.sig) return null; const ks = [S.trainCfg?.cle, ...arr(S.trainCfg?.anciennesCles)].filter(Boolean); return ks.some(k=>tSig(k,r)===r.sig); }
+const verifBadge = v => v===true ? `<span class="vbadge ok" title="Résultat signé par le lien de formation et non modifié">✓ Vérifié</span>` : v===false ? `<span class="vbadge bad" title="La signature ne correspond pas : le fichier a pu être modifié, ou provient d'un ancien lien">⚠ Non vérifié</span>` : `<span class="vbadge" title="Résultat issu d'un lien sans signature (avant cette version)">Non signé</span>`;
+
+/* ---------- 5 à 10. Pilotage ---------- */
+const PIL_TABS = [["dirs","Par direction"],["relances","Relances"],["controle","Contrôle du registre"],["evol","Évolution"],["cnil","Contrôle CNIL"]];
+const liveTrt = () => items("traitements").filter(t=>t.statut!=="archive");
+function dirStats(d){
+  const trt = liveTrt().filter(t=>dirLabel(t)===d);
+  const compl = trt.length ? Math.round(trt.reduce((s,t)=>s+completeness(t),0)/trt.length) : 0;
+  const al = trt.flatMap(t=>MODS.traitements.alerts(t).filter(a=>a.sev!=="info").map(a=>({...a, t0:t})));
+  const cons = items("conservation").filter(c=>dirLabel(c)===d && !MODS.conservation.closed.includes(c.statut));
+  const consLate = cons.filter(c=>c.echeance && c.echeance < today());
+  const revues = trt.filter(t=>t.prochaineRevue && t.prochaineRevue < today());
+  const rs = [...(S.results||new Map()).values()].filter(r=>dirCanon(r.service)===d);
+  const people = new Set(rs.map(r=>String(r.email).toLowerCase())).size, okp = new Set(rs.filter(r=>r.reussi).map(r=>String(r.email).toLowerCase())).size;
+  const score = trt.length ? Math.max(0, Math.round(compl*0.6 + (1 - Math.min(1, al.length/Math.max(1,trt.length)))*30 + (consLate.length?0:10))) : null;
+  return {d, trt, compl, al, cons, consLate, revues, people, okp, score, ref:S.org.referents?.[d]||{}};
+}
+function relanceMail(st){
+  const to = st.ref.email || ""; const lines = [];
+  const inc = st.trt.filter(t=>completeness(t)<100);
+  if (inc.length) lines.push(`Fiches à compléter (${inc.length}) :\n`+inc.map(t=>`  - ${t.ref} ${t.nom} (${completeness(t)} %)`).join("\n"));
+  if (st.al.length) lines.push(`Points à corriger (${st.al.length}) :\n`+st.al.slice(0,12).map(a=>`  - ${a.t0.ref} : ${a.t}`).join("\n"));
+  if (st.consLate.length) lines.push(`Suppressions ou archivages en retard (${st.consLate.length}) :\n`+st.consLate.map(c=>`  - ${c.titre} (échéance ${fmtD(c.echeance)})`).join("\n"));
+  if (st.revues.length) lines.push(`Fiches à revoir (${st.revues.length}) :\n`+st.revues.map(t=>`  - ${t.ref} ${t.nom}`).join("\n"));
+  const body = `Bonjour${st.ref.nom?" "+st.ref.nom.split(" ")[0]:""},\n\nDans le cadre du suivi de la conformité RGPD de la ${st.d}, voici les points à traiter :\n\n${lines.join("\n\n")||"Aucun point en attente : merci pour votre suivi !"}\n\nPouvez-vous me faire un retour d'ici deux semaines ? Je reste disponible pour vous aider.\n\nBien cordialement,\n${S.org.dpoNom||""}\nDélégué à la protection des données`;
+  return {to, subject:`RGPD · ${st.d} : points à traiter`, body, n:lines.length};
+}
+function relancesDues(){
+  const out = [];
+  items("demandes").filter(t=>!MODS.demandes.closed.includes(t.statut)).forEach(t=>{ const e=echeanceDDR(t); if (e && e <= addDays(7)) out.push({sev:e<today()?"crit":"warn", t:`Demande ${t.ref} (${t.demandeur||"demandeur"}) : réponse ${e<today()?"en retard depuis le":"attendue le"} ${fmtD(e)}`, mod:"demandes", id:t._id, mail:{to:"", subject:`Demande de droits ${t.ref} : échéance du ${fmtD(e)}`, body:`Bonjour,\n\nLa demande ${t.ref} (${optL(TYPES_DROIT,t.type)||t.type||""}) doit recevoir une réponse au plus tard le ${fmtD(e)}.\nMerci de me transmettre les éléments nécessaires sans attendre.\n\n${S.org.dpoNom||""}`}}); });
+  items("conservation").filter(c=>!MODS.conservation.closed.includes(c.statut) && c.echeance && c.echeance <= addDays(30)).forEach(c=>{ const r=S.org.referents?.[dirLabel(c)]||{}; out.push({sev:c.echeance<today()?"crit":"warn", t:`${c.titre} : ${c.echeance<today()?"en retard depuis le":"prévu le"} ${fmtD(c.echeance)} (${dirLabel(c)||"direction à préciser"})`, mod:"conservation", id:c._id, mail:{to:r.email||"", subject:`Conservation des données : ${c.titre}`, body:`Bonjour${r.nom?" "+r.nom.split(" ")[0]:""},\n\nL'opération « ${c.titre} » est ${c.echeance<today()?"en retard depuis le":"prévue le"} ${fmtD(c.echeance)}.\nMerci de procéder à la suppression ou à l'archivage prévu et de m'en transmettre la preuve (capture, export ou attestation).\n\n${S.org.dpoNom||""}`}}); });
+  items("actions").filter(a=>a.statut!=="fait" && a.echeance && a.echeance < today()).forEach(a=>out.push({sev:"warn", t:`Action en retard : ${a.titre} (${a.responsable||"sans responsable"}, échéance ${fmtD(a.echeance)})`, mod:"actions", id:a._id, mail:{to:"", subject:`Action RGPD en retard : ${a.titre}`, body:`Bonjour,\n\nL'action « ${a.titre} » devait être réalisée le ${fmtD(a.echeance)}. Où en est-elle ? Si besoin, proposons ensemble une nouvelle échéance.\n\n${S.org.dpoNom||""}`}}));
+  return out.sort((a,b)=>(a.sev==="crit"?0:1)-(b.sev==="crit"?0:1));
+}
+const mailto = m => `mailto:${encodeURIComponent(m.to||"")}?subject=${encodeURIComponent(m.subject)}&body=${encodeURIComponent(m.body)}`;
+/* 7. Contrôle de cohérence */
+function durDays(s){ const m = String(s||"").toLowerCase().match(/(\d+(?:[.,]\d+)?)\s*(jours?|semaines?|mois|ans?|années?)/); if (!m) return null; const n=parseFloat(m[1].replace(",",".")); return /jour/.test(m[2])?n:/semaine/.test(m[2])?n*7:/mois/.test(m[2])?n*30:n*365; }
+const DUR_LIMITS = [[/vid[eé]o|cam[eé]ra/i,31,"1 mois maximum pour les images de vidéoprotection (CNIL, art. L252-5 CSI)"],[/prospect/i,3*365,"3 ans après le dernier contact pour les prospects (CNIL)"],[/recrut|candidat/i,2*365,"2 ans maximum pour les candidatures non retenues (CNIL)"],[/journa|logs?\b|connexion/i,365,"6 mois à 1 an pour les journaux de connexion (CNIL)"],[/g[eé]oloc/i,62,"2 mois pour les données de géolocalisation (CNIL), sauf preuve d'intervention ou temps de travail"],[/badge|contr[oô]le d'acc[eè]s/i,92,"3 mois pour les badges d'accès aux locaux (CNIL)"],[/[eé]coute|enregistrement des appels/i,183,"6 mois pour les enregistrements d'appels (CNIL)"]];
+const wordsOf = s => new Set(norm2(s).split(" ").filter(w=>w.length>3));
+const jacc = (a,b) => { const A=wordsOf(a), B=wordsOf(b); if (!A.size||!B.size) return 0; let i=0; A.forEach(w=>{ if (B.has(w)) i++; }); return i/(A.size+B.size-i); };
+function coherence(){
+  const T = liveTrt(), R = [];
+  const add = (sev, titre, desc, list) => { if (list.length) R.push({sev, titre, desc, list}); };
+  const it = t => ({mod:"traitements", id:t._id, l:`${t.ref} · ${t.nom}`});
+  add("crit","Données sensibles sans exception de l'article 9", "Une catégorie particulière est cochée mais aucune exception de l'article 9.2 n'est indiquée.", T.filter(t=>arr(t.sensibles).length && !t.sensiblesJustif?.trim()).map(it));
+  add("crit","AIPD requise mais non réalisée", "La fiche indique qu'une analyse d'impact est requise et aucune AIPD n'y est rattachée.", T.filter(t=>t.aipd==="requise" && !linkedTo("aipd",t._id).length).map(it));
+  add("crit","Transferts hors UE sans garantie", "Un transfert hors de l'Union européenne doit être encadré (adéquation, clauses contractuelles types…).", [...T.filter(t=>t.transfertHorsUE && !t.transfertGaranties?.trim()).map(it), ...items("soustraitants").filter(s=>s.statut!=="termine" && s.horsUE && !s.garanties?.trim()).map(s=>({mod:"soustraitants", id:s._id, l:`${s.ref||""} · ${s.nom}`}))]);
+  add("warn","Prestataires américains à vérifier", "Pour un prestataire établi aux États-Unis, vérifiez sa certification Data Privacy Framework ou la présence de clauses contractuelles types.", items("soustraitants").filter(s=>s.statut!=="termine" && /[ée]tats[- ]unis|\busa?\b|united states|am[ée]ricain/i.test(String(s.pays||"")+" "+String(s.nom||"")) && !/dpf|data privacy framework|clauses contractuelles|cct|scc/i.test(String(s.garanties||""))).map(s=>({mod:"soustraitants", id:s._id, l:`${s.ref||""} · ${s.nom}`})));
+  add("warn","Finalités sans base légale", "Chaque finalité doit avoir sa propre base légale.", T.filter(t=>finL(t).some(x=>x.f.trim() && !x.b)).map(it));
+  add("warn","Durée de conservation absente ou illimitée", "Une durée doit être fixée pour chaque traitement (art. 5.1.e).", T.filter(t=>!t.conservation?.trim() || /illimit|ind[ée]fini|ind[ée]termin|permanen|toujours|sans limite/i.test(t.conservation)).map(it));
+  const longs = []; T.forEach(t=>{ const d=durDays(t.conservation); if (d==null) return; const L=DUR_LIMITS.find(([re])=>re.test(t.nom||"")); if (L && d > L[1]) longs.push({...it(t), l:`${t.ref} · ${t.nom} : « ${t.conservation} » (référence : ${L[2]})`}); });
+  add("warn","Durées plus longues que les références CNIL", "La durée en base active dépasse la durée de référence pour ce type de traitement. Justifiez-la ou réduisez-la.", longs);
+  const dup = []; for (let i=0;i<T.length;i++) for (let j=i+1;j<T.length;j++){ const s=jacc(T[i].nom,T[j].nom); if (norm2(T[i].nom)===norm2(T[j].nom) || s>=0.75) dup.push({mod:"traitements", id:T[i]._id, l:`${T[i].ref} « ${T[i].nom} » et ${T[j].ref} « ${T[j].nom} »`}); }
+  add("warn","Fiches en doublon possible", "Ces fiches ont un nom très proche : fusionnez-les ou distinguez-les.", dup);
+  add("warn","Sous-traitants sans contrat article 28 signé", "Le contrat doit contenir les clauses de l'article 28.", items("soustraitants").filter(s=>s.statut!=="termine" && s.contrat!=="signe").map(s=>({mod:"soustraitants", id:s._id, l:`${s.ref||""} · ${s.nom} (${optL(MODS.soustraitants.opts.contrat,s.contrat)||"contrat non renseigné"})`})));
+  add("warn","Directions hors organisation", "Rattachez ces fiches à une direction déclarée dans la page Organisation.", T.filter(t=>t.service?.trim() && !dirCanon(t.service)).map(it));
+  add("warn","Outils d'IA non rattachés au registre", "Un outil d'IA qui traite des données personnelles doit être relié à un traitement.", items("ia").filter(x=>x.statut!=="abandonne" && x.donneesPerso==="oui" && !arr(x.traitementIds).length).map(x=>({mod:"ia", id:x._id, l:`${x.ref} · ${x.nom}`})));
+  add("info","Fiches sans revue depuis plus d'un an", "Une revue annuelle de chaque fiche est recommandée.", T.filter(t=>t.statut==="actif" && (t.derniereRevue||String(t.dateCreation||"").slice(0,10)||"9999") < addDays(-365)).map(it));
+  add("info","Information des personnes non renseignée", "Indiquez comment les personnes sont informées (articles 13 et 14).", T.filter(t=>!arr(t.infoModes).length && !t.informationPersonnes?.trim()).map(it));
+  return R;
+}
+/* 9. Historique mensuel */
+function histNow(){
+  const si = scoreInfo(); const T = liveTrt();
+  const acts = items("actions"); const rs = [...(S.results||new Map()).values()];
+  return {mois:today().slice(0,7), score:si.score ?? 0, completude:si.avg, traitements:T.length, alertesCrit:si.crit, actionsFaites:acts.filter(a=>a.statut==="fait").length, actionsOuvertes:acts.filter(a=>a.statut!=="fait").length, formes:new Set(rs.filter(r=>r.reussi).map(r=>String(r.email).toLowerCase())).size, majLe:new Date().toISOString()};
+}
+async function histTick(){
+  if (S.histDone || !W() || !S.histLoaded || MOD_KEYS.some(m=>!S.loaded[m])) return;
+  S.histDone = true; const h = histNow(); if (!h.traitements) return;
+  try{ await S.db.collection("historique").doc(h.mois).set(h); }catch{}
+}
+function histChart(rows){
+  if (!rows.length) return "";
+  const W2=680, H2=220, P=36; const n=rows.length; const x=i=> n===1 ? W2/2 : P + i*(W2-2*P)/(n-1); const y=v=> H2-P - (v/100)*(H2-2*P);
+  const line = (k,c) => `<polyline fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" points="${rows.map((r,i)=>`${x(i).toFixed(1)},${y(r[k]||0).toFixed(1)}`).join(" ")}"/>${rows.map((r,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(r[k]||0).toFixed(1)}" r="3.5" fill="${c}"><title>${esc(r.mois)} : ${r[k]} %</title></circle>`).join("")}`;
+  const mois = m => { const [a,b]=m.split("-"); return NEWS_MOIS[+b-1].slice(0,4)+". "+a.slice(2); };
+  return `<svg viewBox="0 0 ${W2} ${H2}" class="hchart" role="img" aria-label="Évolution du score de conformité et de la complétude">
+    ${[0,25,50,75,100].map(v=>`<line x1="${P}" x2="${W2-P}" y1="${y(v)}" y2="${y(v)}" stroke="currentColor" stroke-opacity=".12"/><text x="${P-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".55">${v}</text>`).join("")}
+    ${rows.map((r,i)=>`<text x="${x(i)}" y="${H2-10}" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".6">${mois(r.mois)}</text>`).join("")}
+    ${line("completude","#97C7EC")}${line("score","#0088CE")}</svg>
+    <div class="hleg"><span style="--lc:#0088CE">Score de conformité</span><span style="--lc:#97C7EC">Complétude moyenne des fiches</span></div>`;
+}
+/* 10. Préparation d'un contrôle CNIL */
+function cnilChecks(){
+  const T = liveTrt(), sts = items("soustraitants").filter(s=>s.statut!=="termine");
+  const pct = (a,b) => b ? Math.round(100*a/b) : 100;
+  const req = T.filter(t=>t.aipd==="requise" || t.aipd==="realisee");
+  const fRecent = items("formations").filter(f=>f.statut==="realisee" && f.date >= addDays(-365)).length + [...(S.results||new Map()).values()].filter(r=>(r.date||"") >= addDays(-365)).length;
+  const info = pct(T.filter(t=>arr(t.infoModes).length || t.informationPersonnes?.trim()).length, T.length);
+  return [
+    {ok:!!S.org.dpoNom && !!S.org.dpoEmail, t:"DPO désigné et joignable", s:S.org.dpoNom?`${S.org.dpoNom} · ${S.org.dpoEmail||"e-mail à renseigner"}`:"Renseignez le DPO dans la page Organisation.", go:"org"},
+    {ok:T.length>0 && scoreInfo().avg>=90 && T.every(t=>t.statut!=="brouillon"), t:"Registre des traitements tenu, complet et validé", s:`${T.length} traitement${T.length>1?"s":""} · complétude moyenne ${scoreInfo().avg} % · ${T.filter(t=>t.statut==="brouillon").length} fiche(s) encore en brouillon`, go:"traitements"},
+    {ok:info>=90, t:"Information des personnes documentée", s:`${info} % des fiches indiquent comment les personnes sont informées`, go:"traitements"},
+    {ok:pct(T.filter(t=>t.conservation?.trim()).length,T.length)===100, t:"Durées de conservation fixées", s:`${pct(T.filter(t=>t.conservation?.trim()).length,T.length)} % des fiches`, go:"traitements"},
+    {ok:req.every(t=>linkedTo("aipd",t._id).some(a=>a.statut==="validee")), t:"AIPD réalisées pour les traitements à risque", s:req.length?`${req.filter(t=>linkedTo("aipd",t._id).some(a=>a.statut==="validee")).length} sur ${req.length} validée(s)`:"Aucun traitement signalé comme nécessitant une AIPD", go:"aipd"},
+    {ok:sts.every(s=>s.contrat==="signe"), t:"Contrats article 28 signés avec les sous-traitants", s:`${sts.filter(s=>s.contrat==="signe").length} sur ${sts.length}`, go:"soustraitants"},
+    {ok:true, t:"Registre des violations tenu", s:`${items("violations").length} violation${items("violations").length>1?"s":""} documentée${items("violations").length>1?"s":""} (même sans notification)`, go:"violations"},
+    {ok:items("demandes").every(d=>MODS.demandes.closed.includes(d.statut) || !echeanceDDR(d) || echeanceDDR(d)>=today()), t:"Demandes de droits traitées dans les délais", s:`${items("demandes").length} demande${items("demandes").length>1?"s":""} enregistrée${items("demandes").length>1?"s":""}`, go:"demandes"},
+    {ok:fRecent>0, t:"Sensibilisation du personnel prouvée", s:`${fRecent} session(s) ou résultat(s) sur les 12 derniers mois`, go:"formations"},
+    {ok:!coherence().some(r=>r.sev==="crit"), t:"Aucune incohérence critique dans le registre", s:`${coherence().filter(r=>r.sev==="crit").reduce((s,r)=>s+r.list.length,0)} point(s) critique(s)`, go:"pil-controle"}
+  ];
+}
+function cnilDossierBlocks(){
+  const o = docOrg(), T = liveTrt(), B = [];
+  B.push(["h1","Dossier de préparation à un contrôle de la CNIL"],["p",`${o.rs} · état au ${fmtD(today())}`,"sub"]);
+  B.push(["p","Ce dossier rassemble les éléments que la CNIL demande habituellement lors d'un contrôle sur place ou sur pièces : organisation, registre, analyses d'impact, contrats, violations, demandes de droits, sensibilisation et procédures. Il est généré à partir de l'outil Égide."]);
+  B.push(["h2","1. État de préparation"]); cnilChecks().forEach(c=>B.push(["kv",(c.ok?"✓ ":"✗ ")+c.t, c.s]));
+  B.push(["h2","2. Organisation"],["kv","Responsable du traitement",`${o.rs}${o.siren?" · SIREN "+o.siren:""}`],["kv","Adresse",o.adr],["kv","Représentant légal",o.rep],["kv","Délégué à la protection des données",o.dpo],["kv","Directions",orgDirections().join(", ")||"—"]);
+  B.push(["h2",`3. Registre des activités de traitement (${T.length})`]);
+  T.forEach(t=>{ B.push(["h3",`${t.ref} · ${t.nom}`],["kv","Direction",t.service||"—"],["kv","Finalités et bases légales",finText(t)||"—"],["kv","Personnes concernées",[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(", ")||"—"],["kv","Données",[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", ")||"—"],["kv","Données sensibles",arr(t.sensibles).join(", ")||"Aucune"],["kv","Destinataires",[t.destinatairesInternes,t.destinatairesExternes].filter(Boolean).join(" ; ")||"—"],["kv","Transferts hors UE",t.transfertHorsUE?`${t.transfertPays||""} · ${t.transfertGaranties||"garanties à préciser"}`:"Non"],["kv","Conservation",[t.conservation,t.conservationArchivage].filter(Boolean).join(" ; archivage : ")||"—"],["kv","Sécurité",[...arr(t.securite),t.securiteAutres].filter(Boolean).join(", ")||"—"]); });
+  const ai = items("aipd"); B.push(["h2",`4. Analyses d'impact (${ai.length})`]); ai.length ? B.push(["ul",ai.map(a=>`${a.ref} · ${titleOf("aipd",a)} : ${optL(MODS.aipd.opts.statut,a.statut)||"—"}`)]) : B.push(["p","Aucune AIPD enregistrée."]);
+  const sts = items("soustraitants"); B.push(["h2",`5. Sous-traitants et contrats (${sts.length})`]); sts.forEach(s=>B.push(["kv",s.nom||"—",`${s.prestation||""} · contrat : ${optL(MODS.soustraitants.opts.contrat,s.contrat)||"non renseigné"} · ${s.horsUE?`hors UE (${s.pays||""}, ${s.garanties||"garanties à préciser"})`:`hébergement ${s.pays||"à préciser"}`}`]));
+  const vs = items("violations"); B.push(["h2",`6. Registre des violations (${vs.length})`]); vs.length ? vs.forEach(v=>B.push(["kv",`${v.ref} · ${fmtD(v.dateDecouverte)}`,`${v.titre||""} · risque : ${v.risque||"—"} · notification CNIL : ${v.notifCnil||"—"}`])) : B.push(["p","Aucune violation enregistrée."]);
+  const ds = items("demandes"); B.push(["h2",`7. Demandes d'exercice des droits (${ds.length})`]); ds.length ? ds.forEach(d=>B.push(["kv",`${d.ref} · ${fmtD(d.dateReception)}`,`${optL(TYPES_DROIT,d.type)||d.type||""} · ${optL(MODS.demandes.opts.statut,d.statut)||d.statut||""}${d.dateReponse?" · réponse le "+fmtD(d.dateReponse):""}`])) : B.push(["p","Aucune demande enregistrée."]);
+  const fs = items("formations"); const rs=[...(S.results||new Map()).values()]; B.push(["h2","8. Sensibilisation du personnel"],["kv","Sessions enregistrées",String(fs.length)],["kv","Collaborateurs formés à distance",String(new Set(rs.filter(r=>r.reussi).map(r=>String(r.email).toLowerCase())).size)]);
+  const acts = items("actions").filter(a=>a.statut!=="fait"); B.push(["h2",`9. Plan d'actions en cours (${acts.length})`]); acts.length ? B.push(["ul",acts.map(a=>`${a.titre} · ${a.responsable||"responsable à désigner"} · échéance ${a.echeance?fmtD(a.echeance):"à fixer"}`)]) : B.push(["p","Aucune action ouverte."]);
+  B.push(["h2","10. Procédures internes"]); [...docViolation().slice(1), ...docDroits().slice(1)].forEach(b=>B.push(b[0]==="h1"?["h3",b[1]]:b[0]==="h2"?["h3",b[1]]:b));
+  B.push(["p","Pièces à joindre le jour du contrôle : contrats de sous-traitance signés, AIPD validées, preuves de formation, mentions d'information en vigueur, charte informatique, procès-verbaux de consultation du CSE le cas échéant.","note"]);
+  return B;
+}
+function vPilotage(){
+  const tab = S.pilTab || "dirs";
+  const dirs = [...orgDirections(), ...(liveTrt().some(t=>dirLabel(t)===DIR_HORS)?[DIR_HORS]:[])];
+  let body = "";
+  if (tab==="dirs"){
+    const stats = dirs.map(dirStats);
+    body = !dirs.length ? `<div class="notice warn">${I.alert}<div>Déclarez vos directions dans la page <button class="lnk" data-action="nav" data-view="org">Organisation</button>.</div></div>` :
+    `<div class="pdirs">${stats.map(st=>`<article class="pdir">
+      <div class="pdir-h"><h3>${esc(st.d)}</h3>${st.score!=null?`<span class="pdir-sc" style="--sc:${st.score>=80?"var(--ok)":st.score>=55?"var(--primary)":"var(--warn)"}">${st.score}</span>`:""}</div>
+      <p class="pdir-ref">${st.ref.nom?`Correspondant : ${esc(st.ref.nom)}`:`<span class="muted">Correspondant à désigner (Revue annuelle)</span>`}</p>
+      <dl class="pdir-k"><div><dt>Traitements</dt><dd>${st.trt.length}</dd></div><div><dt>Complétude</dt><dd>${st.trt.length?st.compl+" %":"—"}</dd></div><div><dt>Points à corriger</dt><dd class="${st.al.length?"w":""}">${st.al.length}</dd></div><div><dt>Purges en retard</dt><dd class="${st.consLate.length?"c":""}">${st.consLate.length}</dd></div><div><dt>Revues dues</dt><dd class="${st.revues.length?"w":""}">${st.revues.length}</dd></div><div><dt>Formés</dt><dd>${st.okp}${st.people>st.okp?` / ${st.people}`:""}</dd></div></dl>
+      <div class="actions"><button class="btn sm" data-action="pil-dir" data-d="${esc(st.d)}">Voir les fiches</button>${st.d!==DIR_HORS?`<a class="btn sm ${relanceMail(st).n?"primary":""}" href="${esc(mailto(relanceMail(st)))}">${I.send}Préparer la relance</a>`:""}</div>
+    </article>`).join("")}</div>`;
+  }
+  if (tab==="relances"){
+    const R = relancesDues();
+    body = `<p class="muted" style="margin:0 0 12px">Égide prépare chaque e-mail : vérifiez le destinataire et le texte, puis envoyez-le depuis Outlook.</p>${R.length?`<ul class="prel">${R.map(r=>`<li class="${r.sev}"><span class="sev ${r.sev}"></span><span>${esc(r.t)}</span><button class="btn sm ghost" data-action="open" data-mod="${r.mod}" data-id="${esc(r.id)}">Ouvrir</button><a class="btn sm" href="${esc(mailto(r.mail))}">${I.send}E-mail</a></li>`).join("")}</ul>`:`<div class="allgood">${I.check}<span>Aucune relance à envoyer : demandes, purges et actions sont à jour.</span></div>`}`;
+  }
+  if (tab==="controle"){
+    const C = coherence(); const n = s => C.filter(r=>r.sev===s).reduce((a,r)=>a+r.list.length,0);
+    body = `<div class="pctl-sum"><span class="pill t-crit">${n("crit")} critique${n("crit")>1?"s":""}</span><span class="pill t-warn">${n("warn")} à corriger</span><span class="pill t-neutral">${n("info")} à surveiller</span><span style="flex:1"></span><button class="btn sm" data-action="pil-ctl-word" ${S.dl?"":"disabled"}>${I.dl}Rapport Word</button></div>
+    ${C.length?C.map(r=>`<details class="pctl ${r.sev}" ${r.sev==="crit"?"open":""}><summary><span class="sev ${r.sev}"></span><b>${esc(r.titre)}</b><span class="pill t-neutral">${r.list.length}</span></summary><p class="muted">${esc(r.desc)}</p><ul>${r.list.map(x=>`<li><button class="lnk" data-action="open" data-mod="${x.mod}" data-id="${esc(x.id)}">${esc(x.l)}</button></li>`).join("")}</ul></details>`).join(""):`<div class="allgood">${I.check}<span>Aucune incohérence détectée dans le registre.</span></div>`}`;
+  }
+  if (tab==="evol"){
+    const rows = [...(S.hist||new Map()).values()].sort((a,b)=>a.mois.localeCompare(b.mois)).slice(-12);
+    const cur = histNow(); if (!rows.some(r=>r.mois===cur.mois)) rows.push(cur);
+    body = `<p class="muted" style="margin:0 0 12px">Égide enregistre un point par mois à l'ouverture de l'application. L'historique démarre avec cette version.</p>${histChart(rows)}
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Mois</th><th>Score</th><th>Complétude</th><th>Traitements</th><th>Alertes critiques</th><th>Actions faites</th><th>Actions ouvertes</th><th>Collaborateurs formés</th></tr></thead><tbody>${rows.slice().reverse().map(r=>`<tr><td><b>${esc(r.mois)}</b></td><td>${r.score}</td><td>${r.completude} %</td><td>${r.traitements}</td><td>${r.alertesCrit}</td><td>${r.actionsFaites}</td><td>${r.actionsOuvertes}</td><td>${r.formes}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+  if (tab==="cnil"){
+    const K = cnilChecks(); const ok = K.filter(k=>k.ok).length;
+    body = `<div class="pcnil-h"><div class="pcnil-sc"><b>${ok}/${K.length}</b><span>points prêts</span></div><p>La CNIL peut contrôler sur place, sur pièces, en ligne ou sur audition. Ce tableau reprend les éléments qu'elle demande le plus souvent ; le dossier Word les rassemble en un document à remettre.</p></div>
+      <ul class="pcnil">${K.map(k=>`<li class="${k.ok?"ok":"ko"}"><span class="pcnil-i">${k.ok?I.check:I.alert}</span><div><b>${esc(k.t)}</b><small>${esc(k.s)}</small></div>${k.ok?"":`<button class="btn sm ghost" data-action="pil-go" data-go="${k.go}">Corriger</button>`}</li>`).join("")}</ul>
+      <div class="actions" style="margin-top:12px"><button class="btn primary" data-action="pil-cnil-word" ${S.dl?"":"disabled"}>${I.dl}Télécharger le dossier de contrôle (Word)</button><button class="btn" data-action="pdf-registre" ${S.dl?"":"disabled"}>${I.pdf}Registre PDF</button></div>`;
+  }
+  return `${roBanner()}<div class="head"><div class="phead"><span class="pico" style="--c:#003865">${I.gauge}</span><div><h1>Pilotage</h1><p class="psub">Directions, relances, contrôle du registre, évolution et préparation d'un contrôle de la CNIL</p></div></div></div>
+    <div class="doctabs" role="tablist">${PIL_TABS.map(([k,l])=>`<button role="tab" aria-selected="${tab===k}" class="${tab===k?"on":""}" data-action="pil-tab" data-k="${k}">${esc(l)}${k==="relances"&&relancesDues().length?`<span>${relancesDues().length}</span>`:""}${k==="controle"?`<span>${coherence().reduce((a,r)=>a+(r.sev!=="info"?r.list.length:0),0)||""}</span>`:""}</button>`).join("")}</div>
+    <section class="panel"><div class="panel-b">${body}</div></section>`;
+}
+
+/* ---------- 8. Analyse des contrats de sous-traitance ---------- */
+const ART28 = [
+  ["objet","Objet, durée, nature et finalité, catégories de données et de personnes", /cat[ée]gories? de (donn[ée]es|personnes)|nature et (la )?finalit|objet du traitement/i, true],
+  ["instructions","Traitement sur instruction documentée (28.3.a)", /instructions? document[ée]e?s?|sur (les )?instructions?|instructions? [ée]crites?/i, true],
+  ["confid","Confidentialité des personnes autorisées (28.3.b)", /confidentialit/i, true],
+  ["securite","Mesures de sécurité de l'article 32 (28.3.c)", /article 32|art\.? ?32|mesures? techniques et organisationnelles|mesures? de s[ée]curit/i, true],
+  ["sst","Sous-traitance ultérieure encadrée (28.2 et 28.4)", /sous-traitan(t|ce)s? ult[ée]rieu|autre sous-traitant|autorisation (écrite |ecrite )?pr[ée]alable/i, true],
+  ["droits","Aide à l'exercice des droits des personnes (28.3.e)", /droits? des personnes|exercice (de leurs |des )droits/i, true],
+  ["assist","Aide aux obligations des articles 32 à 36 : violations, AIPD (28.3.f)", /analyse d'impact|aipd|articles? 32 [àa] 36|consultation pr[ée]alable/i, true],
+  ["violation","Notification des violations de données", /violation(s)? de (donn[ée]es|s[ée]curit)|notifi/i, true],
+  ["fin","Suppression ou restitution en fin de contrat (28.3.g)", /supprim|restitu|destruction|renvo(i|yer)/i, true],
+  ["audit","Audits et mise à disposition des informations (28.3.h)", /audit|inspection/i, true],
+  ["transferts","Transferts hors de l'Union européenne", /transferts?|hors (de l')?union|pays tiers|clauses contractuelles types/i, false],
+  ["localisation","Localisation de l'hébergement", /h[ée]berg|localis|centre(s)? de donn[ée]es|data ?cent/i, false]
+];
+async function pdfText(file){
+  const lib = await loadPdfJs(); const doc = await lib.getDocument({data:new Uint8Array(await file.arrayBuffer()), isEvalSupported:false}).promise; let out = "";
+  for (let i=1;i<=Math.min(doc.numPages,80);i++){ const p = await doc.getPage(i); const c = await p.getTextContent(); out += c.items.map(x=>x.str).join(" ")+"\n"; }
+  return out;
+}
+function art28Analyse(text){
+  const t = String(text||"").replace(/\s+/g," ");
+  const sent = re => { const m = t.match(re); if (!m) return ""; const i=m.index; const st=Math.max(0, t.lastIndexOf(". ", i)+2); const en=t.indexOf(". ", i+m[0].length); return "« "+t.slice(st, en<0?Math.min(t.length,st+240):Math.min(en+1, st+240)).trim()+" »"; };
+  const res = ART28.map(([k,l,re,ess])=>({k, l, ess, ok:re.test(t), ex:sent(re)}));
+  const dm = t.match(/(\d{1,3})\s*(heures|h)\b[^.]{0,80}(violation|incident|notifi)|(violation|incident|notifi)[^.]{0,120}?(\d{1,3})\s*(heures|h)\b/i);
+  const delai = dm ? +(dm[1]||dm[5]) : null;
+  return {res, delai, mots:t.split(" ").length};
+}
+async function stAnalyse(st, text, fichier){
+  const a = art28Analyse(text);
+  if (a.mots < 80){ toast("Texte trop court ou PDF scanné (image) : collez le texte du contrat."); return; }
+  const doc = {date:today(), fichier:fichier||"texte collé", ok:a.res.filter(r=>r.ok).map(r=>r.k), manquants:a.res.filter(r=>!r.ok).map(r=>r.k), extraits:Object.fromEntries(a.res.filter(r=>r.ok).map(r=>[r.k,r.ex.slice(0,260)])), delaiViolation:a.delai};
+  try{ await persist("soustraitants", st._id, {...st, analyseContrat:doc}, "Contrat analysé ("+doc.ok.length+"/"+ART28.length+" clauses repérées)"); }catch(e){ writeError(e); return; }
+  S.stCtr = null; toast(`${doc.ok.length} clause${doc.ok.length>1?"s":""} sur ${ART28.length} repérée${doc.ok.length>1?"s":""}`); render();
+}
+function stContratPanel(t){
+  const A = t.analyseContrat; const ess = ART28.filter(x=>x[3]); const essOk = A ? ess.filter(x=>A.ok.includes(x[0])).length : 0;
+  return `<section class="panel stctr"><div class="panel-h"><h2>Analyse du contrat (article 28)</h2>${A?`<span class="pill ${essOk===ess.length?"t-ok":essOk>=ess.length-2?"t-warn":"t-crit"}">${essOk}/${ess.length} clauses obligatoires</span>`:""}</div><div class="panel-b">
+    ${A?`<p class="muted" style="margin:0 0 10px">Analyse du ${fmtD(A.date)} · ${esc(A.fichier)}${A.delaiViolation?` · délai de notification des violations : ${A.delaiViolation} h${A.delaiViolation>72?" (trop long : le responsable n'aurait pas le temps de notifier la CNIL)":""}`:""}</p>
+      <ul class="art28">${ART28.map(([k,l,,ess2])=>{ const ok=A.ok.includes(k); return `<li class="${ok?"ok":ess2?"ko":"opt"}"><span>${ok?"✓":ess2?"✗":"–"}</span><div><b>${esc(l)}</b>${ok&&A.extraits?.[k]?`<small>${esc(A.extraits[k])}</small>`:!ok&&ess2?`<small>Clause non repérée : vérifiez le contrat ou demandez un avenant (modèle « Clauses de sous-traitance » dans Modèles de documents).</small>`:""}</div></li>`; }).join("")}</ul>
+      ${W() && essOk===ess.length && t.contrat!=="signe" ? `<div class="actions"><button class="btn sm primary" data-action="st-ctr-ok">${I.check}Marquer le contrat comme signé et conforme</button></div>`:""}
+      <p class="hint">Analyse automatique par mots-clés : elle signale les clauses présentes ou absentes, mais ne remplace pas une relecture juridique.</p>`
+    :`<p class="muted" style="margin:0 0 10px">Déposez le contrat (PDF) ou collez son texte : Égide repère les clauses exigées par l'article 28 du RGPD et signale celles qui manquent.</p>`}
+    ${W()?`<div class="actions"><label class="btn sm">${I.up}${A?"Analyser un autre contrat (PDF)":"Analyser le contrat (PDF)"}<input type="file" accept="application/pdf,.pdf,.txt" data-stctr="${esc(t._id)}" hidden></label><button class="btn sm ghost" data-action="st-ctr-paste">Coller le texte</button></div>
+    ${S.stCtr==="paste"?`<div class="f" style="margin-top:8px"><textarea id="st-ctr-txt" rows="6" placeholder="Collez ici le texte du contrat ou de l'annexe RGPD"></textarea><div class="actions" style="margin-top:6px"><button class="btn sm primary" data-action="st-ctr-run">Analyser</button></div></div>`:""}${S.stCtr==="busy"?`<p class="muted"><span class="spin"></span> Lecture du PDF…</p>`:""}`:""}
+  </div></section>`;
+}
+
+/* ---------- 11. Module IA ---------- */
+MODS.ia.opts = {
+  statut:{en_test:{l:"En test",tone:"info"}, autorise:{l:"Autorisé",tone:"ok"}, restreint:{l:"Autorisé sous conditions",tone:"warn"}, interdit:{l:"Usage interdit",tone:"crit"}, abandonne:{l:"Abandonné",tone:"neutral"}},
+  donneesPerso:{oui:{l:"Oui",tone:"warn"}, non:{l:"Non",tone:"ok"}, inconnu:{l:"À vérifier",tone:"neutral"}},
+  entrainement:{non:{l:"Non (désactivé ou exclu par contrat)",tone:"ok"}, oui:{l:"Oui",tone:"crit"}, inconnu:{l:"À vérifier",tone:"warn"}},
+  role:{deployeur:{l:"Déployeur (nous utilisons l'outil)",tone:"info",d:"Cas le plus fréquent : l'entreprise utilise un système d'IA fourni par un tiers."}, fournisseur:{l:"Fournisseur (nous développons l'outil)",tone:"warn",d:"L'entreprise développe ou met sur le marché le système d'IA sous son nom."}},
+  risque:{inacceptable:{l:"Pratique interdite",tone:"crit",d:"Notation sociale, reconnaissance des émotions au travail, manipulation… (art. 5) : interdit depuis le 2 février 2025."}, haut:{l:"Haut risque",tone:"warn",d:"Recrutement, évaluation ou gestion des salariés, accès à des services essentiels… (annexe III) : obligations applicables au 2 décembre 2027."}, transparence:{l:"Transparence",tone:"info",d:"Agent conversationnel, contenus générés : informer les personnes qu'elles interagissent avec une IA ou que le contenu est généré."}, minimal:{l:"Risque minimal",tone:"ok",d:"Correcteur, traduction, aide à la rédaction interne… : pas d'obligation spécifique hors maîtrise de l'IA (art. 4)."}}
+};
+MODS.ia.title = t => t.nom;
+MODS.ia.sections = [
+  {id:"outil", t:"L'outil", req:["nom"], fields:[
+    {k:"nom", l:"Nom de l'outil", t:"text", req:true, ph:"Ex. : Microsoft 365 Copilot"},
+    {k:"fournisseur", l:"Fournisseur", t:"text", ph:"Ex. : Microsoft"},
+    {k:"usage", l:"À quoi sert-il ?", t:"textarea", full:true, ph:"Ex. : rédaction de comptes rendus, synthèse de documents internes"},
+    {k:"service", l:"Direction utilisatrice", t:"direction"},
+    {k:"utilisateurs", l:"Nombre d'utilisateurs", t:"text", ph:"Ex. : 40"},
+    {k:"statut", l:"Statut", t:"select", o:"statut"}
+  ]},
+  {id:"data", t:"Données personnelles", sub:"RGPD", fields:[
+    {k:"donneesPerso", l:"L'outil traite-t-il des données personnelles ?", t:"radio", o:"donneesPerso", full:true},
+    {k:"categories", l:"Données concernées", t:"checks", full:true, items:["Données de salariés","Données de candidats","Données de clients ou prospects","Données de fournisseurs","Données sensibles (santé, syndicales…)","Contenus de messagerie et documents internes","Enregistrements audio ou vidéo"], showIf:d=>d.donneesPerso==="oui"},
+    {k:"entrainement", l:"Nos données servent-elles à entraîner le modèle ?", t:"radio", o:"entrainement", full:true},
+    {k:"hebergement", l:"Hébergement des données", t:"text", ph:"Ex. : Union européenne (EU Data Boundary)"},
+    {k:"traitementIds", l:"Traitements du registre concernés", t:"links", full:true}
+  ]},
+  {id:"aiact", t:"AI Act", sub:"Règlement (UE) 2024/1689", fields:[
+    {k:"role", l:"Rôle de l'entreprise", t:"radio", o:"role", full:true},
+    {k:"risque", l:"Niveau de risque", t:"radio", o:"risque", full:true},
+    {k:"mesures", l:"Mesures en place", t:"checks", full:true, items:["Charte d'usage de l'IA","Formation des utilisateurs (maîtrise de l'IA, art. 4)","Information des personnes concernées","Contrôle humain des résultats","Contrat avec clauses de protection des données","Désactivation de l'entraînement sur nos données","AIPD réalisée","Consultation du CSE"]},
+    {k:"commentaire", l:"Commentaires", t:"textarea", full:true}
+  ]}
+];
+MODS.ia.columns = [
+  {h:"Outil", w:"minmax(0,1fr)", v:t=>`<span class="nm">${esc(t.nom||"Sans titre")}${exTag(t)}${flags("ia",t)}<small>${esc([t.fournisseur,dirLabel(t)].filter(Boolean).join(" · "))}</small></span>`},
+  {h:"Risque AI Act", w:"150px", cls:"hide-sm", v:t=>pill(MODS.ia.opts.risque,t.risque)||'<span class="muted">À qualifier</span>'},
+  {h:"Statut", w:"150px", cls:"c-st", v:t=>pill(MODS.ia.opts.statut,t.statut)}
+];
+MODS.ia.alerts = t => {
+  if (t.statut==="abandonne") return [];
+  const a = [], m = arr(t.mesures);
+  if (t.risque==="inacceptable") a.push({sev:"crit", t:"Pratique interdite par l'AI Act", s:"Cet usage relève de l'article 5 : il doit cesser."});
+  if (t.entrainement==="oui") a.push({sev:"crit", t:"Nos données entraînent le modèle", s:"Désactivez cette option ou obtenez un engagement contractuel du fournisseur."});
+  if (t.donneesPerso==="oui" && !arr(t.traitementIds).length) a.push({sev:"warn", t:"Rattacher au registre", s:"Reliez l'outil au(x) traitement(s) du registre qu'il sert."});
+  if (t.risque==="haut" && !m.includes("Contrôle humain des résultats")) a.push({sev:"warn", t:"Contrôle humain à prévoir", s:"Obligatoire pour un système à haut risque (art. 14 et 26)."});
+  if (t.risque==="haut" && !m.includes("AIPD réalisée") && t.donneesPerso==="oui") a.push({sev:"warn", t:"AIPD recommandée", s:"Un système d'IA à haut risque traitant des données personnelles relève en principe d'une analyse d'impact."});
+  if (["autorise","restreint"].includes(t.statut) && !m.includes("Formation des utilisateurs (maîtrise de l'IA, art. 4)")) a.push({sev:"info", t:"Former les utilisateurs", s:"L'article 4 de l'AI Act demande de favoriser la maîtrise de l'IA par le personnel."});
+  if (!t.risque) a.push({sev:"info", t:"Niveau de risque à qualifier", s:"Choisissez le niveau de risque AI Act."});
+  if (t.donneesPerso==="inconnu" || t.entrainement==="inconnu") a.push({sev:"info", t:"Informations à vérifier", s:"Vérifiez auprès du fournisseur les données traitées et leur réutilisation."});
+  return a;
+};
+MODS.ia.dates = () => [];
+
+/* ---------- 12. Profils : DPO ou correspondant de direction ---------- */
+const PROFIL_KEY = "egide-profil";
+const getProfil = () => { try{ return JSON.parse(localStorage.getItem(PROFIL_KEY)||"null") || {type:"dpo"}; }catch{ return {type:"dpo"}; } };
+S.profil = getProfil();
+const CORR = () => S.profil?.type==="corr" && orgDirections().includes(S.profil.dir) ? S.profil.dir : null;
+function corrCanWrite(){
+  const d = CORR(); if (!d) return true;
+  if (!["traitements","conservation"].includes(S.mod) || !["list","detail","edit"].includes(S.view)) return false;
+  if (S.view==="edit" && S.draft) return !S.draft._id || dirLabel(S.data[S.mod].get(S.draft._id)||S.draft)===d;
+  if (S.view==="detail"){ const t = S.data[S.mod].get(S.selId); return !!t && dirLabel(t)===d; }
+  return true;
+}
+const CORR_VIEWS = new Set(["dashboard","news","list","detail","edit","search","docs","jeu","flux","alertes"]);
+function profilBox(){
+  const d = CORR();
+  return `<div class="profil"><button class="profil-b" data-action="profil-open" title="Changer de profil">${I.user}<span>${d?`Correspondant · ${esc(d)}`:"Profil DPO"}</span></button>
+    ${S.profilOpen?`<div class="profil-m" role="dialog" aria-label="Profil">
+      <p class="muted">Le profil correspondant limite l'affichage et les modifications aux fiches de sa direction.</p>
+      ${orgDirections().map((x,i)=>`<button class="profil-o ${d===x?"on":""}" data-action="profil-set" data-i="${i}">${esc(x)}</button>`).join("")}
+      ${d?`<div class="profil-dpo"><label for="profil-mail">Revenir au profil DPO : e-mail du DPO</label><input type="email" id="profil-mail" placeholder="${esc((S.org.dpoEmail||"").replace(/^(.).*@/,"$1…@"))}"><button class="btn sm primary" data-action="profil-dpo">Valider</button></div>`:""}
+      <p class="hint">Ce profil organise le travail à plusieurs ; ce n'est pas une protection : toute personne qui a le fichier de données peut le lire.</p></div>`:""}</div>`;
+}
+
+/* ---------- 13. Visite guidée ---------- */
+const TOUR = [
+  {sel:'#nav [data-view="dashboard"]', t:"Accueil", d:"Le score de conformité, les priorités du moment et les prochaines échéances. C'est la page à ouvrir chaque matin."},
+  {sel:'#nav [data-view="news"]', t:"Actualités", d:"La veille CNIL, CEPD et jurisprudence, avec pour chaque actualité « Que faire ? » et un plan d'action proposé."},
+  {sel:'#nav [data-mod="traitements"]', t:"Registre des traitements", d:"Le cœur de la conformité (article 30). Une fiche par traitement, avec une base légale par finalité. « # Numérotation » harmonise les références."},
+  {sel:'#nav [data-mod="aipd"]', t:"Analyses d'impact", d:"Pour les traitements à risque élevé : la méthode de la CNIL, l'avis du DPO et la validation."},
+  {sel:'#nav [data-mod="soustraitants"]', t:"Sous-traitants", d:"Les prestataires, leur hébergement et leur contrat. Déposez un contrat en PDF pour vérifier les clauses de l'article 28."},
+  {sel:'#nav [data-mod="ia"]', t:"Outils d'IA", d:"L'inventaire des outils d'intelligence artificielle, leur niveau de risque AI Act et les mesures en place."},
+  {sel:'#nav [data-mod="conservation"]', t:"Conservation", d:"Les purges et archivages programmés, avec alerte des directions à l'échéance."},
+  {sel:'#nav [data-mod="demandes"]', t:"Demandes de droits", d:"Chaque demande avec son délai d'un mois. Les courriers de réponse sont dans Modèles de documents."},
+  {sel:'#nav [data-mod="violations"]', t:"Violations", d:"Le registre des violations et le compte à rebours de 72 heures pour la notification à la CNIL."},
+  {sel:'#nav [data-view="pilotage"]', t:"Pilotage", d:"La situation par direction, les relances prêtes à envoyer, le contrôle de cohérence, l'évolution mois par mois et la préparation d'un contrôle CNIL."},
+  {sel:'#nav [data-view="revue"]', t:"Revue annuelle", d:"Une campagne par an : chaque correspondant de direction confirme ou corrige ses fiches."},
+  {sel:'#nav [data-view="docs"]', t:"Modèles de documents", d:"26 modèles prêts à l'emploi et la rédaction sur mesure avec Claude ou Copilot."},
+  {sel:'#nav [data-mod="formations"]', t:"Formation", d:"Les sessions, les formations à distance par lien et les résultats importés."},
+  {sel:'#nav [data-view="rapport"]', t:"Rapport annuel", d:"Le bilan du DPO pour la direction, généré automatiquement et modifiable."},
+  {sel:'#nav [data-view="org"]', t:"Organisation", d:"L'entreprise, les directions, le DPO. Tout l'outil s'appuie sur ces informations."},
+  {sel:'#nav [data-view="backup"]', t:"Sauvegarde et passation", d:"Sauvegardes (protégées par mot de passe), transfert entre les versions et la marche à suivre le jour de votre départ."}
+];
+function tourRender(){
+  let ov = $("#tour"); if (!S.tour){ ov?.remove(); return; }
+  const st = TOUR[S.tour.i]; const el = document.querySelector(st.sel);
+  if (!ov){ ov = document.createElement("div"); ov.id = "tour"; document.body.appendChild(ov); }
+  el?.scrollIntoView({block:"nearest"});
+  const r = el ? el.getBoundingClientRect() : {left:innerWidth/2-100, top:120, width:200, height:40};
+  const right = r.left + r.width + 16, top = Math.min(Math.max(12, r.top - 20), innerHeight - 230);
+  const narrow = innerWidth < 760;
+  ov.innerHTML = `<div class="tour-spot" style="left:${r.left-6}px;top:${r.top-4}px;width:${r.width+12}px;height:${r.height+8}px"></div>
+    <div class="tour-card" role="dialog" aria-live="polite" style="${narrow?"left:16px;right:16px;bottom:16px":`left:${Math.min(right, innerWidth-380)}px;top:${top}px`}">
+      <span class="eyebrow">Visite guidée · ${S.tour.i+1}/${TOUR.length}</span><h3>${esc(st.t)}</h3><p>${esc(st.d)}</p>
+      <div class="actions"><button class="btn sm ghost" data-action="tour-end">Quitter</button><span style="flex:1"></span>${S.tour.i?`<button class="btn sm" data-action="tour-prev">Précédent</button>`:""}<button class="btn sm primary" data-action="${S.tour.i<TOUR.length-1?"tour-next":"tour-end"}">${S.tour.i<TOUR.length-1?"Suivant":"Terminer"}</button></div></div>`;
+}
+
+/* ---------- Actions ---------- */
+const recoActions = {
+  "import-unlock": async () => { const pw = $("#imp-pw")?.value||""; try{ backupFromObj(await egDecrypt(S.importLocked, pw)); toast("Sauvegarde déverrouillée"); }catch{ toast("Mot de passe incorrect."); } },
+  "confirm-import": confirmImportMerge,
+  "pil-tab"(el){ S.pilTab = el.dataset.k; render(); },
+  "pil-dir"(el){ S.filters = {...(S.filters||{}), service:el.dataset.d}; go("list","traitements"); },
+  "pil-go"(el){ const g = el.dataset.go; if (g==="org") go("org"); else if (g==="pil-controle"){ S.pilTab="controle"; render(); } else go("list", g); },
+  "pil-ctl-word"(){ const C = coherence(); const B = [["h1","Contrôle de cohérence du registre"],["p",`${S.org.raisonSociale||""} · ${fmtD(today())}`,"sub"]]; if (!C.length) B.push(["p","Aucune incohérence détectée."]); C.forEach(r=>{ B.push(["h2",`${r.sev==="crit"?"Critique":r.sev==="warn"?"À corriger":"À surveiller"} · ${r.titre} (${r.list.length})`],["p",r.desc],["ul",r.list.map(x=>x.l)]); }); save(`${slugOrg()}-controle-registre-${today()}.docx`, docxFrom(B,{title:"Contrôle de cohérence du registre"})); },
+  "pil-cnil-word"(){ save(`${slugOrg()}-dossier-controle-cnil-${today()}.docx`, docxFrom(cnilDossierBlocks(), {title:"Dossier de contrôle CNIL"})); },
+  "st-ctr-paste"(){ S.stCtr = S.stCtr==="paste" ? null : "paste"; render(); setTimeout(()=>$("#st-ctr-txt")?.focus(),30); },
+  async "st-ctr-run"(){ const t = S.data.soustraitants.get(S.selId); if (t) await stAnalyse(t, $("#st-ctr-txt")?.value||""); },
+  async "st-ctr-ok"(){ const t = S.data.soustraitants.get(S.selId); if (!t) return; try{ await persist("soustraitants", t._id, {...t, contrat:"signe", dateContrat:t.dateContrat||today()}, "Contrat article 28 marqué conforme après analyse"); toast("Contrat marqué comme signé"); render(); }catch(e){ writeError(e); } },
+  "profil-open"(){ S.profilOpen = !S.profilOpen; renderNav(); },
+  "profil-set"(el){ const d = orgDirections()[+el.dataset.i]; if (!d) return; S.profil = {type:"corr", dir:d}; try{ localStorage.setItem(PROFIL_KEY, JSON.stringify(S.profil)); }catch{} S.profilOpen = false; S.filters = {...(S.filters||{}), service:d}; toast("Profil correspondant : "+d); go("dashboard"); },
+  "profil-dpo"(){ const v = ($("#profil-mail")?.value||"").trim().toLowerCase(); if (!S.org.dpoEmail || v === S.org.dpoEmail.trim().toLowerCase()){ S.profil = {type:"dpo"}; try{ localStorage.setItem(PROFIL_KEY, JSON.stringify(S.profil)); }catch{} S.profilOpen = false; S.filters = {...(S.filters||{}), service:""}; toast("Profil DPO"); render(); } else toast("Ce n'est pas l'e-mail du DPO."); },
+  "tour-start"(){ S.tour = {i:0}; if (S.view!=="dashboard") go("dashboard"); setTimeout(tourRender, 60); },
+  "tour-next"(){ if (!S.tour) return; S.tour.i = Math.min(TOUR.length-1, S.tour.i+1); tourRender(); },
+  "tour-prev"(){ if (!S.tour) return; S.tour.i = Math.max(0, S.tour.i-1); tourRender(); },
+  "tour-end"(){ S.tour = null; tourRender(); try{ localStorage.setItem("egide-tour-vu","1"); }catch{} }
+};
 
 /* ================= Exports ================= */
 const slugOrg = () => (norm(S.org.raisonSociale||"registre").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")) || "registre";
@@ -7852,10 +8351,6 @@ async function save(filename, data, markBackup){
     if (e?.code==="rate_limited") return toast("Une demande de téléchargement est déjà ouverte.");
     toast("Le fichier n'a pas pu être enregistré.");
   }
-}
-function exportJSON(){
-  const data = {app:"registre-rgpd", version:2, exporteLe:new Date().toISOString(), org:S.org, collections:Object.fromEntries(MOD_KEYS.map(m=>[m, items(m).map(clean)]))};
-  save(`${slugOrg()}-sauvegarde-rgpd-${today()}.json`, JSON.stringify(data,null,2), true);
 }
 const csvCell = v => { const s = String(v ?? "").replace(/\r?\n/g," "); return /[;"]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s; };
 function exportCSVMod(){
@@ -7886,7 +8381,7 @@ const pt = v => String(v??"").replace(/[   ]/g," ").replace(/[‘’]/g,"'"
 class Pdf {
   constructor(J, o){
     const d = this.d = new J({unit:"mm", format:"a4"});
-    this.M=16; this.W=210; this.H=297; this.CW=178; this.c=o.color||RGB.blue;
+    this.M=16; this.W=210; this.H=297; this.CW=178; this.c=o.color||RGB.blue; this.title=o.title||"";
     d.setLineHeightFactor(1.4);
     d.setFont("helvetica","bold"); d.setFontSize(21);
     const tl = d.splitTextToSize(pt(o.title), this.CW-10);
@@ -7982,9 +8477,10 @@ class Pdf {
         const chunk = vl.slice(0, avail); vl = vl.slice(avail);
         const rowsN = Math.max(chunk.length, first?kl.length:1);
         const h = rowsN*lh + 2*pad;
-        if (i%2===0){ d.setFillColor(...RGB.zebra); d.rect(this.M, this.y, this.CW, h, "F"); }
+        d.setFillColor(238,244,250); d.rect(this.M, this.y, LW-3, h, "F");
+        d.setDrawColor(...RGB.line); d.setLineWidth(.2); d.line(this.M, this.y+h, this.M+this.CW, this.y+h);
         const base = this.y + pad + size*0.3528;
-        if (first){ d.setFont("helvetica","bold"); d.setFontSize(size); d.setTextColor(...RGB.muted); kl.forEach((l,j)=>d.text(l, this.M+3, base+j*lh)); }
+        if (first){ d.setFont("helvetica","bold"); d.setFontSize(size); d.setTextColor(...RGB.navy); kl.forEach((l,j)=>d.text(l, this.M+3, base+j*lh)); }
         d.setFont("helvetica", empty?"italic":"normal"); d.setFontSize(size); d.setTextColor(...(empty?[160,154,148]:RGB.ink));
         chunk.forEach((l,j)=>d.text(l, this.M+LW, base+j*lh));
         this.y += h; first = false;
@@ -8015,6 +8511,7 @@ class Pdf {
   blob(){
     const d=this.d; const n=d.internal.getNumberOfPages();
     for (let i=1;i<=n;i++){ d.setPage(i);
+      if (i>1){ d.setFont("helvetica","bold"); d.setFontSize(7.5); d.setTextColor(...RGB.navy); d.text(pt(S.org.raisonSociale||"Égide"), this.M, 10); d.setFont("helvetica","normal"); d.setTextColor(...RGB.muted); d.text(pt(this.title.length>80?this.title.slice(0,78)+"…":this.title), this.W-this.M, 10, {align:"right"}); d.setDrawColor(...RGB.line); d.setLineWidth(.2); d.line(this.M, 12, this.W-this.M, 12); }
       d.setDrawColor(...RGB.line); d.setLineWidth(.3); d.line(this.M, this.H-13, this.W-this.M, this.H-13);
       d.setFont("helvetica","normal"); d.setFontSize(8); d.setTextColor(...RGB.muted);
       d.text(pt("Égide · "+(S.org.raisonSociale||"Conformité RGPD")), this.M, this.H-8.5);
@@ -8337,7 +8834,7 @@ const actions = {
   nav(el){ go(el.dataset.view); },
   list(el){ const m=el.dataset.mod; if (m!==S.mod) S.filters={q:"",statut:"",service:"",base:"",alerts:false}; go("list", m); },
   open(el){ S.mod=el.dataset.mod; S.selId=el.dataset.id; go("detail"); },
-  new(el){ S.addOpen=false; if(!W()) return; const m=el.dataset.mod||S.mod; startEdit(m, blankOf(m)); document.querySelector("#edit-form input[type=text]")?.focus(); },
+  new(el){ S.addOpen=false; if(!W()) return; const m=el.dataset.mod||S.mod; const d0=blankOf(m); if (CORR() && ["traitements","conservation"].includes(m)) d0.service=CORR(); startEdit(m, d0); document.querySelector("#edit-form input[type=text]")?.focus(); },
   edit(){ const t=S.data[S.mod].get(S.selId); if(!t||!W()) return; startEdit(S.mod, structuredClone({...blankOf(S.mod), ...t})); },
   "new-action"(){ if(!W()) return; const t=S.data[S.mod].get(S.selId); const d=blankOf("actions"); d.lienMod=S.mod; d.lienId=S.selId; d.traitementIds = S.mod==="traitements" ? [S.selId] : [...arr(t?.traitementIds)]; startEdit("actions", d); $("#e-titre")?.focus(); },
   "aipd-from-trt"(){ const t=S.data.traitements.get(S.selId); if(!t) return; const d=blankOf("aipd"); d.titre="AIPD – "+(t.nom||""); d.traitementIds=[t._id]; d.statut="en_cours"; prefillAipd(d,t); startEdit("aipd", d); },
@@ -8543,7 +9040,7 @@ const actions = {
   "quiz-level"(el){ try{ localStorage.setItem(QLEVEL_K, el.dataset.l); }catch{} const c=S.course||"essentiel"; delete QCACHE[c]; render(); },
   "pres-record"(el){ P.open=false; renderPres(); if(!W()) return; const d=blankOf("formations"); d.intitule=CUR.intitule; d.duree=CUR.dur; d.public=CUR.pub; d.scoreQuiz=el.dataset.score||""; d.formateur=S.meName||""; startEdit("formations", d); },
   "pick-import"(){ $("#import-file").value=""; $("#import-file").click(); },
-  "cancel-import"(){ S.importData=null; render(); },
+  "cancel-import"(){ S.importData=null; S.importLocked=null; render(); },
   async "confirm-import"(){
     const d=S.importData; if(!d) return; S.busy=true; render(); let n=0;
     try{
@@ -8563,7 +9060,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
@@ -8593,6 +9090,7 @@ document.addEventListener("click", e => {
 document.addEventListener("input", e => {
   const el = e.target;
   if (el.dataset?.gen!=null){ const g=genInit(); g[el.dataset.gen] = el.type==="checkbox" ? el.checked : el.value; if (el.type==="checkbox" || el.dataset.gen==="useReg") render(); return; }
+  if (el.dataset?.bk!=null){ S.bk = S.bk || {}; S.bk[el.dataset.bk] = el.type==="checkbox" ? el.checked : el.value; if (el.dataset.bk==="on") render(); return; }
   if (el.dataset?.num!=null && S.num){ S.num[el.dataset.num] = el.value; const pos=el.selectionStart; render(); if (el.id==="num-p"){ const n=$("#num-p"); if(n){ n.focus(); try{ n.setSelectionRange(pos,pos); }catch{} } } return; }
   if (el.id==="doc-md" && S.docv?.draft){ S.docv.draft.md=el.value; const p=$("#doc-prev"); if (p) p.innerHTML=docHTML(mdToBlocks(el.value)); return; }
   if (el.id==="doc-titre" && S.docv?.draft){ S.docv.draft.titre=el.value; return; }
@@ -8613,6 +9111,7 @@ document.addEventListener("input", e => {
 document.addEventListener("change", e => {
   const el = e.target;
   if (el.dataset?.gen!=null){ const g=genInit(); g[el.dataset.gen] = el.type==="checkbox" ? el.checked : el.value; if (el.type==="checkbox") render(); return; }
+  if (el.dataset?.stctr!=null && el.files?.[0]){ const f=el.files[0], st=S.data.soustraitants.get(el.dataset.stctr); el.value=""; if (!st) return; (async()=>{ try{ S.stCtr="busy"; render(); const txt = /\.pdf$/i.test(f.name) || f.type==="application/pdf" ? await pdfText(f) : await f.text(); S.stCtr=null; await stAnalyse(st, txt, f.name); }catch(e){ S.stCtr=null; render(); toast("Lecture impossible : vérifiez votre connexion ou collez le texte du contrat."); } })(); return; }
   if (el.dataset?.fin!=null && S.draft){ const L=S.draft.finalitesL||(S.draft.finalitesL=finL(S.draft)); const r=L[+el.dataset.fin]; if (r){ r[el.dataset.fk]=el.value; finSync(S.draft); S.dirty=true; refreshEdit(); } return; }
   if (el.dataset.trnC!=null || el.id==="trn-dpo" || el.id==="trn-up"){ trnSaveCfg(); return; }
   if (el.dataset.trnFiles!=null){ const fs=[...(el.files||[])]; el.value=""; (async()=>{ let all=[]; for (const f of fs){ try{ all=all.concat(parseResults(await f.text())); }catch{} } await importResults(all); })(); return; }
@@ -8669,21 +9168,9 @@ document.addEventListener("submit", async e => {
 document.addEventListener("dragover", e => { if (S.view==="import" && e.target.closest?.(".dropzone")){ e.preventDefault(); e.target.closest(".dropzone").classList.add("over"); } });
 document.addEventListener("dragleave", e => { e.target.closest?.(".dropzone")?.classList.remove("over"); });
 document.addEventListener("drop", e => { const z=e.target.closest?.(".dropzone"); if (S.view==="import" && z){ e.preventDefault(); z.classList.remove("over"); const f=e.dataTransfer?.files?.[0]; if (f) readExcel(f); } });
-function readImport(file){
-  const r = new FileReader();
-  r.onload = () => {
-    try{
-      const d = JSON.parse(r.result);
-      if (d?.app!=="registre-rgpd") throw 0;
-      const cols = d.version>=2 && d.collections ? d.collections : {traitements:arr(d.traitements)};
-      const out = {};
-      MOD_KEYS.forEach(m=>{ out[m] = arr(cols[m]).filter(t=>t && typeof t==="object" && !Array.isArray(t)); });
-      S.importData = {exporteLe:d.exporteLe, org:d.org, collections:out}; render();
-    }catch{ toast("Ce fichier n'est pas une sauvegarde de cette application."); }
-  };
-  r.readAsText(file);
-}
 let toastT;
+window.addEventListener("resize", () => { if (S.tour) tourRender(); });
+document.addEventListener("keydown", e => { if (S.tour && e.key==="Escape"){ S.tour=null; tourRender(); } });
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,3400); }
 function setSync(st){
   const sb=$("#savebtn"); if (sb) sb.hidden = !LOCAL;
@@ -8817,7 +9304,7 @@ render(); renderWelcome();
   MOD_KEYS.forEach(mod => {
     db.collection(mod).onSnapshot(snap => {
       S.data[mod] = new Map(snap.docs.map(d => [d.id, {...d.data(), _id:d.id}]));
-      S.loaded[mod] = true; refresh(mod); welcomeReady(); arAutoCheck();
+      S.loaded[mod] = true; refresh(mod); welcomeReady(); arAutoCheck(); histTick();
     }, () => { S.loaded[mod] = true; setSync("off"); refresh(mod); welcomeReady(); });
   });
   db.collection("scores").onSnapshot(snap => { S.scores = new Map(snap.docs.map(d=>[d.id,{...d.data()}])); if (S.view==="jeu" && !G.mode && !WEL.open) render(); }, () => {});
@@ -8827,6 +9314,7 @@ render(); renderWelcome();
   db.collection("resultats").onSnapshot(snap => { S.results = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (S.view==="list" && S.mod==="formations" && !quiet() && !(document.activeElement?.matches?.("input,textarea,select") && document.activeElement.closest(".trn-adm,.trn-res"))) render(); }, () => {});
   db.doc("config/formationDistance").onSnapshot(snap => { if (snap.exists) S.trainCfg = snap.data(); }, () => {});
   db.collection("campagnes").onSnapshot(snap => { S.camps = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (quiet()) renderNav(); else if (["revue","dashboard","detail"].includes(S.view)) render(); else renderNav(); }, () => {});
+  db.collection("historique").onSnapshot(snap => { S.hist = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); S.histLoaded = true; histTick(); if (S.view==="pilotage" && S.pilTab==="evol") render(); }, () => { S.histLoaded = true; });
   db.collection("rapportsTextes").onSnapshot(snap => { S.arEdits = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); }, () => {});
   db.collection("documents").onSnapshot(snap => { S.docs = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (S.view==="docs" && !quiet() && !S.docv?.editing) render(); }, () => {});
   if (LOCAL) db.doc("config/newsImport").onSnapshot(snap => { if (snap.exists) S.newsImp = snap.data(); }, () => {});
