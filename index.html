@@ -1911,6 +1911,38 @@ body.train .rail,body.train #chatfab,body.train #welcome,body.train #savebtn{dis
 .tbl-wrap{overflow-x:auto;margin-top:14px}
 .trn-res table{width:100%;border-collapse:collapse;font-size:.88rem}.trn-res th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px;border-bottom:1px solid var(--line)}.trn-res td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
 @media (max-width:760px){.trn-grid{grid-template-columns:1fr}.tr-course{flex-direction:column}}
+/* --- Finalités et bases légales --- */
+.finl{display:flex;flex-direction:column;gap:8px}
+.finrow{display:grid;grid-template-columns:26px minmax(0,1fr) minmax(170px,240px) 36px;gap:8px;align-items:start}
+.finrow .finn{width:26px;height:26px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:700;font-size:.8rem;margin-top:6px}
+.finrow textarea{min-height:44px;resize:vertical}
+.finhelp{font-size:.8rem;color:var(--muted)}.finhelp summary{cursor:pointer;color:var(--primary);font-weight:600}.finhelp ul{margin:6px 0 0;padding-left:18px;display:grid;gap:3px}
+.finlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.finlist li{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;padding:7px 10px;border-radius:10px;background:var(--surface-2,rgba(0,0,0,.03))}
+.finb{flex:none;font-size:.78rem;font-weight:600;color:var(--primary);background:var(--primary-soft);padding:3px 9px;border-radius:999px;white-space:nowrap}.finb .mono{opacity:.7;font-weight:500}
+.finb.miss{color:#B86A06;background:rgba(224,162,59,.15)}
+@media (max-width:640px){.finrow{grid-template-columns:22px minmax(0,1fr) 36px}.finrow select{grid-column:2/3}.finrow>button,.finrow>span:last-child{grid-row:1;grid-column:3}.finlist li{flex-direction:column;gap:4px}}
+/* --- Actualités : passage en ligne / local --- */
+.nimp{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.nimp-h{display:flex;gap:12px;align-items:flex-start}.nimp-h b{display:block;color:var(--heading)}.nimp-h span{font-size:.85rem;color:var(--muted)}
+.nimp-ic{flex:none;width:36px;height:36px;border-radius:12px;background:#800064;color:#fff;display:grid;place-items:center;font-size:1.1rem}
+.nimp-steps{margin:0;padding-left:20px;font-size:.86rem;display:grid;gap:2px}
+.nimp-paste{display:flex;flex-direction:column;gap:6px}.nimp-paste label{font-size:.83rem;font-weight:600}
+/* --- Modèles de documents --- */
+.doctabs{display:flex;gap:6px;flex-wrap:wrap}
+.doctabs button{all:unset;cursor:pointer;box-sizing:border-box;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:.86rem;font-weight:600;color:var(--text);display:inline-flex;gap:7px;align-items:center}
+.doctabs button span{font-size:.72rem;color:var(--muted);font-weight:600}
+.doctabs button.on{background:var(--primary);border-color:var(--primary);color:#fff}.doctabs button.on span{color:rgba(255,255,255,.8)}
+.doctabs button:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.gen label.chk{display:flex;gap:8px;align-items:center;font-weight:600;font-size:.86rem}
+.docedit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
+.docedit textarea{min-height:560px;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
+.docedit .docpaper{max-height:620px;overflow:auto}
+@media (max-width:900px){.docedit{grid-template-columns:minmax(0,1fr)}.docedit textarea{min-height:320px}}
+/* --- Visionneuse du rapport --- */
+.arv-edhint{color:rgba(255,255,255,.75);font-size:.82rem;margin-right:6px}
+.pjv-btn.primary{background:#0088CE}.pjv-btn.primary:hover{background:#0a77b3}
+@media (max-width:640px){.arv-edhint{display:none}}
 </style>
 
 <div class="app">
@@ -2302,7 +2334,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.13-a";
+const EGIDE_VERSION = "2026.11.13-b";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -3328,7 +3360,8 @@ MODS.traitements.alerts = t => {
   if (t.transfertHorsUE && !t.transfertGaranties?.trim()) a.push({sev:"crit", t:"Transfert hors UE sans garantie", s:"Précisez la garantie : décision d'adéquation, clauses contractuelles types…"});
   if (t.aipd==="requise"){ const l=linkedTo("aipd",t._id); if(!l.length) a.push({sev:"warn", t:"AIPD requise mais non lancée", s:"Lancez l'analyse d'impact depuis la fiche du traitement."}); else if(!l.some(x=>x.statut==="validee")) a.push({sev:"info", t:"AIPD en cours", s:"L'analyse d'impact n'est pas encore validée."}); }
   if (t.prochaineRevue && t.prochaineRevue < today()) a.push({sev:"warn", t:"Revue annuelle dépassée", s:"Prévue le "+fmtD(t.prochaineRevue)+". Relisez la fiche puis marquez-la comme revue."});
-  if (t.baseLegale==="interet_legitime" && !t.baseLegaleDetail?.trim()) a.push({sev:"warn", t:"Intérêt légitime à documenter", s:"Décrivez l'intérêt poursuivi et la mise en balance avec les droits des personnes."});
+  if (finL(t).some(x=>x.f.trim() && !x.b) && basesOf(t).length) a.push({sev:"warn", t:"Finalité sans base légale", s:"Chaque finalité doit avoir sa propre base légale : complétez la liste des finalités."});
+  if (basesOf(t).includes("interet_legitime") && !t.baseLegaleDetail?.trim()) a.push({sev:"warn", t:"Intérêt légitime à documenter", s:"Décrivez l'intérêt poursuivi et la mise en balance avec les droits des personnes."});
   if (!t.prochaineRevue && t.statut==="actif") a.push({sev:"info", t:"Aucune date de revue planifiée", s:"Fixez une prochaine revue pour garder le registre à jour."});
   const risky = arr(t.sensibles).length || arr(t.donnees).some(x=>/sécurité sociale|Infractions|localisation/.test(x)) || t.decisionAuto;
   if (risky && t.aipd==="non_requise" && !linkedTo("aipd",t._id).length) a.push({sev:"info", t:"Vérifier la nécessité d'une AIPD", s:"Données sensibles, hautement personnelles ou décision automatisée : une AIPD est obligatoire dès que deux critères de risque sont réunis."});
@@ -4056,7 +4089,7 @@ function searchHay(t){ return norm(Object.entries(t).filter(([k])=>!["history","
 function matches(mod,t){
   const f=S.filters;
   if (f.statut && t.statut!==f.statut) return false;
-  if (mod==="traitements"){ if (f.service && (t.service||"").trim()!==f.service) return false; if (f.base && t.baseLegale!==f.base) return false; }
+  if (mod==="traitements"){ if (f.service && (t.service||"").trim()!==f.service) return false; if (f.base && !basesOf(t).includes(f.base)) return false; }
   if (f.alerts && !MODS[mod].alerts(t).some(a=>a.sev!=="info")) return false;
   if (f.q){ const h=searchHay(t); if (!norm(f.q).split(/\s+/).filter(Boolean).every(w=>h.includes(w))) return false; }
   return true;
@@ -4241,7 +4274,7 @@ function trtRow(t){
   return `<button class="row-i has-md" style="${colsStyle(TRT_COLS)}" data-action="open" data-mod="traitements" data-id="${esc(t._id)}">
     <span class="c-ref mono">${esc(t.ref)}</span>
     <span class="nm">${esc(t.nom||"Sans titre")}${exTag(t)}${al.length?`<span class="flag ${crit?"crit":"warn"}">● ${al.length}</span>`:""}<small>${esc([t.service,t.finalites].filter(Boolean).join(" · "))}</small></span>
-    <span class="hide-md hide-sm">${esc(baseOf(t.baseLegale)?.l||"—")}</span>
+    <span class="hide-md hide-sm">${esc(basesLabel(t)||"—")}</span>
     <span class="hide-sm">${meter(completeness(t))}</span>
     <span class="c-st">${pill(STATUTS,t.statut)}</span></button>`;
 }
@@ -4255,7 +4288,7 @@ function vTrtList(){
     <div class="actions">${exN&&W()?`<button class="btn" data-action="del-examples">Retirer tous les exemples (${exN})</button>`:""}<button class="btn" data-action="import-open" ${W()?"":"disabled"}>${I.up}Importer</button><button class="btn" data-action="xlsx-export" ${S.dl?"":"disabled"}>${I.dl}Excel</button><button class="btn" data-action="pdf-registre">${I.pdf}Registre PDF</button><button class="btn mod" data-action="new" data-mod="traitements" ${W()?"":"disabled"}>${I.plus}Nouveau traitement</button></div>
   </div>
   ${S.confirmEx?confirmBox(`Supprimer définitivement les ${exN} fiches d'exemple, dans tous les modules ?`,"confirm-ex-all","cancel-ex"):""}
-  ${summaryStrip(BASES.map((b,i)=>({l:b.l, n:all.filter(t=>t.statut!=="archive"&&t.baseLegale===b.k).length, c:["#0088CE","#003865","#97C7EC","#BA6AA7","#800064","#5C7FA3"][i]})), "Bases légales")}
+  ${summaryStrip(BASES.map((b,i)=>({l:b.l, n:all.filter(t=>t.statut!=="archive"&&basesOf(t).includes(b.k)).length, c:["#0088CE","#003865","#97C7EC","#BA6AA7","#800064","#5C7FA3"][i]})), "Bases légales")}
   ${filterBar("traitements",{ph:"Rechercher un traitement, une donnée, un sous-traitant…", extra:`<span class="fsep" aria-hidden="true"></span><select id="f-service" class="fsel ${f.service?"on":""}" aria-label="Direction"><option value="">Toutes les directions</option>${services.map(s=>`<option ${f.service===s?"selected":""}>${esc(s)}</option>`).join("")}</select><select id="f-base" class="fsel ${f.base?"on":""}" aria-label="Base légale"><option value="">Toutes les bases légales</option>${BASES.map(b=>`<option value="${b.k}" ${f.base===b.k?"selected":""}>${b.l}</option>`).join("")}</select>`})}
   <div class="panel"><div class="list-h has-md" style="${colsStyle(TRT_COLS)}"><span>Réf.</span><span>Traitement</span><span class="hide-md">Base légale</span><span>Complétude</span><span>Statut</span></div><div class="list" id="rows"></div></div>`;
 }
@@ -4285,7 +4318,7 @@ function vTrtDetail(){
   <div class="linkline"><span class="muted">Éléments liés :</span>${["aipd","soustraitants","demandes","violations"].flatMap(m=>linkedTo(m,t._id).map(x=>`<button class="chip ${MODS[m].cls}" data-action="open" data-mod="${m}" data-id="${esc(x._id)}">${esc(MODS[m].single)} · ${esc(x.ref||titleOf(m,x))}</button>`)).join("")||'<span class="muted">aucun</span>'}${W()&&!linkedTo("aipd",t._id).length?`<button class="lnk" data-action="aipd-from-trt">+ Lancer une AIPD</button>`:""}</div>
   <div class="plain">
     <div class="sect"><h3>Identification</h3><dl class="kv"><dt>Rôle de l'entreprise</dt><dd>${esc(ROLES[t.role||"responsable"])}${t.roleClient?` · ${esc(t.roleClient)}`:""}</dd><dt>Direction concernée</dt><dd>${val(t.service)}</dd><dt>Pilote opérationnel</dt><dd>${val(t.pilote)}</dd><dt>Source des données</dt><dd>${val(t.source)}</dd></dl></div>
-    <div class="sect"><h3>Finalité et base légale<small>Art. 30.1.b · art. 6</small></h3><dl class="kv"><dt>Finalité(s)</dt><dd>${val(t.finalites)}</dd><dt>Base légale</dt><dd>${b?`<b>${esc(b.l)}</b> <span class="mono muted">${b.a}</span>`:`<span class="none">Non renseigné</span>`}</dd><dt>Justification</dt><dd>${val(t.baseLegaleDetail)}</dd><dt>Information des personnes</dt><dd>${arr(t.infoModes).length||t.informationPersonnes?chips(t.infoModes,t.informationPersonnes):val("")}</dd></dl></div>
+    <div class="sect"><h3>Finalité et base légale<small>Art. 30.1.b · art. 6</small></h3><dl class="kv"><dt>Finalités et bases légales</dt><dd>${finDetail(t)}</dd><dt>Justification</dt><dd>${val(t.baseLegaleDetail)}</dd><dt>Information des personnes</dt><dd>${arr(t.infoModes).length||t.informationPersonnes?chips(t.infoModes,t.informationPersonnes):val("")}</dd></dl></div>
     <div class="sect"><h3>Personnes et données<small>Art. 30.1.c · art. 9</small></h3><dl class="kv"><dt>Personnes concernées</dt><dd>${chips(t.personnes,t.personnesAutres)}</dd><dt>Catégories de données</dt><dd>${chips(t.donnees,t.donneesAutres)}</dd><dt>Données sensibles</dt><dd>${arr(t.sensibles).length?chips(t.sensibles,"","sens"):"Aucune"}</dd>${arr(t.sensibles).length?`<dt>Exception art. 9.2</dt><dd>${val(t.sensiblesJustif)}</dd>`:""}</dl></div>
     <div class="sect"><h3>Destinataires et transferts<small>Art. 30.1.d · 30.1.e</small></h3><dl class="kv"><dt>Destinataires internes</dt><dd>${val(t.destinatairesInternes)}</dd><dt>Destinataires externes</dt><dd>${val(t.destinatairesExternes)}</dd><dt>Sous-traitants (texte libre)</dt><dd>${val(t.sousTraitants)}</dd><dt>Transfert hors UE</dt><dd>${t.transfertHorsUE?`Oui · ${val(t.transfertPays)}`:"Non"}</dd>${t.transfertHorsUE?`<dt>Garanties</dt><dd>${val(t.transfertGaranties)}</dd>`:""}</dl></div>
     <div class="sect"><h3>Conservation et sécurité<small>Art. 30.1.f · 30.1.g</small></h3><dl class="kv"><dt>Durée en base active</dt><dd>${val(t.conservation)}</dd><dt>Archivage intermédiaire</dt><dd>${val(t.conservationArchivage)}</dd>${consTrtBlock(t)}<dt>Mesures de sécurité</dt><dd>${chips(t.securite,t.securiteAutres)}</dd></dl></div>
@@ -4319,9 +4352,8 @@ function vTrtEdit(){
         <div class="f" id="w-roleClient" ${d.role==="soustraitant"||d.role==="conjoint"?"":"hidden"}><label for="e-roleClient">${d.role==="conjoint"?"Responsable(s) conjoint(s)":"Pour le compte de"}</label><input type="text" id="e-roleClient" data-field="roleClient" value="${esc(d.roleClient)}" placeholder="Nom de l'organisme"></div>
         ${A("source","Source des données","Collecte directe, fichier transmis, tiers… Étirez la case par son coin inférieur droit.","Ex. : formulaire de candidature",false)}`)}
       ${sec("s-fin","Finalité et base légale","Art. 6 · 30.1.b",`
-        ${A("finalites","Finalité(s) poursuivie(s)","Décrivez pourquoi les données sont traitées, objectif par objectif.","Ex. : calcul et versement des salaires, déclarations sociales…")}
-        <fieldset class="f full"><legend class="lbl" style="margin-bottom:6px">Base légale</legend><div class="radios">${BASES.map(b=>`<label><input type="radio" name="baseLegale" data-field="baseLegale" value="${b.k}" ${d.baseLegale===b.k?"checked":""}><span><b>${b.l}</b><small class="mono">${b.a}</small><br><small>${b.d}</small></span></label>`).join("")}</div></fieldset>
-        ${A("baseLegaleDetail","Justification de la base légale","Indispensable pour l'intérêt légitime (mise en balance) et le consentement (modalités de recueil).","Ex. : article L.3243-2 du Code du travail")}
+        ${finBasesEditor(d)}
+        ${A("baseLegaleDetail","Justification des bases légales","Indispensable pour l'intérêt légitime (mise en balance) et le consentement (modalités de recueil).","Ex. : article L.3243-2 du Code du travail")}
         <div class="f full"><span class="lbl">Information des personnes</span><span class="hint">Article 13 en collecte directe, article 14 si les données viennent d'un tiers. Cochez toutes les modalités utilisées.</span>${C("infoModes",INFO_MODES)}</div>
         ${A("informationPersonnes","Autres modalités et précisions","Ce qui n'est pas dans la liste, ou les détails utiles : où trouver la mention, à quel moment elle est donnée…","Ex. : mention en bas du formulaire de candidature en ligne, rappel dans l'accusé de réception")}`)}
       ${sec("s-pers","Personnes et données","Art. 9 · 30.1.c",`
@@ -4663,6 +4695,7 @@ function vNews(){
   const [first, ...rest] = list;
   return `<div class="m-news" style="display:flex;flex-direction:column;gap:22px">
     <div class="phead"><span class="pico">${I.news}</span><div><h1>Actualités</h1><p class="psub">Protection des données et vie privée${latest?` · mise à jour le ${fmtD(latest.slice(0,10))}`:""}${nNew?` · <span class="psub-new">${nNew} nouvelle${nNew>1?"s":""}</span>`:""}</p></div></div>
+    ${LOCAL?newsLocalBox():""}
     ${S.newsLoaded?npBlock():""}
     <div class="fbar">
       <div class="search big">${I.search}<input type="search" id="n-q" placeholder="Rechercher une actualité, une autorité, un sujet…" value="${esc(nf.q)}" aria-label="Rechercher dans les actualités" autocomplete="off"></div>
@@ -4672,8 +4705,8 @@ function vNews(){
       : !all.length ? `<div class="empty"><span class="big">${I.news}</span><p>Aucune actualité pour le moment. La sélection est mise à jour chaque semaine.</p></div>`
       : !list.length ? `<p class="muted">Aucune actualité ne correspond à cette recherche.</p>`
       : `${newsCard(first, true)}<div class="ngrid">${rest.map(n=>newsCard(n)).join("")}</div>`}
-    ${LOCAL?`<div class="notice">${I.info}<div style="flex:1">Mettez à jour les actualités avec Copilot : Égide prépare la demande, Copilot recherche les nouveautés, vous collez sa réponse. Vous pouvez aussi importer un fichier d'actualités.<div class="actions" style="margin-top:8px"><button class="btn sm primary" data-action="cop-news" ${W()?"":"disabled"}>✦ Mettre à jour avec Copilot</button><button class="btn sm" data-action="news-import">${I.up}Importer un fichier</button><a class="btn sm" href="https://www.cnil.fr/fr/actualites" target="_blank" rel="noopener noreferrer">Actualités de la CNIL ↗</a><a class="btn sm" href="https://www.edpb.europa.eu/news_fr" target="_blank" rel="noopener noreferrer">Actualités du CEPD ↗</a></div></div></div>`:`<div class="actions"><button class="btn sm" data-action="news-export" ${S.dl&&all.length?"":"disabled"}>${I.dl}Exporter pour l'édition locale</button></div>`}
-    <p class="muted nnote">Sélection et résumés rédigés par ${LOCAL?"Copilot ou Claude":"Claude"} à partir de sources publiques (CNIL, CEPD, Commission européenne, presse spécialisée), ${LOCAL?"mis à jour à votre demande":"mis à jour chaque lundi"}. Consultez toujours la source avant de vous appuyer sur une information.</p>
+    ${LOCAL?"":`<section class="nimp"><div class="nimp-h"><span class="nimp-ic">⇅</span><div><b>Utiliser ces actualités dans Égide sur votre PC</b><span>Copiez-les ici, puis dans l'édition installée sur votre ordinateur : Actualités › Coller les actualités. Les résumés, catégories et le plan d'action sont repris.</span></div></div><div class="actions"><button class="btn sm primary" data-action="news-copy" ${all.length?"":"disabled"}>${I.clip}Copier pour l'édition locale</button><button class="btn sm" data-action="news-export" ${S.dl&&all.length?"":"disabled"}>${I.dl}Exporter un fichier</button></div></section>`}
+    <p class="muted nnote">Sélection et résumés rédigés par ${LOCAL?"Copilot ou Claude":"Claude"} à partir de sources publiques (CNIL, CEPD, Commission européenne, presse spécialisée), ${LOCAL?"mis à jour à votre demande":"mis à jour chaque jour ouvré"}. Consultez toujours la source avant de vous appuyer sur une information.</p>
   </div>`;
 }
 
@@ -5751,7 +5784,8 @@ async function pjDownload(id){
 }
 
 /* ================= Rapport annuel ================= */
-const AR_CSS = `
+const AR_CSS = `.ar .dponote{margin:6px 0 12px;padding:9px 13px;border-left:3px solid #0088CE;background:#F2F8FC;border-radius:0 10px 10px 0;font-size:9.5pt;line-height:1.5;color:#1d2b38;white-space:pre-wrap}.ar .dponote:empty{display:none}.ar .dponote::before{content:"Commentaire du DPO";display:block;font-weight:700;font-size:7.5pt;text-transform:uppercase;letter-spacing:.06em;color:#0088CE;margin-bottom:2px}.ar .dponote.big::before{content:"Annexe · commentaires du DPO";font-size:9pt}.ar .dponote.big{font-size:10.5pt;min-height:0}.ar .dpoann:has(.dponote:empty){display:none}.ar.editing .dpoann{display:block!important}.ar.editing [data-ed]{outline:1.5px dashed rgba(0,136,206,.55);outline-offset:3px;border-radius:4px;cursor:text}.ar.editing [data-ed]:hover{outline-color:#0088CE;background:rgba(0,136,206,.05)}.ar.editing [data-ed]:focus{outline:2px solid #0088CE;background:rgba(0,136,206,.04)}.ar.editing .dponote:empty{display:block;min-height:1.3em}.ar.editing .dponote:empty::after{content:"Ajouter un commentaire du DPO pour cette partie…";color:#8796A5;font-style:italic}.ar.editing .dponote.big:empty::after{content:"Page libre : ajoutez ici un texte d'annexe (contexte, faits marquants, remerciements…). Elle n'apparaît que si elle est remplie."}.ar.editing .cover [data-ed]{outline-color:rgba(255,255,255,.6)}
+
 .ar{--blue:#0088CE;--navy:#003865;--plum:#800064;--mauve:#BA6AA7;--sky:#97C7EC;--ink:#3C3732;--muted:#6F6862;--line:#E3E5E8;--soft:#F4F7FA;--ok:#1F8A52;--okS:#E1F3E9;--warn:#B86A06;--warnS:#FCEFD9;--crit:#C8243D;--critS:#FBE4E8;
   font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);font-size:10.5pt;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .ar *{box-sizing:border-box}
@@ -5902,7 +5936,7 @@ function arCompute(Y, P){
   const al = allAlerts(); k.crit = al.filter(a=>a.sev==="crit").length; k.warn = al.filter(a=>a.sev==="warn").length; k.alerts = al.filter(a=>a.sev!=="info");
   k.score = scoreInfo().score ?? 0;
   k.dirs = Object.entries(trt.reduce((o,t)=>{ const d=(t.service||"").trim()||"Non renseignée"; o[d]=(o[d]||0)+1; return o; },{})).sort((a,b)=>b[1]-a[1]);
-  k.bases = Object.entries(trt.reduce((o,t)=>{ const b=baseOf(t.baseLegale)?.l||"Non renseignée"; o[b]=(o[b]||0)+1; return o; },{})).sort((a,b)=>b[1]-a[1]);
+  k.bases = Object.entries(trt.reduce((o,t)=>{ const L=basesOf(t).map(x=>baseOf(x)?.l).filter(Boolean); (L.length?L:["Non renseignée"]).forEach(b=>o[b]=(o[b]||0)+1); return o; },{})).sort((a,b)=>b[1]-a[1]);
   // activité mensuelle : toutes les mises à jour consignées dans les historiques
   const months = []; for (let i=0;i<12;i++){ const d=new Date(Y-1, 11+i, 1); months.push([arIso(d).slice(0,7), d.toLocaleDateString("fr-FR",{month:"short"}).replace(".","")]); }
   const cnt = {}; MOD_KEYS.forEach(m=>items(m).forEach(t=>arr(t.history).forEach(h=>{ if (h.at && inP(h.at,P)){ const mk=String(h.at).slice(0,7); cnt[mk]=(cnt[mk]||0)+1; } })));
@@ -5965,8 +5999,8 @@ function arBuild(Y, o={}){
   pages.push(`<section class="pg cover"><span class="orb o1"></span><span class="orb o2"></span>
     <svg class="rings" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="none" stroke="#fff" stroke-width=".6"/><circle cx="50" cy="50" r="36" fill="none" stroke="#fff" stroke-width=".6"/><circle cx="50" cy="50" r="24" fill="none" stroke="#fff" stroke-width=".6"/></svg>
     <div class="cv-top"><span class="logo">${logo}Égide</span><span class="cvtag">${preview?"Aperçu en cours d'année":"Document interne"}</span></div>
-    <div class="cv-mid">${orgLogoOk(S.org?.logo)?`<span class="cvlogo"><img src="${S.org.logo}" alt=""></span>`:""}<span class="kick">Rapport annuel ${Y}</span><h1>Protection des données personnelles<span>Bilan et perspectives</span></h1>
-      <p class="sub">${esc(org)} · Période ${per}</p>
+    <div class="cv-mid">${orgLogoOk(S.org?.logo)?`<span class="cvlogo"><img src="${S.org.logo}" alt=""></span>`:""}<span class="kick">Rapport annuel ${Y}</span><h1 data-ed="cv-titre">Protection des données personnelles<span>Bilan et perspectives</span></h1>
+      <p class="sub" data-ed="cv-sub">${esc(org)} · Période ${per}</p>
       <div class="cv-score">${ring(k.score,96,"#97C7EC").replace('stroke="#E8ECF0"','stroke="rgba(255,255,255,.18)"').replace('<b>','<b style="color:#fff">').replace('<small>','<small style="color:rgba(255,255,255,.7)">')}<div><b>Score de conformité : ${lv[1]}</b><span>${esc(lv[2])}</span>${delta!=null?`<br><span>${delta>=0?"▲ +":"▼ "}${delta} points par rapport à ${Y-1}</span>`:""}</div></div>
     </div>
     <div class="cv-bot"><div>Présenté à<b>La direction générale</b></div><div>Préparé par<b>${esc(author)}</b>${esc(role)}</div><div>Édité le<b>${fmtD(T)}</b>${preview?"Aperçu, version définitive le 1er décembre":"Généré automatiquement par Égide"}</div></div>
@@ -5974,7 +6008,7 @@ function arBuild(Y, o={}){
   p++;
   pages.push(`<section class="pg">${run("Synthèse")}
     <div class="sh" style="--c:#0088CE"><span class="n">1</span><div><h2>L'année en un coup d'œil</h2><p>Synthèse pour la direction générale</p></div></div>
-    <div class="hero">${ring(k.score)}<div><h3>${lv[4]} ${lv[1]}</h3><p>${esc(lv[2])} Le score tient compte de la complétude et de la validation du registre, des dossiers sans point d'attention et des points urgents.</p>
+    <div class="hero">${ring(k.score)}<div><h3>${lv[4]} ${lv[1]}</h3><p data-ed="synthese">${esc(lv[2])} Le score tient compte de la complétude et de la validation du registre, des dossiers sans point d'attention et des points urgents.</p>
       ${delta!=null?`<span class="chip ${delta>=0?"up":"down"}">${delta>=0?"▲ +":"▼ "}${delta} pts sur un an</span>`:`<span class="chip">Premier rapport annuel : base de comparaison pour ${Y+1}</span>`}<span class="chip">${k.crit} point${k.crit>1?"s":""} urgent${k.crit>1?"s":""}</span><span class="chip">${k.warn} point${k.warn>1?"s":""} important${k.warn>1?"s":""}</span></div></div>
     <div class="kpis">
       <div class="kpi" style="--c:#0088CE"><b>${k.trt}</b><span>traitements au registre</span><em>${k.compl} % complétés</em></div>
@@ -5987,12 +6021,12 @@ function arBuild(Y, o={}){
       <div class="kpi" style="--c:#3C3732"><b>${k.actDone}</b><span>actions réalisées</span><em>${k.actOpen} en cours</em></div>
     </div>
     <h3>Les messages clés</h3>
-    <div class="msgs">${msgs.map(([e,t])=>`<div class="msg"><i>${e}</i><p>${t}</p></div>`).join("")}</div>
-    <div class="two"><div class="box good"><h4>✓ Ce qui fonctionne</h4><ul>${(good.length?good:["Le pilotage de la conformité est en place dans Égide"]).slice(0,5).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div class="box vig"><h4>⚠ Points de vigilance</h4><ul>${(vig.length?vig:["Aucun point de vigilance majeur"]).slice(0,5).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
+    <div class="msgs" data-ed="messages">${msgs.map(([e,t])=>`<div class="msg"><i>${e}</i><p>${t}</p></div>`).join("")}</div>
+    <div class="two"><div class="box good"><h4>✓ Ce qui fonctionne</h4><ul data-ed="forces">${(good.length?good:["Le pilotage de la conformité est en place dans Égide"]).slice(0,5).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div class="box vig"><h4>⚠ Points de vigilance</h4><ul data-ed="vigilances">${(vig.length?vig:["Aucun point de vigilance majeur"]).slice(0,5).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
     ${foot(p++)}</section>`);
   pages.push(`<section class="pg">${run("Registre et analyses d'impact")}
     <div class="sh" style="--c:#0088CE"><span class="n">2</span><div><h2>Le registre des traitements</h2><p>Article 30 du RGPD · état au ${fmtD(T)}</p></div></div>
-    <p class="lead">Le registre est la colonne vertébrale de la conformité : il décrit chaque usage des données personnelles dans l'entreprise. ${k.trtNew?`${n(k.trtNew,"traitement a été ajouté","traitements ont été ajoutés")} cette année`:"Il a été maintenu à jour cette année"}${k.trtRevus?` et ${n(k.trtRevus,"fiche a été revue","fiches ont été revues")}`:""}.</p>
+    <p class="lead" data-ed="registre-intro">Le registre est la colonne vertébrale de la conformité : il décrit chaque usage des données personnelles dans l'entreprise. ${k.trtNew?`${n(k.trtNew,"traitement a été ajouté","traitements ont été ajoutés")} cette année`:"Il a été maintenu à jour cette année"}${k.trtRevus?` et ${n(k.trtRevus,"fiche a été revue","fiches ont été revues")}`:""}.</p>
     <h3>Avancement des fiches</h3>
     <div class="stack">${[[k.trtActif,"#1F8A52"],[k.trtBrouillon,"#E0A23B"],[k.trtArch,"#C9CDD2"]].filter(x=>x[0]).map(([v,c])=>`<i style="flex:${v};background:${c}"></i>`).join("")}</div>
     <div class="legend"><span style="--lc:#1F8A52">Validées · <b>${k.trtActif}</b></span><span style="--lc:#E0A23B">En brouillon · <b>${k.trtBrouillon}</b></span><span style="--lc:#C9CDD2">Archivées · <b>${k.trtArch}</b></span></div>
@@ -6032,9 +6066,9 @@ function arBuild(Y, o={}){
     ${foot(p++)}</section>`);
   pages.push(`<section class="pg">${run("Priorités et feuille de route")}
     <div class="sh" style="--c:#800064"><span class="n">8</span><div><h2>Feuille de route ${Y+1}</h2><p>Nos recommandations, par ordre de priorité</p></div></div>
-    <p class="lead">Ces recommandations découlent directement de l'état du registre et des points ouverts dans Égide. Elles sont proposées à la validation de la direction générale.</p>
-    ${reco.map((r,i)=>`<div class="reco"><span class="k">${i+1}</span><div><b>${esc(r[1])}</b><span>${esc(r[2])}</span><br><span class="note">Porteur suggéré : ${esc(r[3])}</span></div><span class="pill ${pcol[r[0]]}">${esc(r[0])}</span></div>`).join("")}
-    <div class="sign"><div><b>${esc(author)}</b>${esc(role)}<br>Date et signature</div><div><b>La direction générale</b>Feuille de route validée le<br><br>Signature</div></div>
+    <p class="lead" data-ed="reco-intro">Ces recommandations découlent directement de l'état du registre et des points ouverts dans Égide. Elles sont proposées à la validation de la direction générale.</p>
+    <div data-ed="recommandations">${reco.map((r,i)=>`<div class="reco"><span class="k">${i+1}</span><div><b>${esc(r[1])}</b><span>${esc(r[2])}</span><br><span class="note">Porteur suggéré : ${esc(r[3])}</span></div><span class="pill ${pcol[r[0]]}">${esc(r[0])}</span></div>`).join("")}</div>
+    <div class="sign" data-ed="signature"><div><b>${esc(author)}</b>${esc(role)}<br>Date et signature</div><div><b>La direction générale</b>Feuille de route validée le<br><br>Signature</div></div>
     ${foot(p++)}</section>`);
   pages.push(`<section class="pg">${run("Points ouverts et plan d'actions")}
     <div class="sh" style="--c:#3C3732"><span class="n">9</span><div><h2>Points ouverts et plan d'actions</h2><p>Situation à la date du rapport</p></div></div>
@@ -6043,9 +6077,9 @@ function arBuild(Y, o={}){
     <h3>Plan d'actions en cours</h3>
     ${k.actOpenList.length?`<table><thead><tr><th>Action</th><th>Responsable</th><th>Échéance</th><th>Priorité</th></tr></thead><tbody>${k.actOpenList.slice(0,6).map(a=>`<tr><td><b>${esc(a.titre||"")}</b></td><td>${esc(a.responsable||"—")}</td><td>${a.echeance?fmtD(a.echeance):"—"}</td><td><span class="pill ${a.priorite==="haute"?"crit":a.priorite==="basse"?"info":"warn"}">${esc(optL(MODS.actions.opts.priorite,a.priorite)||"Moyenne")}</span></td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucune action en cours.</div>`}
     <h3>Méthode et périmètre</h3>
-    <p class="note">Méthode : le score de conformité (sur 100) combine la qualité du registre (45 %, une fiche en brouillon comptant pour 60 % de sa complétude), la part des dossiers en cours sans point d'attention (40 %) et la part des fiches validées (15 %), moins 3 points par point urgent ouvert (15 points au plus). Les chiffres de la période portent ${per}. ${items("traitements").some(t=>t.exemple)?"Certaines fiches d'exemple fournies avec l'application sont incluses dans les chiffres.":""}</p>
+    <p class="note" data-ed="methode">Méthode : le score de conformité (sur 100) combine la qualité du registre (45 %, une fiche en brouillon comptant pour 60 % de sa complétude), la part des dossiers en cours sans point d'attention (40 %) et la part des fiches validées (15 %), moins 3 points par point urgent ouvert (15 points au plus). Les chiffres de la période portent ${per}. ${items("traitements").some(t=>t.exemple)?"Certaines fiches d'exemple fournies avec l'application sont incluses dans les chiffres.":""}</p>
     ${foot(p++)}</section>`);
-  const body = `<div class="ar">${pages.join("")}</div>`;
+  const body = `<div class="ar">${pages.join("").replace(/(<div class="sh"[^>]*><span class="n">(\d+)<\/span><div><h2)>([\s\S]*?<\/h2><p)>([\s\S]*?<\/p><\/div><\/div>)/g, (m,a,n,b,c)=>`${a} data-ed="h-${n}">${b} data-ed="hs-${n}">${c}<div class="dponote" data-ed="note-${n}"></div>`)}<section class="pg dpoann" data-ed-wrap><div class="dponote big" data-ed="annexe"></div></section></div>`;
   return {body, k, preview, P:Pv, title:`Rapport annuel de conformité RGPD ${Y}`};
 }
 function arDoc(r){
@@ -6055,20 +6089,150 @@ function arDoc(r){
 <body><p class="tip">Pour obtenir un PDF : <b>Ctrl + P</b> (ou Cmd + P), puis « Enregistrer au format PDF ». Activez l'option « Graphiques d'arrière-plan » pour conserver les couleurs.</p>${r.body}</body></html>`;
 }
 
+/* ================= Finalités et bases légales ================= */
+function finLines(txt){ return String(txt||"").split(/\n+/).map(s=>s.replace(/^\s*[-•*]\s*/,"").trim()).filter(Boolean); }
+function finL(t){
+  if (!t) return [{f:"",b:""}];
+  if (Array.isArray(t.finalitesL) && t.finalitesL.length){
+    const L = t.finalitesL.map(x=>({f:String(x?.f||""), b:String(x?.b||"")}));
+    const txt = L.map(x=>x.f.trim()).filter(Boolean).join("\n");
+    if (!String(t.finalites||"").trim() || txt===String(t.finalites).trim()) return L;
+    const old = new Map(L.map(x=>[x.f.trim(), x.b]));
+    return finLines(t.finalites).map(f=>({f, b:old.get(f)||t.baseLegale||""}));
+  }
+  const L = finLines(t.finalites);
+  return L.length ? L.map(f=>({f, b:t.baseLegale||""})) : [{f:"", b:t.baseLegale||""}];
+}
+function basesOf(t){ const s=[...new Set(finL(t).map(x=>x.b).filter(Boolean))]; if (!s.length && t?.baseLegale) s.push(t.baseLegale); return s; }
+function basesLabel(t, art){ return basesOf(t).map(k=>{ const b=baseOf(k); return b ? (art?`${b.l} (${b.a})`:b.l) : ""; }).filter(Boolean).join(" + "); }
+function finText(t){ return finL(t).filter(x=>x.f.trim()).map(x=>{ const b=baseOf(x.b); return x.f.trim().replace(/\.$/,"")+(b?` (${b.l})`:""); }).join(" ; "); }
+function finSync(d){ const L=d.finalitesL||[]; d.finalites=L.map(x=>String(x.f||"").trim()).filter(Boolean).join("\n"); const bs=[...new Set(L.map(x=>x.b).filter(Boolean))]; d.baseLegale=bs[0]||""; d.basesLegales=bs; }
+function finRow(x,i,n){ return `<div class="finrow"><span class="finn">${i+1}</span><textarea rows="${Math.min(5,Math.max(2,Math.ceil(String(x.f).length/62)))}" data-fin="${i}" data-fk="f" aria-label="Finalité ${i+1}" placeholder="${i?"Autre finalité":"Ex. : calcul et versement des salaires"}">${esc(x.f)}</textarea><select data-fin="${i}" data-fk="b" aria-label="Base légale de la finalité ${i+1}"><option value="">Base légale…</option>${BASES.map(b=>`<option value="${b.k}" ${x.b===b.k?"selected":""}>${esc(b.l)} (${b.a})</option>`).join("")}</select>${n>1?`<button type="button" class="btn ghost sm" data-action="fin-del" data-i="${i}" aria-label="Supprimer la finalité ${i+1}">${I.close}</button>`:"<span></span>"}</div>`; }
+function finBasesEditor(d){
+  const L = d.finalitesL = finL(d); finSync(d);
+  return `<div class="f full"><span class="lbl">Finalités et bases légales</span><span class="hint">Une ligne par finalité, chacune avec sa propre base légale (art. 6). Par exemple, pour le recrutement : l'étude des candidatures repose sur les mesures précontractuelles, le vivier de candidats sur le consentement.</span>
+    <div class="finl" id="finl">${L.map((x,i)=>finRow(x,i,L.length)).join("")}</div>
+    <div><button type="button" class="lnk" data-action="fin-add">+ Ajouter une finalité</button></div>
+    <details class="finhelp"><summary>Rappel des six bases légales</summary><ul>${BASES.map(b=>`<li><b>${esc(b.l)}</b> <span class="mono">${b.a}</span> : ${esc(b.d)}</li>`).join("")}</ul></details></div>`;
+}
+function finRedraw(focusLast){ const d=S.draft; if(!d) return; finSync(d); const el=$("#finl"); if (el) el.innerHTML=d.finalitesL.map((x,i)=>finRow(x,i,d.finalitesL.length)).join(""); S.dirty=true; refreshEdit(); if (focusLast){ const t=[...document.querySelectorAll('#finl textarea')].pop(); t?.focus(); } }
+function finDetail(t){
+  const L = finL(t).filter(x=>x.f.trim()||x.b);
+  if (!L.length) return `<span class="none">Non renseigné</span>`;
+  return `<ul class="finlist">${L.map(x=>{ const b=baseOf(x.b); return `<li><span>${esc(x.f||"Finalité à préciser")}</span>${b?`<span class="finb" title="${esc(b.d)}">${esc(b.l)} <span class="mono">${b.a}</span></span>`:`<span class="finb miss">Base légale à préciser</span>`}</li>`; }).join("")}</ul>`;
+}
+
+/* ================= Actualités : passage de la version en ligne à la version locale ================= */
+function newsPack(){ return {app:"egide-news", v:2, exporteLe:new Date().toISOString(), items:newsItems().map(({_id,...n})=>({id:_id,...n})), veille:S.np?.plan||null}; }
+async function newsImportData(d){
+  if (d?.app!=="egide-news" || !Array.isArray(d.items)) throw new Error("format");
+  let nw=0, up=0;
+  for (const it of d.items){
+    if (!it || !it.url || !it.titre) continue;
+    const id = String(it.id||slug(it.titre)).replace(/[^A-Za-z0-9_\-.~:@+]/g,"-").slice(0,120);
+    const {id:_x, ...body} = it; const prev = S.news.get(id);
+    if (prev){ const {_id, ...p} = prev; if (JSON.stringify(p)===JSON.stringify({...p, ...body})) continue; up++; } else nw++;
+    await S.db.collection("actualites").doc(id).set({...(prev?Object.fromEntries(Object.entries(prev).filter(([k])=>k!=="_id")):{}), ...body});
+  }
+  let plan = false;
+  const v = d.veille;
+  if (v && v.genereLe && Array.isArray(v.actions) && (!S.np?.plan || (v.genereLe||"") > (S.np.plan.genereLe||""))){ try{ await S.db.doc("config/veille").set(v); S.np={...(S.np||{}), plan:{...v, actions:arr(v.actions)}}; plan=true; }catch{} }
+  try{ await S.db.doc("config/newsImport").set({le:new Date().toISOString(), nouvelles:nw, majs:up, exporteLe:d.exporteLe||""}); }catch{}
+  S.newsImp = {le:new Date().toISOString(), exporteLe:d.exporteLe||""};
+  S.newsPaste = false;
+  toast(nw||up ? `${nw} nouvelle${nw>1?"s":""} actualité${nw>1?"s":""}${up?`, ${up} mise${up>1?"s":""} à jour`:""}${plan?", plan d'action repris":""}` : plan ? "Plan d'action repris, actualités déjà à jour" : "Vos actualités sont déjà à jour");
+  render(); return nw+up;
+}
+function newsParse(txt){ const t=String(txt||"").trim(); const m=t.match(/\{[\s\S]*\}/); if(!m) throw new Error("format"); return JSON.parse(m[0]); }
+function newsLocalBox(){
+  const imp = S.newsImp;
+  return `<section class="nimp">
+    <div class="nimp-h"><span class="nimp-ic">⇅</span><div><b>Reprendre les actualités d'Égide en ligne</b><span>Égide en ligne (sur Claude) met à jour les actualités chaque jour ouvré. Reprenez-les ici avec leurs résumés, catégories et plan d'action.${imp?.le?` Dernière reprise le ${fmtD(imp.le.slice(0,10))}${imp.exporteLe?` (actualités du ${fmtD(String(imp.exporteLe).slice(0,10))})`:""}.`:""}</span></div></div>
+    <ol class="nimp-steps"><li>Dans Égide en ligne, page <b>Actualités</b> : cliquez sur <b>Copier pour l'édition locale</b>.</li><li>Revenez ici et cliquez sur <b>Coller les actualités</b>.</li></ol>
+    <div class="actions"><button class="btn sm primary" data-action="news-paste" ${W()?"":"disabled"}>${I.clip||""}Coller les actualités</button><button class="btn sm" data-action="news-import" ${W()?"":"disabled"}>${I.up}Importer un fichier</button><button class="btn sm" data-action="cop-news" ${W()?"":"disabled"}>✦ Mettre à jour avec Copilot</button></div>
+    ${S.newsPaste?`<div class="nimp-paste"><label for="news-txt">Collez ici le texte copié depuis Égide en ligne (Ctrl + V)</label><textarea id="news-txt" rows="4" placeholder='{"app":"egide-news", …}'></textarea><div class="actions"><button class="btn sm primary" data-action="news-paste-ok">Importer</button><button class="btn sm ghost" data-action="news-paste-x">Annuler</button></div></div>`:""}
+    <p class="muted" style="margin:6px 0 0;font-size:.8rem">Sources directes : <a href="https://www.cnil.fr/fr/actualites" target="_blank" rel="noopener noreferrer">CNIL ↗</a> · <a href="https://www.edpb.europa.eu/news_fr" target="_blank" rel="noopener noreferrer">CEPD ↗</a></p>
+  </section>`;
+}
+const newsActions = {
+  async "news-copy"(){ try{ await navigator.clipboard.writeText(JSON.stringify(newsPack())); toast("Actualités copiées : collez-les dans Égide sur votre PC (Actualités › Coller les actualités)."); }catch{ toast("Copie impossible ici : utilisez « Exporter un fichier »."); } },
+  "news-export"(){ save(`egide-actualites-${today()}.json`, JSON.stringify(newsPack(),null,1)); },
+  async "news-paste"(){
+    try{ const t = await navigator.clipboard.readText(); const d = newsParse(t); await newsImportData(d); }
+    catch(e){ S.newsPaste = true; render(); setTimeout(()=>$("#news-txt")?.focus(),30); if (e?.message==="format") toast("Le presse-papiers ne contient pas d'actualités d'Égide : collez-les ci-dessous."); }
+  },
+  async "news-paste-ok"(){ try{ await newsImportData(newsParse($("#news-txt")?.value)); }catch{ toast("Ce texte n'est pas un export d'actualités d'Égide."); } },
+  "news-paste-x"(){ S.newsPaste=false; render(); },
+  "fin-add"(){ const d=S.draft; if(!d) return; d.finalitesL=finL(d); d.finalitesL.push({f:"",b:""}); finRedraw(true); },
+  "fin-del"(el){ const d=S.draft; if(!d) return; d.finalitesL=finL(d); d.finalitesL.splice(+el.dataset.i,1); if(!d.finalitesL.length) d.finalitesL.push({f:"",b:""}); finRedraw(); }
+};
+
+/* ================= Rapport annuel : textes modifiables ================= */
+const arEd = Y => S.arEdits?.get(String(Y));
+function arClean(html){
+  const t=document.createElement("template"); t.innerHTML=String(html||"");
+  t.content.querySelectorAll("script,style,iframe,object,embed,link,meta,form,input,button,textarea,select,img,svg").forEach(n=>n.remove());
+  t.content.querySelectorAll("*").forEach(n=>{ [...n.attributes].forEach(a=>{ if (!["class","style"].includes(a.name)) n.removeAttribute(a.name); }); const st=n.getAttribute("style"); if (st && /url\(|expression|position/i.test(st)) n.removeAttribute("style"); });
+  return t.innerHTML.trim();
+}
+function arApplyEdits(body, ed){
+  if (!ed?.blocks || !Object.keys(ed.blocks).length) return body;
+  const t=document.createElement("template"); t.innerHTML=body;
+  t.content.querySelectorAll("[data-ed]").forEach(n=>{ const v=ed.blocks[n.dataset.ed]; if (v!=null) n.innerHTML=arClean(v); });
+  return t.innerHTML;
+}
+function arTools(){
+  const ed = arEd(ARV.year), can = W() && S.db && ARV.r?.body?.includes("data-ed=");
+  if (ARV.editing) return `<span class="arv-edhint">Cliquez sur un texte pour le modifier</span><button class="pjv-btn wide primary" data-action="ar-save">${I.check}<span>Enregistrer</span></button><button class="pjv-btn wide" data-action="ar-cancel"><span>Annuler</span></button>`;
+  return `${can?`<button class="pjv-btn wide" data-action="ar-edit">${I.edit}<span>Modifier les textes</span></button>`:""}${can&&ed?`<button class="pjv-btn wide" data-action="ar-reset" title="Supprimer vos modifications et revenir au texte généré par Égide"><span>Texte automatique</span></button>`:""}<button class="pjv-btn wide" data-action="ar-print">${I.pdf}<span>Imprimer ou PDF</span></button><button class="pjv-btn wide" data-action="ar-dl" ${S.dl?"":"disabled"}>${I.dl}<span>Télécharger</span></button><button class="pjv-btn" data-action="ar-close" aria-label="Fermer le rapport">${I.close}</button>`;
+}
+function arRefreshTools(){ const t=$("#arv .pjv-tools"); if (t) t.innerHTML=arTools(); const s=$("#arv .arv-t small"); if (s && arEd(ARV.year) && !ARV.editing && !s.dataset.m){ s.dataset.m=1; s.textContent += " · textes modifiés le "+fmtD(String(arEd(ARV.year).majLe||"").slice(0,10)); } }
+const arActions = {
+  "ar-edit"(){
+    const ar = ARV.root?.querySelector(".ar"); if (!ar) return;
+    ARV.editing = true; ar.classList.add("editing");
+    ar.querySelectorAll("[data-ed]").forEach(n=>{ n.setAttribute("contenteditable","true"); n.setAttribute("spellcheck","true"); });
+    arRefreshTools(); toast("Mode modification : cliquez sur un texte. Les encadrés pointillés vides servent à ajouter vos commentaires.");
+  },
+  async "ar-save"(){
+    const ar = ARV.root?.querySelector(".ar"); if (!ar || !S.db) return;
+    const base = document.createElement("template"); base.innerHTML = ARV.r.body;
+    const auto = {}; base.content.querySelectorAll("[data-ed]").forEach(n=>auto[n.dataset.ed]=arClean(n.innerHTML));
+    const blocks = {};
+    ar.querySelectorAll("[data-ed]").forEach(n=>{ let v=arClean(n.innerHTML); if (/^(<br>|\s|&nbsp;)*$/i.test(v)) v=""; if (v!==(auto[n.dataset.ed]??"")) blocks[n.dataset.ed]=v; });
+    const ref = S.db.collection("rapportsTextes").doc(String(ARV.year));
+    try{
+      if (Object.keys(blocks).length){ const doc={blocks, majLe:new Date().toISOString(), annee:ARV.year}; await ref.set(doc); S.arEdits.set(String(ARV.year), doc); }
+      else { await ref.delete(); S.arEdits.delete(String(ARV.year)); }
+      toast(Object.keys(blocks).length ? `Rapport ${ARV.year} enregistré avec vos modifications` : "Aucune modification à enregistrer");
+    }catch(e){ writeError(e); return; }
+    ARV.editing=false; arOpen(ARV.r, ARV.year);
+  },
+  "ar-cancel"(){ ARV.editing=false; arOpen(ARV.r, ARV.year); },
+  async "ar-reset"(){
+    if (!confirmTwice("ar-reset","Cliquez à nouveau pour supprimer vos modifications du rapport")) return;
+    try{ await S.db.collection("rapportsTextes").doc(String(ARV.year)).delete(); S.arEdits.delete(String(ARV.year)); toast("Texte automatique rétabli"); }catch(e){ writeError(e); return; }
+    arOpen(ARV.r, ARV.year);
+  }
+};
+const CONF2 = {};
+function confirmTwice(k, msg){ const n=Date.now(); if (CONF2[k] && n-CONF2[k]<4000){ delete CONF2[k]; return true; } CONF2[k]=n; toast(msg); return false; }
+
 /* --- Visionneuse, archives et génération automatique --- */
 const ARV = {open:false, r:null, year:null};
 function arOpen(r, year){
-  ARV.open=true; ARV.r=r; ARV.year=year;
+  ARV.open=true; ARV.r=r; ARV.year=year; ARV.editing=false;
   const el=$("#arv"); el.hidden=false; document.body.style.overflow="hidden";
   el.innerHTML = `<div class="arv-bar"><div class="arv-t"><span class="arv-ic">${I.report}</span><div><b>${esc(r.title)}</b><small>${r.preview?"Aperçu en cours d'année · version définitive le 1er décembre":"Édition définitive"}</small></div></div>
-    <div class="pjv-tools"><button class="pjv-btn wide" data-action="ar-print">${I.pdf}<span>Imprimer ou PDF</span></button><button class="pjv-btn wide" data-action="ar-dl" ${S.dl?"":"disabled"}>${I.dl}<span>Télécharger</span></button><button class="pjv-btn" data-action="ar-close" aria-label="Fermer le rapport">${I.close}</button></div></div>
+    <div class="pjv-tools">${arTools()}</div></div>
     <div class="arv-body" id="arv-body"><div id="arv-host"></div></div>`;
   const host=$("#arv-host"); const root = host.attachShadow ? host.attachShadow({mode:"open"}) : host;
-  root.innerHTML = `<style>:host{display:block}${AR_CSS}</style>${r.body}`;
-  arFit(); setTimeout(()=>$("#arv [data-action=ar-close]")?.focus(),30);
+  root.innerHTML = `<style>:host{display:block}${AR_CSS}</style>${arApplyEdits(r.body, arEd(year))}`; ARV.root = root;
+  root.addEventListener?.("paste", e=>{ if (!ARV.editing) return; e.preventDefault(); const t=(e.clipboardData||window.clipboardData)?.getData("text/plain")||""; document.execCommand("insertText", false, t); });
+  arRefreshTools(); arFit(); setTimeout(()=>$("#arv [data-action=ar-close]")?.focus(),30);
 }
 function arFit(){ const b=$("#arv-body"), h=$("#arv-host"); if(!h||!b) return; const w=b.clientWidth-24, pw=793.7; const s=Math.min(1, w/pw); h.style.zoom = s<1 ? s : ""; }
-function arClose(){ ARV.open=false; const el=$("#arv"); el.hidden=true; el.innerHTML=""; if (!P.open && !WEL.open && !PJV.id) document.body.style.overflow=""; }
+function arClose(){ if (ARV.editing && !confirmTwice("ar-close","Modifications non enregistrées : cliquez à nouveau sur Fermer pour les abandonner")) return; ARV.editing=false; ARV.open=false; const el=$("#arv"); el.hidden=true; el.innerHTML=""; if (!P.open && !WEL.open && !PJV.id) document.body.style.overflow=""; }
 async function arLoadArchived(Y){
   const d = S.rapports.get(String(Y)); if (!d) return null;
   if (d.asset){ try{ const raw = LOCAL ? await LS.getAsset(d.asset) : await (await fetch("/_blob/"+d.asset)).blob(); if (raw){ const body = await raw.text(); if (body.includes('class="ar"')) return {body, preview:false, title:`Rapport annuel de conformité RGPD ${Y}`, k:d.kpis}; } }catch{} }
@@ -6227,7 +6391,7 @@ function copKnowledge(){
   (dues.length?dues:[["","Aucune échéance",""]]).forEach(([d,l,n])=>B.push(["p",`• ${d?fmtD(d)+" : ":""}${l}${n?" — "+n:""}`]));
   B.push(["h2","Registre des traitements"]);
   items("traitements").forEach(t=>{ B.push(["h3",`${t.ref} · ${t.nom||"Sans titre"}`]);
-    [["Statut",optL(STATUTS,t.statut)],["Direction",t.service],["Pilote",t.pilote],["Finalités",t.finalites],["Base légale",[baseOf(t.baseLegale)?.l,t.baseLegaleDetail].filter(Boolean).join(" — ")],["Personnes concernées",[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(", ")],["Données",[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", ")],["Données sensibles",arr(t.sensibles).join(", ")],["Destinataires",[t.destinatairesInternes,t.destinatairesExternes].filter(Boolean).join(" ; ")],["Sous-traitants",t.sousTraitants],["Transfert hors UE",t.transfertHorsUE?`Oui (${t.transfertPays||"?"}, ${t.transfertGaranties||"garanties à préciser"})`:"Non"],["Conservation",[t.conservation,t.conservationArchivage].filter(Boolean).join(" ; archivage : ")],["Sécurité",[...arr(t.securite),t.securiteAutres].filter(Boolean).join(", ")],["AIPD",AIPD_FLAG[t.aipd]],["Prochaine revue",t.prochaineRevue?fmtD(t.prochaineRevue):""],["Complétude",completeness(t)+" %"]].forEach(([k,v])=>v&&String(v).trim()&&B.push(["kv",k,v])); });
+    [["Statut",optL(STATUTS,t.statut)],["Direction",t.service],["Pilote",t.pilote],["Finalités et bases légales",finText(t)],["Justification",t.baseLegaleDetail],["Personnes concernées",[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(", ")],["Données",[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", ")],["Données sensibles",arr(t.sensibles).join(", ")],["Destinataires",[t.destinatairesInternes,t.destinatairesExternes].filter(Boolean).join(" ; ")],["Sous-traitants",t.sousTraitants],["Transfert hors UE",t.transfertHorsUE?`Oui (${t.transfertPays||"?"}, ${t.transfertGaranties||"garanties à préciser"})`:"Non"],["Conservation",[t.conservation,t.conservationArchivage].filter(Boolean).join(" ; archivage : ")],["Sécurité",[...arr(t.securite),t.securiteAutres].filter(Boolean).join(", ")],["AIPD",AIPD_FLAG[t.aipd]],["Prochaine revue",t.prochaineRevue?fmtD(t.prochaineRevue):""],["Complétude",completeness(t)+" %"]].forEach(([k,v])=>v&&String(v).trim()&&B.push(["kv",k,v])); });
   MOD_KEYS.filter(m=>m!=="traitements").forEach(m=>{ const list=items(m); B.push(["h2",MODS[m].long+` (${list.length})`]); if (!list.length) B.push(["p","Aucune fiche."]);
     list.forEach(t=>{ B.push(["h3",`${t.ref||""} · ${titleOf(m,t)}`]); MODS[m].sections.forEach(s=>s.fields.forEach(f=>{ if (f.t==="heading") return; const v=plainText(m,f,t); if (v && String(v).trim() && v!=="Non") B.push(["kv",f.l,String(v).slice(0,1200)]); }));
       if (m==="conservation" && arr(t.purges).length) B.push(["kv","Suppressions réalisées", arr(t.purges).map(p=>`${fmtD(p.date)}${p.volume?" ("+p.volume+")":""}${p.note?" : "+p.note:""}`).join(" ; ")]); }); });
@@ -6329,131 +6493,492 @@ async function finNext(mode){
 }
 
 /* ================= Modèles de documents ================= */
+const DOC_CATS = [["info","Informer les personnes"],["rh","Salariés"],["courriers","Courriers et réponses"],["proc","Procédures internes"],["contrats","Contrats et clauses"],["gouv","Gouvernance"],["mine","Sur mesure"]];
 const DOC_KINDS = {
-  mention:{t:"Mention d'information", d:"Pour chaque traitement : à afficher sur un formulaire, une annonce, un site ou à remettre aux personnes.", e:"📄", per:true},
-  salaries:{t:"Note d'information des salariés", d:"Une notice unique regroupant tous les traitements qui concernent le personnel.", e:"👥"},
-  video:{t:"Panneau de vidéoprotection", d:"Le texte du panneau à apposer à l'entrée des zones filmées.", e:"📹"},
-  politique:{t:"Politique de protection des données", d:"Le document de référence de l'entreprise, construit à partir de votre registre.", e:"🛡️"},
-  violation:{t:"Procédure de gestion des violations", d:"Qui fait quoi, et quand, en cas d'incident : le délai de 72 heures pas à pas.", e:"🚨"},
-  droits:{t:"Procédure de traitement des demandes de droits", d:"Réception, vérification d'identité, réponse sous un mois et archivage.", e:"🙋"},
-  art28:{t:"Clauses de sous-traitance (article 28)", d:"Les clauses à annexer au contrat de chaque prestataire qui traite des données pour vous.", e:"🤝", per:"st"}
+  mention:{cat:"info", t:"Mention d'information complète", d:"Pour chaque traitement : la notice complète des articles 13 et 14, à remettre ou à mettre en ligne.", e:"📄", per:true},
+  encart:{cat:"info", t:"Encart court sous un formulaire", d:"Le premier niveau d'information, à placer sous un formulaire, avec renvoi vers la notice complète.", e:"🧾", per:true},
+  site:{cat:"info", t:"Politique de confidentialité du site internet", d:"Pour vos clients, prospects et visiteurs : collecte en ligne, cookies, droits.", e:"🌐"},
+  cookies:{cat:"info", t:"Politique de cookies", d:"Ce que sont les traceurs, lesquels sont utilisés, comment gérer ses choix.", e:"🍪"},
+  candidats:{cat:"info", t:"Notice d'information des candidats", d:"À joindre aux offres d'emploi et aux accusés de réception de candidature.", e:"🧑‍💼"},
+  video:{cat:"info", t:"Vidéoprotection : panneau et notice", d:"Le panneau à l'entrée des zones filmées et la notice complète qui l'accompagne.", e:"📹"},
+  image:{cat:"info", t:"Autorisation d'utilisation de l'image", d:"Formulaire de consentement pour photos et vidéos (site, réseaux sociaux, intranet).", e:"📸"},
+  salaries:{cat:"rh", t:"Note d'information des salariés", d:"Une notice unique regroupant tous les traitements qui concernent le personnel.", e:"👥"},
+  charte:{cat:"rh", t:"Charte informatique et de protection des données", d:"Règles d'usage des outils numériques, à annexer au règlement intérieur.", e:"💻"},
+  confid:{cat:"rh", t:"Engagement de confidentialité", d:"À faire signer aux personnes qui accèdent à des données sensibles ou en volume.", e:"🤐"},
+  reflexe:{cat:"rh", t:"Fiche réflexe : incident de données", d:"Une page à afficher ou diffuser : que faire en cas de doute, de perte ou de piratage.", e:"🆘"},
+  rep_acces:{cat:"courriers", t:"Réponse à une demande d'accès", d:"Le courrier qui accompagne la copie des données (article 15).", e:"📬", per:"dem"},
+  rep_effacement:{cat:"courriers", t:"Réponse à une demande d'effacement ou d'opposition", d:"Acceptation, ou refus motivé lorsque la loi impose de conserver.", e:"🗑️", per:"dem"},
+  rep_precision:{cat:"courriers", t:"Demande de précision ou de justificatif", d:"Quand la demande est imprécise ou que l'identité doit être vérifiée.", e:"❓", per:"dem"},
+  rep_prolong:{cat:"courriers", t:"Prolongation du délai de réponse", d:"À envoyer dans le premier mois pour une demande complexe (article 12.3).", e:"⏳", per:"dem"},
+  vio_personnes:{cat:"courriers", t:"Information des personnes après une violation", d:"Le message de l'article 34 aux personnes exposées à un risque élevé.", e:"📣", per:"vio"},
+  violation:{cat:"proc", t:"Procédure de gestion des violations", d:"Qui fait quoi, et quand, en cas d'incident : le délai de 72 heures pas à pas.", e:"🚨"},
+  droits:{cat:"proc", t:"Procédure de traitement des demandes de droits", d:"Réception, vérification d'identité, réponse sous un mois, archivage.", e:"🙋"},
+  pbd:{cat:"proc", t:"Procédure « protection dès la conception »", d:"Comment associer le DPO à tout nouveau projet, outil ou prestataire.", e:"🧭"},
+  aipdproc:{cat:"proc", t:"Procédure d'analyse d'impact (AIPD)", d:"Quand en faire une, qui la mène, comment la valider.", e:"🔍"},
+  purge:{cat:"proc", t:"Procédure de purge et d'archivage", d:"Appliquer les durées de conservation : base active, archives, suppression, preuve.", e:"🧹"},
+  art28:{cat:"contrats", t:"Clauses de sous-traitance (article 28)", d:"Les clauses complètes à annexer au contrat de chaque prestataire.", e:"🤝", per:"st"},
+  art26:{cat:"contrats", t:"Accord entre responsables conjoints (article 26)", d:"Quand deux organismes décident ensemble des finalités et des moyens.", e:"🔗"},
+  clausetravail:{cat:"contrats", t:"Clause « données personnelles » du contrat de travail", d:"Information du salarié et obligation de confidentialité.", e:"✍️"},
+  politique:{cat:"gouv", t:"Politique de protection des données", d:"Le document de référence de l'entreprise, construit à partir de votre registre.", e:"🛡️"},
+  lettredpo:{cat:"gouv", t:"Lettre de désignation et de mission du DPO", d:"Désignation, missions, moyens et indépendance (articles 37 à 39).", e:"🎖️"}
 };
-function docOrg(){ const o=S.org; return {rs:o.raisonSociale||"[Raison sociale]", adr:o.adresse||"[adresse du siège]", siren:o.siren||"", dpo:o.dpoNom?`${o.dpoNom}${o.dpoEmail?" ("+o.dpoEmail+")":""}`:"[nom et e-mail du DPO]", dpoMail:o.dpoEmail||"[e-mail du DPO]", isDpo:true}; }
+function docOrg(){ const o=S.org; return {rs:o.raisonSociale||"[Raison sociale]", adr:o.adresse||"[adresse du siège]", siren:o.siren||"", dpo:o.dpoNom?`${o.dpoNom}${o.dpoEmail?" ("+o.dpoEmail+")":""}`:"[nom et e-mail du DPO]", dpoNom:o.dpoNom||"[nom du DPO]", dpoMail:o.dpoEmail||"[e-mail du DPO]", rep:o.responsableNom||"[représentant légal]", site:o.site||"[adresse du site]", isDpo:true}; }
+const CNIL_ADR = "Commission nationale de l'informatique et des libertés (CNIL), 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, www.cnil.fr";
+const docSign = o => ["p",`${o.dpoNom}, délégué à la protection des données · ${o.dpoMail}`,"note"];
+const ver = o => ["p",`${o.rs} · version du ${fmtD(today())}`,"sub"];
 function docRights(t){
-  const r = ["Accès : obtenir la confirmation que vos données sont traitées et en recevoir une copie.","Rectification : faire corriger des données inexactes ou incomplètes.","Effacement : demander la suppression de vos données dans les cas prévus par le RGPD.","Limitation : demander le gel temporaire de l'utilisation de vos données."];
-  if (["interet_legitime","mission_publique"].includes(t.baseLegale)) r.push("Opposition : vous opposer au traitement pour des raisons tenant à votre situation particulière, et à tout moment à la prospection.");
-  if (["contrat","consentement"].includes(t.baseLegale)) r.push("Portabilité : recevoir vos données dans un format structuré et lisible par machine.");
-  if (t.baseLegale==="consentement") r.push("Retrait du consentement : à tout moment, sans remettre en cause ce qui a été fait auparavant.");
+  const r = ["Accès : obtenir la confirmation que vos données sont traitées et en recevoir une copie.","Rectification : faire corriger des données inexactes ou incomplètes.","Effacement : demander la suppression de vos données dans les cas prévus par l'article 17 du RGPD.","Limitation : demander le gel temporaire de l'utilisation de vos données, par exemple le temps de vérifier leur exactitude."];
+  const bs = basesOf(t);
+  if (bs.some(x=>["interet_legitime","mission_publique"].includes(x))) r.push("Opposition : vous opposer au traitement pour des raisons tenant à votre situation particulière, et à tout moment, sans motif, à la prospection.");
+  if (bs.some(x=>["contrat","consentement"].includes(x))) r.push("Portabilité : recevoir les données que vous avez fournies dans un format structuré et lisible par machine, ou les faire transmettre à un autre organisme.");
+  if (bs.includes("consentement")) r.push("Retrait du consentement : à tout moment, aussi simplement que vous l'avez donné, sans remettre en cause ce qui a été fait auparavant.");
   r.push("Directives post-mortem : définir des directives sur le sort de vos données après votre décès.");
   return r;
 }
+const splitL = s => String(s||"").split(/\n|;\s*/).map(x=>x.trim()).filter(Boolean);
 function docMention(t){
-  const o = docOrg(); const b = baseOf(t.baseLegale);
-  const B = [["h1",`Information sur le traitement de vos données personnelles`],["p",`${t.nom||"Traitement"} · ${o.rs}`,"sub"]];
-  B.push(["h2","Qui est responsable de vos données ?"],["p",`${o.rs}${o.siren?", SIREN "+o.siren:""}, dont le siège est situé ${o.adr}, est responsable de ce traitement.`]);
-  B.push(["h2","Pourquoi utilisons-nous vos données ?"],["ul",String(t.finalites||"[finalités à préciser]").split(/\n|;\s*/).map(x=>x.trim()).filter(Boolean)]);
-  B.push(["h2","Sur quel fondement ?"],["p",b?`${b.l} (${b.a}) : ${b.d}${t.baseLegaleDetail?" "+t.baseLegaleDetail:""}`:"[base légale à préciser]"]);
-  const don = [...arr(t.donnees), t.donneesAutres].filter(Boolean); if (don.length) B.push(["h2","Quelles données ?"],["ul",don]);
-  if (arr(t.sensibles).length) B.push(["p",`Certaines données sont particulièrement protégées (${arr(t.sensibles).join(", ").toLowerCase()}). Elles sont traitées sur le fondement suivant : ${t.sensiblesJustif||"[exception de l'article 9 à préciser]"}.`]);
-  const dest = [t.destinatairesInternes && "En interne : "+t.destinatairesInternes, t.destinatairesExternes && "À l'extérieur : "+t.destinatairesExternes, t.sousTraitants && "Prestataires : "+t.sousTraitants].filter(Boolean);
-  B.push(["h2","Qui peut y accéder ?"], dest.length?["ul",dest]:["p","Seules les personnes habilitées, pour ce qui relève de leurs missions."]);
-  if (t.transfertHorsUE) B.push(["h2","Transferts hors de l'Union européenne"],["p",`Vos données peuvent être transférées vers ${t.transfertPays||"[pays]"}. Ce transfert est encadré par : ${t.transfertGaranties||"[garanties à préciser]"}.`]);
-  B.push(["h2","Combien de temps ?"],["p",[t.conservation, t.conservationArchivage && "puis archivage : "+t.conservationArchivage].filter(Boolean).join(", ")||"[durée à préciser]"]);
+  const o = docOrg();
+  const B = [["h1","Information sur le traitement de vos données personnelles"],["p",`${t.nom||"Traitement"} · ${o.rs} · mise à jour le ${fmtD(today())}`,"sub"],
+    ["p",`${o.rs} attache une grande importance à la protection de vos données. Cette notice vous explique, conformément aux articles 13 et 14 du règlement général sur la protection des données (RGPD), comment vos données sont utilisées dans le cadre de « ${t.nom||"ce traitement"} » et comment exercer vos droits.`]];
+  B.push(["h2","1. Qui est responsable de vos données ?"],["p",`${o.rs}${o.siren?", SIREN "+o.siren:""}, dont le siège est situé ${o.adr}, représentée par ${o.rep}, est responsable de ce traitement. Notre délégué à la protection des données (DPO) est joignable à l'adresse : ${o.dpoMail}.`]);
+  const FL = finL(t).filter(x=>x.f.trim());
+  B.push(["h2","2. Pourquoi utilisons-nous vos données, et sur quel fondement ?"],["p","Chaque utilisation de vos données repose sur une base légale prévue à l'article 6 du RGPD :"],["ul",FL.length?FL.map(x=>{ const bb=baseOf(x.b); return `${x.f.replace(/\.$/,"")} : ${bb?`${bb.l.toLowerCase()} (${bb.a})`:"[base légale à préciser]"}.`; }):["[finalités et bases légales à préciser]"]]);
+  if (t.baseLegaleDetail) B.push(["p",t.baseLegaleDetail]);
+  B.push(["p","Vos données ne sont pas réutilisées pour un objectif incompatible avec ceux-ci."]);
+  if (basesOf(t).includes("interet_legitime")) B.push(["p","Nous avons vérifié que cet intérêt ne porte pas une atteinte excessive à vos droits et à vos attentes raisonnables. Vous pouvez nous demander le détail de cette mise en balance."]);
+  const don = [...arr(t.donnees), t.donneesAutres].filter(Boolean);
+  B.push(["h2","3. Quelles données ?"], don.length?["ul",don]:["p","[catégories de données à préciser]"]);
+  B.push(["p","Les informations signalées comme obligatoires dans nos formulaires sont nécessaires pour traiter votre demande ; à défaut, nous ne pourrons pas y donner suite. Les autres sont facultatives.","note"]);
+  if (t.source) B.push(["p",`Origine des données : ${t.source}.`]);
+  if (arr(t.sensibles).length) B.push(["p",`Certaines données sont particulièrement protégées (${arr(t.sensibles).join(", ").toLowerCase()}). Elles sont traitées sur le fondement suivant : ${t.sensiblesJustif||"[exception de l'article 9 à préciser]"}, avec des mesures de sécurité renforcées.`]);
+  const dest = [t.destinatairesInternes && "En interne : "+t.destinatairesInternes, t.destinatairesExternes && "À l'extérieur : "+t.destinatairesExternes, t.sousTraitants && "Nos prestataires, liés par contrat et tenus à la confidentialité : "+t.sousTraitants].filter(Boolean);
+  B.push(["h2","4. Qui peut y accéder ?"], dest.length?["ul",dest]:["p","Seules les personnes habilitées, pour ce qui relève de leurs missions."],["p","Vos données ne sont ni vendues ni louées."]);
+  B.push(["h2","5. Vos données quittent-elles l'Union européenne ?"],["p",t.transfertHorsUE?`Vos données peuvent être transférées vers ${t.transfertPays||"[pays]"}. Ce transfert est encadré par : ${t.transfertGaranties||"[décision d'adéquation ou clauses contractuelles types]"}. Vous pouvez en obtenir une copie auprès du DPO.`:"Non : vos données sont hébergées et traitées dans l'Union européenne."]);
+  B.push(["h2","6. Combien de temps sont-elles conservées ?"],["p",[t.conservation, t.conservationArchivage && "puis archivage : "+t.conservationArchivage].filter(Boolean).join(", ")||"[durée à préciser]"],["p","À l'issue de ces durées, elles sont supprimées ou rendues anonymes."]);
   if (t.decisionAuto) B.push(["h2","Décision automatisée"],["p","Ce traitement comporte une décision automatisée. Vous pouvez demander l'intervention d'une personne, exprimer votre point de vue et contester la décision."]);
-  B.push(["h2","Vos droits"],["ul",docRights(t)],["p",`Pour exercer vos droits ou pour toute question, contactez ${o.isDpo?"notre délégué à la protection des données":"notre DPO"} : ${o.dpo}. Une réponse vous sera apportée dans un délai d'un mois.`],["p","Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL (www.cnil.fr)."]);
+  B.push(["h2","7. Vos droits"],["ul",docRights(t)],["p",`Pour les exercer, écrivez à ${o.dpoMail} ou par courrier à ${o.rs}, à l'attention du DPO, ${o.adr}. Nous pourrons vous demander un justificatif d'identité en cas de doute. Une réponse vous sera apportée dans un délai d'un mois.`],["p",`Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la ${CNIL_ADR}.`]);
   return B;
 }
-function docSalaries(){
-  const o = docOrg(); const hr = items("traitements").filter(t=>t.statut!=="archive" && arr(t.personnes).some(p=>/salari|stagiaire|intérim|interim/i.test(p)));
-  const B = [["h1","Note d'information des salariés sur la protection de leurs données personnelles"],["p",o.rs,"sub"],["p",`Dans le cadre de la relation de travail, ${o.rs} traite des données personnelles vous concernant. Cette note vous explique quels traitements sont concernés, pourquoi, et comment exercer vos droits.`]];
-  B.push(["h2","Les traitements qui vous concernent"]);
-  hr.forEach(t=>{ const b=baseOf(t.baseLegale); B.push(["h3",t.nom||"Traitement"],["kv","Objectif",String(t.finalites||"").replace(/\n/g," ")],["kv","Fondement",b?b.l:"à préciser"],["kv","Destinataires",[t.destinatairesInternes,t.destinatairesExternes].filter(Boolean).join(" ; ")||"personnes habilitées"],["kv","Durée",[t.conservation,t.conservationArchivage].filter(Boolean).join(", puis archivage : ")||"à préciser"]); });
-  if (!hr.length) B.push(["p","[Aucun traitement du registre ne cible encore les salariés : complétez la rubrique « Personnes concernées ».]"]);
-  B.push(["h2","Vos droits"],["ul",["Accès, rectification, effacement dans les cas prévus, limitation et, selon le fondement, opposition ou portabilité.","Vos demandes sont traitées dans un délai d'un mois.","Vous pouvez saisir la CNIL (www.cnil.fr) si vous estimez que vos droits ne sont pas respectés."]],["p",`Contact : ${o.dpo}.`]);
+function docEncart(t){
+  const o = docOrg(), bl = basesLabel(t);
+  return [["h1","Encart d'information (premier niveau)"],["p",`À placer sous le formulaire ou au point de collecte · ${t.nom||""}`,"sub"],
+    ["p",`Les informations recueillies sont traitées par ${o.rs} pour ${splitL(t.finalites)[0]?.replace(/\.$/,"").replace(/^./,c=>c.toLowerCase())||"[finalité principale]"}. Base légale : ${bl?bl.toLowerCase():"[à préciser]"}. Elles sont destinées à ${t.destinatairesInternes||"[services destinataires]"}${t.sousTraitants?" et à nos prestataires":""}, et conservées ${t.conservation||"[durée]"}. Les champs marqués d'un astérisque sont obligatoires.`],
+    ["p",`Vous pouvez accéder à vos données, les rectifier, demander leur effacement${basesOf(t).includes("interet_legitime")?", vous opposer au traitement":""} ou exercer votre droit à la limitation en écrivant à ${o.dpoMail}. Pour en savoir plus : [lien vers la notice complète]. Vous pouvez aussi saisir la CNIL.`],
+    ["p","Conseil : gardez ce texte court et visible au moment de la collecte ; la notice complète (modèle « Mention d'information complète ») est accessible par un lien.","note"]];
+}
+function docSite(){
+  const o = docOrg(); const trt = items("traitements").filter(t=>t.statut!=="archive" && arr(t.personnes).some(p=>/client|prospect|visiteur|internaute|utilisateur|contact/i.test(p)));
+  const B = [["h1","Politique de confidentialité"],ver(o),["p",`La présente politique explique comment ${o.rs} collecte et utilise les données personnelles des visiteurs de son site ${o.site}, de ses clients, prospects et contacts, et comment exercer vos droits.`],
+    ["h2","1. Responsable du traitement et DPO"],["p",`${o.rs}${o.siren?", SIREN "+o.siren:""}, ${o.adr}. Délégué à la protection des données : ${o.dpoMail}.`],
+    ["h2","2. Les données que nous traitons et pourquoi"]];
+  if (trt.length) trt.forEach(t=>{ B.push(["h3",t.nom||"Traitement"],["kv","Finalités et bases légales",finText(t)||"[à préciser]"],["kv","Données",[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", ")||"[à préciser]"],["kv","Durée de conservation",t.conservation||"[à préciser]"]); });
+  else B.push(["ul",["Répondre à vos demandes de contact (intérêt légitime) : identité, coordonnées, message. Conservation : 3 ans après le dernier échange.","Gérer nos relations clients (exécution du contrat) : coordonnées, commandes, facturation. Conservation : durée de la relation, puis 10 ans pour les pièces comptables.","Vous adresser nos actualités et offres (consentement ou intérêt légitime selon les cas) : e-mail, préférences. Conservation : 3 ans après le dernier contact.","Mesurer l'audience du site (consentement ou exemption selon l'outil) : données de navigation. Conservation : 13 mois pour les traceurs, 25 mois pour les statistiques."]]);
+  B.push(["h2","3. Destinataires"],["p","Vos données sont destinées aux services habilités de l'entreprise et à nos prestataires techniques (hébergement, messagerie, outils de gestion), liés par des clauses conformes à l'article 28 du RGPD. Elles ne sont jamais vendues."],
+    ["h2","4. Transferts hors de l'Union européenne"],["p","Lorsque l'un de nos prestataires traite des données hors de l'Union européenne, le transfert est encadré par une décision d'adéquation de la Commission européenne ou par des clauses contractuelles types. [À compléter selon vos prestataires.]"],
+    ["h2","5. Cookies et autres traceurs"],["p","Les traceurs non indispensables ne sont déposés qu'avec votre accord, que vous pouvez retirer à tout moment via le lien « Gérer mes cookies » en bas de chaque page. Voir notre politique de cookies."],
+    ["h2","6. Prospection"],["p","Nous ne vous adressons de messages commerciaux par e-mail ou SMS qu'avec votre accord, sauf si vous êtes déjà client et que l'offre concerne des produits ou services analogues. Chaque message comporte un lien de désinscription."],
+    ["h2","7. Sécurité"],["p","Nous mettons en œuvre des mesures techniques et organisationnelles adaptées : chiffrement des échanges, contrôle des accès, sauvegardes, sensibilisation des équipes."],
+    ["h2","8. Vos droits"],["ul",["Accès, rectification, effacement, limitation.","Opposition, notamment à la prospection, à tout moment et sans motif.","Portabilité des données que vous nous avez fournies.","Retrait de votre consentement, à tout moment.","Directives sur le sort de vos données après votre décès."]],
+    ["p",`Écrivez à ${o.dpoMail}. Réponse sous un mois. Vous pouvez aussi saisir la ${CNIL_ADR}.`],
+    ["h2","9. Modifications"],["p","Cette politique peut évoluer ; la date de mise à jour figure en tête du document."]);
   return B;
+}
+function docCookies(){
+  const o = docOrg();
+  return [["h1","Politique de cookies"],ver(o),["p",`Lors de votre visite sur ${o.site}, des cookies et autres traceurs peuvent être déposés sur votre terminal. Cette page explique lesquels, pourquoi, et comment exprimer vos choix.`],
+    ["h2","1. Qu'est-ce qu'un cookie ?"],["p","Un cookie est un petit fichier enregistré par votre navigateur. D'autres techniques (pixels, identifiants de terminal, stockage local) sont soumises aux mêmes règles."],
+    ["h2","2. Les traceurs que nous utilisons"],
+    ["h3","Traceurs strictement nécessaires (sans consentement)"],["ul",["Fonctionnement du site, sécurité, équilibrage de charge.","Mémorisation de vos choix en matière de cookies.","[Panier, authentification, préférences de langue : à adapter.]"]],
+    ["h3","Mesure d'audience"],["p","[Outil utilisé] : si l'outil est configuré conformément aux conditions d'exemption de la CNIL (statistiques anonymes, usage exclusif par l'éditeur), il ne requiert pas de consentement ; sinon, il n'est déposé qu'avec votre accord."],
+    ["h3","Traceurs soumis à votre consentement"],["ul",["Publicité et mesure des campagnes : [outils].","Partage et contenus des réseaux sociaux : [boutons, vidéos intégrées].","Personnalisation : [à préciser]."]],
+    ["h2","3. Vos choix"],["ul",["Accepter ou refuser est aussi simple : les boutons « Tout accepter » et « Tout refuser » ont la même visibilité.","Vous pouvez modifier vos choix à tout moment via le lien « Gérer mes cookies » en bas de page.","Votre choix est conservé 6 mois, puis nous vous le redemandons.","Les traceurs soumis à consentement ont une durée de vie de 13 mois au plus."]],
+    ["h2","4. Paramétrer votre navigateur"],["p","Vous pouvez aussi bloquer les cookies depuis les réglages de votre navigateur ; certaines fonctions du site pourraient alors ne plus marcher."],
+    ["h2","5. Contact"],["p",`Pour toute question : ${o.dpoMail}. Vous pouvez saisir la CNIL (www.cnil.fr).`],
+    ["p","Tableau détaillé à compléter : nom du cookie, émetteur, finalité, durée de vie.","note"]];
+}
+function docCandidats(){
+  const o = docOrg(); const t = items("traitements").find(x=>/recrut|candidat/i.test(x.nom||"")) || {};
+  return [["h1","Information des candidats sur le traitement de leurs données"],ver(o),
+    ["p",`Vous avez transmis votre candidature à ${o.rs}. Voici comment nous utilisons vos données.`],
+    ["h2","Pourquoi ?"],["p","Pour étudier votre candidature, organiser les entretiens, évaluer vos compétences professionnelles au regard du poste et vous informer de la suite donnée. Les méthodes d'évaluation éventuellement utilisées (tests, mises en situation) vous sont présentées avant leur mise en œuvre."],
+    ["h2","Sur quel fondement ?"],["p",`${baseOf(t.baseLegale)?.l||"Mesures précontractuelles prises à votre demande"} ; pour la conservation de votre candidature au-delà du recrutement, votre accord.`],
+    ["h2","Quelles données ?"],["p","Celles de votre CV et de votre lettre, vos échanges avec nous, nos notes d'entretien et, le cas échéant, les résultats des tests. Nous ne collectons que des informations ayant un lien direct et nécessaire avec le poste."],
+    ["h2","Qui y a accès ?"],["p",`${t.destinatairesInternes||"L'équipe RH et les managers impliqués dans le recrutement"}${t.sousTraitants?", ainsi que nos prestataires : "+t.sousTraitants:""}.`],
+    ["h2","Combien de temps ?"],["p",t.conservation||"Si votre candidature n'est pas retenue, elle est conservée 2 ans après le dernier contact, sauf opposition de votre part, afin de vous proposer d'autres postes ; elle est ensuite supprimée. Si vous êtes recruté, elle rejoint votre dossier du personnel."],
+    ["h2","Vos droits"],["p",`Accès, rectification, effacement, limitation, opposition au maintien dans notre vivier : écrivez à ${o.dpoMail}. Réponse sous un mois. Réclamation possible auprès de la CNIL.`]];
 }
 function docVideo(){
-  const o = docOrg(); const v = items("traitements").find(t=>/vid[ée]o/i.test(t.nom||""));
-  return [["h1","Établissement placé sous vidéoprotection"],["p",`Responsable : ${o.rs}`,"sub"],["p",`Finalité : ${v?.finalites?String(v.finalites).split(/[.;\n]/)[0]:"sécurité des biens et des personnes"}.`],["p",`Base légale : ${baseOf(v?.baseLegale)?.l||"intérêt légitime"}.`],["p",`Durée de conservation des images : ${v?.conservation||"1 mois maximum"}.`],["p",`Pour exercer vos droits (accès, effacement, limitation, opposition) : ${o.dpo}.`],["p","Vous pouvez adresser une réclamation à la CNIL : www.cnil.fr"],["p","Pour en savoir plus : [lien ou affichage de la notice complète]","note"]];
+  const o = docOrg(); const v = items("traitements").find(t=>/vid[ée]o/i.test(t.nom||"")) || {};
+  return [["h1","Établissement placé sous vidéoprotection"],["p","Panneau à apposer à l'entrée de chaque zone filmée","sub"],
+    ["kv","Responsable",o.rs],["kv","Finalité",v.finalites?String(v.finalites).split(/[.;\n]/)[0]:"Sécurité des biens et des personnes"],["kv","Base légale",basesLabel(v)||"Intérêt légitime"],["kv","Conservation des images",v.conservation||"1 mois maximum, sauf procédure en cours"],["kv","Vos droits",`Accès, effacement, limitation, opposition : ${o.dpoMail}`],["kv","Réclamation","CNIL, www.cnil.fr"],
+    ["p","Pour en savoir plus : [lien ou emplacement de la notice complète]","note"],
+    ["h1","Notice complète"],
+    ["h2","Pourquoi des caméras ?"],["p",`${o.rs} a installé un dispositif de vidéoprotection pour ${v.finalites||"assurer la sécurité des personnes et des biens, prévenir les vols et dégradations"}. Il ne sert pas à surveiller l'activité des salariés.`],
+    ["h2","Où ?"],["p","[Entrées, parkings, zones de stockage…] Les caméras ne filment ni les postes de travail en continu, ni les zones de pause, ni les toilettes, ni la voie publique au-delà des abords immédiats."],
+    ["h2","Qui regarde les images ?"],["p",v.destinatairesInternes||"Seules les personnes habilitées [fonction], en cas d'incident, et, sur réquisition, les forces de l'ordre."],
+    ["h2","Combien de temps ?"],["p",`${v.conservation||"1 mois au maximum"}, puis effacement automatique, sauf si un incident nécessite d'extraire des images pour une procédure.`],
+    ["h2","Information et consultation"],["p","Les salariés ont été informés individuellement et le CSE a été consulté avant la mise en service. [Si des caméras filment la voie publique ou un lieu ouvert au public : autorisation préfectorale n° à compléter.]"],
+    ["h2","Vos droits"],["p",`Vous pouvez demander à accéder aux images vous concernant, leur effacement ou leur limitation, et vous opposer pour un motif légitime : ${o.dpoMail}. Réclamation possible auprès de la CNIL.`]];
 }
-function docPolitique(){
-  const o = docOrg(); const trt = items("traitements").filter(t=>t.statut!=="archive");
-  const dirs = [...new Set(trt.map(t=>t.service).filter(Boolean))];
-  return [["h1","Politique de protection des données personnelles"],["p",`${o.rs} · version du ${fmtD(today())}`,"sub"],
-    ["h2","1. Notre engagement"],["p",`${o.rs} s'engage à traiter les données personnelles de ses salariés, candidats, clients, prospects, fournisseurs et partenaires dans le respect du règlement général sur la protection des données (RGPD) et de la loi Informatique et Libertés.`],
-    ["h2","2. Organisation"],["ul",[`Responsable du traitement : ${o.rs}, représentée par ${S.org.responsableNom||"[représentant légal]"}.`,`Délégué à la protection des données : ${o.dpo}.`,`Chaque direction désigne un correspondant chargé de tenir à jour ses traitements${dirs.length?" ("+dirs.length+" directions concernées)":""}.`]],
-    ["h2","3. Nos principes"],["ul",["Licéité, loyauté et transparence : chaque traitement repose sur une base légale et les personnes sont informées.","Limitation des finalités : les données ne sont pas réutilisées pour un autre objectif incompatible.","Minimisation : seules les données nécessaires sont collectées.","Exactitude : les données sont tenues à jour.","Conservation limitée : chaque donnée a une durée définie, au terme de laquelle elle est supprimée ou archivée.","Sécurité et confidentialité : des mesures techniques et organisationnelles adaptées protègent les données."]],
-    ["h2","4. Le registre des traitements"],["p",`L'entreprise tient un registre de ses ${trt.length} traitements de données (article 30 du RGPD). Il est revu chaque année avec les directions.`],
-    ["h2","5. Protection dès la conception"],["p","Tout nouveau projet ou outil traitant des données personnelles est présenté au DPO en amont. Une analyse d'impact (AIPD) est menée lorsque le traitement présente un risque élevé."],
-    ["h2","6. Prestataires"],["p","Les prestataires qui traitent des données pour notre compte sont choisis pour leurs garanties de sécurité et signent des clauses conformes à l'article 28 du RGPD. Les transferts hors de l'Union européenne sont encadrés."],
-    ["h2","7. Droits des personnes"],["p",`Toute personne peut exercer ses droits auprès de ${o.dpo}. Les demandes sont traitées dans un délai d'un mois, selon la procédure dédiée.`],
-    ["h2","8. Violations de données"],["p","Tout incident est signalé sans délai au DPO. Les violations présentant un risque sont notifiées à la CNIL dans les 72 heures et, en cas de risque élevé, les personnes concernées sont informées."],
-    ["h2","9. Sensibilisation"],["p","Les salariés sont sensibilisés à la protection des données à leur arrivée puis régulièrement. Les équipes les plus exposées (RH, commercial, informatique) suivent des modules spécifiques."],
-    ["h2","10. Contrôle et amélioration"],["p","Un bilan annuel est présenté à la direction générale, avec une feuille de route. Cette politique est revue chaque année."]];
+function docImage(){
+  const o = docOrg();
+  return [["h1","Autorisation d'utilisation de mon image"],ver(o),
+    ["p","Je soussigné(e) : Nom ……………………… Prénom ……………………… Fonction / service ………………………"],
+    ["p",`autorise ${o.rs} à fixer, reproduire et diffuser mon image (photographies, vidéos) prise le …………… à l'occasion de …………………………`],
+    ["h2","Supports de diffusion (cochez)"],["ul",["☐ Intranet et supports internes","☐ Site internet de l'entreprise","☐ Réseaux sociaux de l'entreprise : [préciser]","☐ Supports imprimés (plaquettes, rapports)","☐ Salons et présentations commerciales"]],
+    ["h2","Durée"],["p","Cette autorisation est valable [2 ans] à compter de sa signature. Les images publiées sur un support imprimé avant le retrait de mon accord peuvent rester diffusées jusqu'à épuisement du stock."],
+    ["h2","Conditions"],["ul",["Cette autorisation est gratuite et facultative : un refus n'a aucune conséquence sur ma situation.","Mon image ne sera pas utilisée dans un contexte portant atteinte à ma dignité ou à ma réputation.","Je peux retirer mon accord à tout moment ; les images seront retirées des supports numériques dans un délai raisonnable."]],
+    ["h2","Protection de vos données"],["p",`Vos images sont traitées par ${o.rs} sur la base de votre consentement, pour la communication de l'entreprise, et accessibles au service communication. Vous disposez des droits d'accès, de rectification, d'effacement et de retrait du consentement : ${o.dpoMail}. Réclamation possible auprès de la CNIL.`],
+    ["p","Fait à ……………………, le ……………………   Signature :"]];
+}
+function docSalaries(){
+  const o = docOrg(); const hr = items("traitements").filter(t=>t.statut!=="archive" && arr(t.personnes).some(p=>/salari|stagiaire|intérim|interim|personnel|alternant/i.test(p)));
+  const B = [["h1","Note d'information des salariés sur la protection de leurs données personnelles"],ver(o),
+    ["p",`Dans le cadre de la relation de travail, ${o.rs} traite des données personnelles vous concernant. Cette note, prévue par les articles 13 et 14 du RGPD, vous présente ces traitements, leurs règles et vos droits. Elle est disponible en permanence sur l'intranet et remise à chaque nouvel arrivant.`],
+    ["h2","1. Responsable et DPO"],["p",`${o.rs}, ${o.adr}, représentée par ${o.rep}. Délégué à la protection des données : ${o.dpo}.`],
+    ["h2","2. Les traitements qui vous concernent"]];
+  hr.forEach(t=>{ B.push(["h3",t.nom||"Traitement"],["kv","Objectifs et fondements",finText(t)||"à préciser"],["kv","Données",[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", ")||"à préciser"],["kv","Destinataires",[t.destinatairesInternes,t.destinatairesExternes,t.sousTraitants].filter(Boolean).join(" ; ")||"personnes habilitées"],["kv","Durée",[t.conservation,t.conservationArchivage].filter(Boolean).join(", puis archivage : ")||"à préciser"]); });
+  if (!hr.length) B.push(["p","[Aucun traitement du registre ne cible encore les salariés : complétez la rubrique « Personnes concernées ».]"]);
+  B.push(["h2","3. Nos engagements"],["ul",["Seules les personnes habilitées accèdent à vos données, pour ce qui relève de leurs missions.","Aucun dispositif de contrôle de l'activité n'est mis en place sans information préalable des salariés et consultation du CSE.","Vos données de santé restent couvertes par le secret médical : l'entreprise ne reçoit que les avis d'aptitude.","Vos données ne sont jamais vendues ni utilisées à des fins commerciales."]],
+    ["h2","4. Vos droits"],["ul",["Accès, y compris à vos évaluations professionnelles ; rectification ; effacement dans les cas prévus ; limitation.","Opposition pour un motif tenant à votre situation, lorsque le traitement repose sur l'intérêt légitime.","Portabilité des données que vous avez fournies, lorsque le traitement repose sur le contrat.","Les demandes sont traitées dans un délai d'un mois, sans incidence sur votre situation professionnelle."]],
+    ["p",`Contact : ${o.dpoMail}. Vous pouvez saisir la ${CNIL_ADR}.`]);
+  return B;
+}
+function docCharte(){
+  const o = docOrg();
+  return [["h1","Charte d'utilisation des outils numériques et de protection des données"],ver(o),
+    ["p",`Cette charte fixe les règles d'utilisation des outils numériques mis à disposition par ${o.rs} (postes, téléphones, messagerie, applications, accès à distance) et les bons réflexes pour protéger les données. Annexée au règlement intérieur après consultation du CSE, elle s'applique à tous les utilisateurs : salariés, stagiaires, intérimaires et prestataires.`],
+    ["h2","1. Principes"],["ul",["Les outils sont fournis pour un usage professionnel. Un usage personnel ponctuel et raisonnable est toléré s'il ne gêne pas l'activité et respecte la loi.","Chacun est responsable de l'usage de ses identifiants et des actions réalisées avec eux.","Seuls les logiciels et services validés par le service informatique sont utilisés (pas de stockage ni de messagerie personnels pour des données de l'entreprise)."]],
+    ["h2","2. Mots de passe et accès"],["ul",["Un mot de passe robuste et propre à chaque service : au moins 12 caractères variés, ou une phrase de passe ; l'authentification multifacteur est activée lorsqu'elle est proposée.","Les mots de passe ne sont jamais communiqués, même au service informatique ou à un supérieur.","La session est verrouillée (Windows + L) dès que l'on quitte son poste."]],
+    ["h2","3. Messagerie et hameçonnage"],["ul",["Vérifier l'expéditeur et les liens avant de cliquer ; ne jamais saisir ses identifiants après avoir suivi un lien reçu par message.","Toute demande inhabituelle de virement ou de changement de RIB est vérifiée par téléphone, avec un numéro déjà connu.","Les messages suspects sont signalés au service informatique."]],
+    ["h2","4. Protection des données personnelles"],["ul",["N'accéder qu'aux données nécessaires à sa mission ; ne pas les copier sur des supports personnels.","Ne pas transmettre de données hors de l'entreprise sans nécessité ; chiffrer les envois sensibles.","Ne pas saisir de données personnelles ou confidentielles dans des outils d'intelligence artificielle grand public.","Imprimer le moins possible ; récupérer immédiatement les impressions ; détruire les documents dans les bacs prévus.","Respecter les durées de conservation : supprimer ce qui n'est plus utile."]],
+    ["h2","5. Nomadisme et télétravail"],["ul",["Utiliser le VPN de l'entreprise ; éviter les Wi-Fi publics ou utiliser le partage de connexion du téléphone.","Ne pas laisser le matériel sans surveillance ; utiliser un filtre de confidentialité dans les lieux publics.","Signaler sans délai toute perte ou vol de matériel."]],
+    ["h2","6. Incidents"],["p",`Tout incident ou doute (clic sur un lien suspect, envoi à un mauvais destinataire, perte de matériel, comportement anormal du poste) est signalé immédiatement au service informatique et au DPO (${o.dpoMail}). Signaler de bonne foi n'est jamais reproché.`],
+    ["h2","7. Contrôles"],["p","Pour la sécurité du système d'information, des journaux techniques (connexions, accès aux applications) sont conservés [6 mois à 1 an]. Ils ne servent pas à surveiller individuellement l'activité, sauf en cas de suspicion d'usage abusif, dans le respect de la vie privée : les fichiers et messages identifiés comme « personnel » ne sont ouverts qu'en présence de l'utilisateur ou après l'avoir appelé, sauf risque ou événement particulier."],
+    ["h2","8. Départ"],["p","Au départ, le matériel est restitué, les données personnelles de l'utilisateur peuvent être récupérées avant sa date de sortie, et les accès sont désactivés le dernier jour."],
+    ["h2","9. Sanctions"],["p","Le non-respect de la charte peut entraîner une limitation des accès et des sanctions disciplinaires prévues au règlement intérieur, sans préjudice des poursuites prévues par la loi."]];
+}
+function docConfid(){
+  const o = docOrg();
+  return [["h1","Engagement de confidentialité"],ver(o),
+    ["p","Je soussigné(e) ……………………………, exerçant la fonction de ……………………………, reconnais avoir accès, dans le cadre de mes missions, à des données personnelles et à des informations confidentielles."],
+    ["h2","Je m'engage à :"],["ul",["n'utiliser ces données que pour les besoins de mes missions et selon les instructions reçues ;","ne les communiquer qu'aux personnes habilitées à en connaître ;","ne pas en conserver de copie hors des outils de l'entreprise, ni après la fin de mes missions ;","respecter les mesures de sécurité prévues par la charte informatique (mots de passe, verrouillage, chiffrement) ;","signaler sans délai au DPO tout incident ou soupçon de violation de données."]],
+    ["p","Cet engagement s'applique pendant toute la durée de mes fonctions et après leur terme, sans limitation de durée pour les informations restant confidentielles."],
+    ["p","Je suis informé(e) que le non-respect de cet engagement peut entraîner des sanctions disciplinaires et, le cas échéant, des poursuites (notamment article 226-22 du Code pénal sur la divulgation de données personnelles)."],
+    ["p","Fait à ……………………, le ……………………   Signature, précédée de « lu et approuvé » :"],
+    docSign(o)];
+}
+function docReflexe(){
+  const o = docOrg();
+  return [["h1","Incident de données : les bons réflexes"],["p",`${o.rs} · à afficher et à diffuser`,"sub"],
+    ["h2","Vous avez un doute ? Signalez, même si vous n'êtes pas sûr."],["kv","Service informatique","[numéro / adresse]"],["kv","DPO",o.dpo],
+    ["h2","Exemples d'incidents"],["ul",["E-mail ou document envoyé au mauvais destinataire.","Ordinateur, téléphone, clé USB ou dossier papier perdu ou volé.","Clic sur un lien ou une pièce jointe suspecte, saisie de son mot de passe sur une fausse page.","Fichiers chiffrés, message de rançon, comportement anormal du poste.","Accès à des données par une personne qui n'aurait pas dû les voir."]],
+    ["h2","Les bons gestes"],["ul",["Débranchez le câble réseau ou coupez le Wi-Fi si votre poste semble infecté ; ne l'éteignez pas.","Ne supprimez rien : les traces aident à comprendre ce qui s'est passé.","Pour un envoi erroné : demandez au destinataire de supprimer le message et de le confirmer par écrit.","Changez votre mot de passe si vous l'avez saisi sur une page douteuse.","Notez l'heure et ce que vous avez constaté."]],
+    ["h2","Pourquoi vite ?"],["p","L'entreprise dispose de 72 heures pour notifier la CNIL lorsqu'une violation présente un risque. Chaque heure compte, et un signalement de bonne foi n'est jamais reproché."]];
+}
+function docDem(id){ const d = id ? S.data.demandes?.get(id) : null; return d || {}; }
+function demHead(o, d, objet){
+  return [["p",`${o.rs} · ${o.adr}`,"note"],["p",`À l'attention de ${d.demandeur||"[nom du demandeur]"} · [adresse]`,"note"],["p",`Le ${fmtD(today())}`,"note"],["kv","Objet",`${objet}${d.ref?` (notre référence ${d.ref})`:""}`],["p","Madame, Monsieur,"]];
+}
+const demRecu = d => d.dateReception ? fmtD(d.dateReception) : "[date de réception]";
+function docRepAcces(id){
+  const o = docOrg(), d = docDem(id);
+  return [["h1","Réponse à une demande d'accès"],...demHead(o,d,"votre demande d'accès à vos données personnelles"),
+    ["p",`Nous avons bien reçu le ${demRecu(d)} votre demande d'accès aux données personnelles vous concernant, au titre de l'article 15 du règlement général sur la protection des données (RGPD), et nous vous en remercions.`],
+    ["p","Vous trouverez ci-joint une copie de l'ensemble des données vous concernant que nous détenons. Conformément à l'article 15, nous vous indiquons également :"],
+    ["ul",["Les finalités des traitements : [finalités].","Les catégories de données concernées : [catégories].","Les destinataires ou catégories de destinataires : [destinataires], y compris, le cas échéant, hors de l'Union européenne avec les garanties appropriées : [garanties].","La durée de conservation : [durées].","L'origine des données lorsqu'elles n'ont pas été collectées auprès de vous : [source].","L'existence ou non d'une prise de décision automatisée : [aucune / préciser]."]],
+    ["p","Vous disposez également des droits de rectification, d'effacement, de limitation et, selon les cas, d'opposition et de portabilité. Les informations concernant d'autres personnes ont été occultées pour préserver leurs droits."],
+    ["p",`Pour toute question, notre délégué à la protection des données reste à votre disposition : ${o.dpoMail}. Si vous estimez que votre demande n'a pas été correctement traitée, vous pouvez saisir la CNIL (www.cnil.fr).`],
+    ["p","Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées."],docSign(o),["p","Pièce jointe : copie des données (format [PDF / tableur]).","note"]];
+}
+function docRepEffacement(id){
+  const o = docOrg(), d = docDem(id); const op = d.type==="opposition";
+  return [["h1",op?"Réponse à une demande d'opposition":"Réponse à une demande d'effacement"],...demHead(o,d,op?"votre demande d'opposition":"votre demande d'effacement de vos données"),
+    ["p",`Nous avons bien reçu le ${demRecu(d)} votre demande ${op?"d'opposition au traitement de vos données (article 21 du RGPD)":"d'effacement de vos données (article 17 du RGPD)"}.`],
+    ["h2","Si la demande est acceptée"],["p",op?"Nous avons pris en compte votre opposition : vos données ne sont plus utilisées pour [finalité], et votre adresse a été inscrite sur notre liste d'opposition afin que vous ne soyez plus sollicité(e).":"Nous avons procédé à l'effacement des données vous concernant dans l'ensemble de nos systèmes, ainsi que chez nos prestataires, le [date]. Nous avons informé de cet effacement les destinataires à qui elles avaient été communiquées."],
+    ["h2","Si la demande est refusée en tout ou partie (supprimer le paragraphe inutile)"],["p",op?"Nous ne pouvons faire droit à votre opposition pour le traitement [nom], car il repose sur [une obligation légale / l'exécution du contrat], ou parce qu'il existe des motifs légitimes et impérieux qui prévalent sur vos intérêts : [motif précis].":"Certaines données doivent être conservées pour respecter une obligation légale : [par exemple, pièces comptables pendant 10 ans, article L123-22 du Code de commerce] ou pour la constatation, l'exercice ou la défense de droits en justice. Ces données sont conservées en archive, avec un accès restreint, jusqu'au [date], puis supprimées. Toutes les autres données ont été effacées."],
+    ["p",`Vous pouvez contester cette décision auprès de notre délégué à la protection des données (${o.dpoMail}) ou introduire une réclamation auprès de la CNIL (www.cnil.fr), ou encore former un recours juridictionnel.`],
+    ["p","Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées."],docSign(o)];
+}
+function docRepPrecision(id){
+  const o = docOrg(), d = docDem(id);
+  return [["h1","Demande de précision ou de justificatif"],...demHead(o,d,"votre demande relative à vos données personnelles"),
+    ["p",`Nous avons bien reçu le ${demRecu(d)} votre demande et nous vous en remercions.`],
+    ["p","Afin de la traiter dans les meilleures conditions, nous avons besoin des éléments suivants (supprimer ce qui est inutile) :"],
+    ["ul",["Un justificatif d'identité, car nous avons un doute raisonnable sur l'identité de l'auteur de la demande. Vous pouvez masquer la photo, le numéro du document et les mentions inutiles ; ce justificatif sera supprimé dès la vérification faite.","La précision des traitements ou de la période visés par votre demande : [préciser].","[Pour une demande faite pour le compte d'un tiers] Un mandat signé de la personne concernée et une copie de sa pièce d'identité."]],
+    ["p","Le délai de réponse d'un mois courra à compter de la réception de ces éléments."],
+    ["p",`Vous pouvez nous les adresser à ${o.dpoMail}.`],
+    ["p","Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées."],docSign(o)];
+}
+function docRepProlong(id){
+  const o = docOrg(), d = docDem(id);
+  return [["h1","Prolongation du délai de réponse"],...demHead(o,d,"délai de réponse à votre demande"),
+    ["p",`Nous avons bien reçu le ${demRecu(d)} votre demande relative à vos données personnelles.`],
+    ["p",`En raison de ${d.motifProlongation||"[la complexité de la demande / du nombre de demandes reçues : préciser le motif]"}, nous ne serons pas en mesure d'y répondre dans le délai d'un mois. Conformément à l'article 12.3 du RGPD, ce délai est prolongé de deux mois : vous recevrez notre réponse au plus tard le [date].`],
+    ["p","Nous mettons tout en œuvre pour vous répondre avant cette date."],
+    ["p",`Notre délégué à la protection des données reste à votre disposition : ${o.dpoMail}. Vous pouvez également saisir la CNIL (www.cnil.fr).`],
+    ["p","Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées."],docSign(o)];
+}
+function docVioPersonnes(id){
+  const o = docOrg(), v = id ? S.data.violations?.get(id) : null;
+  return [["h1","Information sur un incident concernant vos données"],["p",`${o.rs} · le ${fmtD(today())}`,"sub"],["p","Madame, Monsieur,"],
+    ["p",`Nous vous informons qu'un incident de sécurité ${v?.dateDecouverte?`découvert le ${fmtD(v.dateDecouverte)} `:""}a pu concerner certaines de vos données personnelles. Conformément à l'article 34 du RGPD, nous tenons à vous en informer en toute transparence.`],
+    ["h2","Ce qui s'est passé"],["p",v?.description||"[Décrire la nature de la violation en termes simples : quoi, quand, comment.]"],
+    ["h2","Les données concernées"],["p",v?.categoriesDonnees||"[Catégories de données : identité, coordonnées, données bancaires…]"],
+    ["h2","Les conséquences possibles"],["p",v?.consequences||"[Par exemple : risque de messages frauduleux utilisant vos informations (hameçonnage), tentative d'usurpation d'identité.]"],
+    ["h2","Ce que nous avons fait"],["p",v?.mesures||"[Mesures prises pour mettre fin à l'incident et en limiter les effets ; notification à la CNIL le … ; dépôt de plainte le …]"],
+    ["h2","Ce que nous vous recommandons"],["ul",["Soyez vigilant face aux messages, appels ou SMS inattendus se recommandant de nous : nous ne vous demanderons jamais vos mots de passe ni vos coordonnées bancaires.","Changez votre mot de passe s'il était utilisé ailleurs, et activez la double authentification.","Surveillez vos relevés de compte et signalez toute opération inhabituelle à votre banque.","Pour vous aider : www.cybermalveillance.gouv.fr."]],
+    ["h2","Pour toute question"],["p",`Notre délégué à la protection des données est à votre disposition : ${o.dpo}. Vous pouvez également adresser une réclamation à la CNIL (www.cnil.fr).`],
+    ["p","Nous vous présentons nos excuses pour cet incident et restons à votre écoute."],docSign(o)];
 }
 function docViolation(){
   const o = docOrg();
-  return [["h1","Procédure de gestion des violations de données"],["p",`${o.rs} · version du ${fmtD(today())}`,"sub"],
-    ["p","Une violation de données est un incident de sécurité entraînant, de manière accidentelle ou illicite, la destruction, la perte, l'altération, la divulgation non autorisée ou l'accès non autorisé à des données personnelles."],
-    ["h2","Étape 1 · Signaler immédiatement (H+0)"],["ul",["Toute personne qui constate ou soupçonne un incident prévient sans attendre son manager et le DPO, même en cas de doute.",`Contact : ${o.dpo}.`,"Ne rien effacer : les traces sont utiles à l'analyse."]],
-    ["h2","Étape 2 · Contenir (H+4)"],["ul",["Le service informatique isole les systèmes touchés, change les mots de passe compromis, révoque les accès.","Pour un e-mail mal adressé : demander au destinataire de le supprimer et de le confirmer par écrit."]],
-    ["h2","Étape 3 · Évaluer le risque (H+24)"],["ul",["Le DPO évalue avec les directions concernées : nature et volume des données, nombre de personnes, possibilité d'identification, conséquences possibles.","Niveau retenu : pas de risque, risque, ou risque élevé. La décision est motivée et consignée dans le registre des violations (Égide)."]],
-    ["h2","Étape 4 · Notifier la CNIL (avant H+72)"],["p","Si la violation présente un risque pour les droits et libertés des personnes, le DPO la notifie à la CNIL via son téléservice dans les 72 heures suivant la prise de connaissance. Si toutes les informations ne sont pas disponibles, une notification initiale est faite puis complétée."],
-    ["h2","Étape 5 · Informer les personnes"],["p","En cas de risque élevé, les personnes concernées sont informées dans les meilleurs délais, en termes clairs : nature de la violation, conséquences probables, mesures prises, contact du DPO, conseils pour se protéger."],
-    ["h2","Étape 6 · Documenter et tirer les leçons"],["ul",["Toute violation, même sans risque, est inscrite au registre des violations (article 33.5).","Des actions correctives sont décidées et suivies dans le plan d'actions.","Un retour d'expérience est partagé avec les équipes concernées."]],
-    ["h2","Contacts utiles"],["ul",[`DPO : ${o.dpo}`,"Service informatique : [numéro d'astreinte]","CNIL : téléservice de notification des violations sur cnil.fr","17Cyber et Cybermalveillance.gouv.fr pour l'assistance en cas de cyberattaque"]]];
+  return [["h1","Procédure de gestion des violations de données"],ver(o),
+    ["p","Une violation de données est un incident de sécurité entraînant, de manière accidentelle ou illicite, la destruction, la perte, l'altération, la divulgation non autorisée ou l'accès non autorisé à des données personnelles (article 4.12 du RGPD). Elle peut toucher la confidentialité, l'intégrité ou la disponibilité des données."],
+    ["h2","Rôles"],["kv","Toute personne","Signale immédiatement tout incident ou doute."],["kv","Service informatique","Contient l'incident, préserve les traces, rétablit le service."],["kv","DPO",`${o.dpo} : qualifie le risque, décide de la notification, tient le registre des violations.`],["kv","Direction générale","Est informée sans délai des violations à risque élevé ; valide la communication."],["kv","Communication / juridique","Préparent les messages aux personnes et, le cas échéant, le dépôt de plainte."],
+    ["h2","Étape 1 · Signaler immédiatement (H+0)"],["ul",["Prévenir sans attendre son manager, le service informatique et le DPO, même en cas de doute.","Ne rien effacer : les traces sont utiles à l'analyse.","Noter l'heure de découverte : elle fait courir le délai de 72 heures."]],
+    ["h2","Étape 2 · Contenir (avant H+4)"],["ul",["Isoler les systèmes touchés, changer les mots de passe compromis, révoquer les accès.","E-mail mal adressé : demander au destinataire de le supprimer et de le confirmer par écrit.","Prestataire en cause : exiger son rapport d'incident (délai contractuel de 48 heures)."]],
+    ["h2","Étape 3 · Évaluer le risque (avant H+24)"],["p","Le DPO apprécie, avec les directions concernées :"],["ul",["la nature des données (sensibles, bancaires, identifiants, documents d'identité) ;","le volume et le nombre de personnes, et leur vulnérabilité (mineurs, salariés, patients) ;","la facilité d'identification des personnes ;","la gravité des conséquences (usurpation d'identité, fraude, discrimination, atteinte à la réputation) ;","les mesures déjà en place (chiffrement robuste, récupération des données)."]],["p","Niveau retenu : pas de risque, risque, ou risque élevé. La décision et ses motifs sont consignés dans Égide."],
+    ["h2","Étape 4 · Notifier la CNIL (avant H+72)"],["p","Si la violation présente un risque, le DPO la notifie via le téléservice de la CNIL dans les 72 heures suivant la prise de connaissance. La notification précise : la nature de la violation, les catégories et le nombre approximatif de personnes et d'enregistrements, les coordonnées du DPO, les conséquences probables et les mesures prises. Une notification initiale peut être complétée ensuite ; au-delà de 72 heures, les motifs du retard sont indiqués."],
+    ["h2","Étape 5 · Informer les personnes"],["p","En cas de risque élevé, les personnes sont informées dans les meilleurs délais, en termes clairs (modèle « Information des personnes après une violation »), sauf si les données étaient chiffrées de façon robuste, si le risque a été supprimé, ou si une information individuelle exigerait des efforts disproportionnés (communication publique alors)."],
+    ["h2","Étape 6 · Documenter et tirer les leçons"],["ul",["Toute violation, même sans risque, est inscrite au registre des violations (article 33.5).","Des actions correctives sont décidées et suivies dans le plan d'actions.","Un retour d'expérience est partagé avec les équipes concernées dans le mois."]],
+    ["h2","Contacts utiles"],["ul",[`DPO : ${o.dpo}`,"Service informatique : [numéro d'astreinte]","CNIL : téléservice de notification des violations (notifications.cnil.fr)","Cybermalveillance.gouv.fr et 17Cyber pour l'assistance en cas de cyberattaque","Assureur cyber : [contrat et numéro]"]]];
 }
 function docDroits(){
   const o = docOrg();
-  return [["h1","Procédure de traitement des demandes d'exercice des droits"],["p",`${o.rs} · version du ${fmtD(today())}`,"sub"],
-    ["h2","1. Réception"],["ul",["Une demande peut arriver par tout canal : e-mail, courrier, formulaire, oral. Toute personne qui la reçoit la transmet le jour même au DPO.",`Point de contact : ${o.dpoMail}.`,"Le DPO l'enregistre dans Égide (module Demandes de droits) : la date de réception fait courir le délai d'un mois."]],
-    ["h2","2. Vérification"],["ul",["Vérifier l'identité du demandeur en cas de doute raisonnable, sans demander plus que nécessaire (une pièce d'identité peut suffire, photo et numéro masquables).","Préciser la demande si elle est imprécise."]],
-    ["h2","3. Instruction"],["ul",["Rechercher les données dans tous les traitements concernés (le registre aide à les identifier).","Associer les directions concernées.","Vérifier les éventuelles exceptions (obligation légale de conservation, droits des tiers)."]],
-    ["h2","4. Réponse"],["ul",["Répondre dans un délai d'un mois, prolongeable de deux mois si la demande est complexe, en prévenant la personne dans le premier mois.","Répondre gratuitement, de façon claire, dans un format accessible.","En cas de refus, le motiver et rappeler la possibilité de saisir la CNIL."]],
-    ["h2","5. Archivage"],["p","Conserver la demande, la réponse et la preuve d'envoi dans Égide (pièces justificatives) pendant la durée prévue au registre."],
-    ["h2","Délais à retenir"],["ul",["Accès, rectification, effacement, limitation, portabilité, opposition : un mois.","Prolongation : deux mois supplémentaires, avec information motivée dans le premier mois."]]];
+  return [["h1","Procédure de traitement des demandes d'exercice des droits"],ver(o),
+    ["p","Toute personne dont nous traitons les données (salarié, candidat, client, prospect, fournisseur) peut exercer les droits prévus aux articles 15 à 22 du RGPD. Cette procédure garantit une réponse complète, dans les délais, et la preuve de cette réponse."],
+    ["h2","1. Réception"],["ul",["Une demande peut arriver par tout canal : e-mail, courrier, formulaire, oral, réseaux sociaux. Elle n'a pas à être motivée ni à citer le RGPD.","Toute personne qui la reçoit la transmet le jour même au DPO.",`Point de contact unique : ${o.dpoMail}.`,"Le DPO l'enregistre dans Égide (module Demandes de droits) : la date de réception fait courir le délai."]],
+    ["h2","2. Vérification"],["ul",["Vérifier l'identité seulement en cas de doute raisonnable, sans exiger plus que nécessaire ; le justificatif est supprimé après vérification.","Demande pour un tiers : exiger un mandat et une pièce d'identité de la personne concernée.","Demande imprécise : demander des précisions (modèle de courrier dédié) ; le délai court à réception."]],
+    ["h2","3. Instruction, droit par droit"],["kv","Accès (art. 15)","Copie de toutes les données, où qu'elles soient (y compris e-mails), et informations sur le traitement ; occulter les données de tiers."],["kv","Rectification (art. 16)","Corriger et informer les destinataires."],["kv","Effacement (art. 17)","Supprimer partout, y compris chez les sous-traitants, sauf obligation légale de conservation ou défense de droits."],["kv","Limitation (art. 18)","Geler les données le temps d'une vérification."],["kv","Portabilité (art. 20)","Données fournies, sur base du consentement ou du contrat, dans un format structuré (CSV, JSON)."],["kv","Opposition (art. 21)","Absolue pour la prospection ; sinon, examiner les motifs légitimes et impérieux."],
+    ["h2","4. Réponse"],["ul",["Répondre dans un délai d'un mois, prolongeable de deux mois si la demande est complexe, en prévenant la personne dans le premier mois.","Répondre gratuitement, clairement, par le canal utilisé par la personne sauf demande contraire.","Refus ou réponse partielle : le motiver et rappeler les voies de recours (CNIL, juge).","Demande manifestement infondée ou excessive : refus ou frais raisonnables, à justifier."]],
+    ["h2","5. Archivage"],["p","Conserver la demande, la réponse et la preuve d'envoi dans Égide (pièces justificatives) pendant 5 ans, pour pouvoir démontrer le respect de la procédure."]];
+}
+function docPbd(){
+  const o = docOrg();
+  return [["h1","Procédure « protection des données dès la conception »"],ver(o),
+    ["p","Tout nouveau projet, outil, prestataire ou usage de données personnelles est présenté au DPO avant son lancement (article 25 du RGPD). L'objectif : intégrer la conformité au bon moment, quand elle coûte le moins."],
+    ["h2","1. Quand saisir le DPO ?"],["ul",["Achat ou abonnement à un logiciel ou service en ligne traitant des données personnelles.","Nouveau fichier, nouvelle collecte, nouveau formulaire, nouvelle campagne de prospection.","Réutilisation de données existantes pour un nouvel objectif.","Dispositif de contrôle ou de surveillance (badges, vidéo, géolocalisation, outils de suivi).","Projet utilisant de l'intelligence artificielle ou des données sensibles."]],
+    ["h2","2. Les questions à se poser"],["ul",["Quel est l'objectif précis ? Les données sont-elles toutes nécessaires ?","Sur quelle base légale ? Comment les personnes seront-elles informées ?","Qui y aura accès ? Le prestataire présente-t-il des garanties (contrat article 28, hébergement, sécurité) ?","Les données sortent-elles de l'Union européenne ?","Combien de temps les garder, et comment les supprimer ?","Les réglages par défaut sont-ils les plus protecteurs ?"]],
+    ["h2","3. Circuit"],["ul",["Le porteur du projet remplit la fiche de traitement dans Égide (ou la transmet au DPO).","Le DPO rend un avis écrit sous [10 jours ouvrés] : favorable, favorable avec réserves, ou défavorable.","Si le traitement présente un risque élevé, une analyse d'impact est menée avant le lancement.","Le contrat du prestataire intègre les clauses de l'article 28.","La fiche est validée dans le registre avant la mise en service."]],
+    ["h2","4. Responsabilités"],["p","Le porteur du projet reste responsable de la mise en œuvre des recommandations. Le DPO conseille et contrôle ; il n'est pas responsable du projet."]];
+}
+function docAipdProc(){
+  const o = docOrg();
+  return [["h1","Procédure d'analyse d'impact (AIPD)"],ver(o),
+    ["p","L'analyse d'impact relative à la protection des données (article 35 du RGPD) est obligatoire avant tout traitement susceptible d'engendrer un risque élevé pour les droits et libertés des personnes."],
+    ["h2","1. Quand est-elle requise ?"],["ul",["Le traitement figure sur la liste de la CNIL des traitements pour lesquels une AIPD est requise.","Ou il réunit au moins deux des neuf critères du CEPD : évaluation ou notation ; décision automatisée avec effet juridique ; surveillance systématique ; données sensibles ou très personnelles ; grande échelle ; croisement de données ; personnes vulnérables (dont salariés) ; usage innovant ; exclusion du bénéfice d'un droit ou d'un service.","En cas de doute, le DPO tranche et documente sa décision."]],
+    ["h2","2. Qui fait quoi ?"],["kv","Porteur du projet","Mène l'analyse et apporte la description du traitement."],["kv","DPO","Conseille, rend un avis écrit (article 35.2)."],["kv","Service informatique / RSSI","Évalue les risques techniques et les mesures de sécurité."],["kv","Direction","Valide les risques résiduels."],
+    ["h2","3. Contenu"],["ul",["Description du traitement et de ses finalités.","Nécessité et proportionnalité : base légale, minimisation, durées, information, droits.","Risques pour les personnes : accès illégitime, modification non désirée, disparition des données ; gravité et vraisemblance.","Mesures pour réduire les risques et plan d'action."]],
+    ["h2","4. Validation"],["ul",["L'AIPD est validée avant la mise en œuvre, avec l'avis du DPO.","Si un risque élevé résiduel subsiste, la CNIL est consultée avant tout lancement (article 36).","Elle est revue lors de tout changement significatif, et au moins tous les 3 ans."]],
+    ["p","Outil conseillé : le module AIPD d'Égide, ou le logiciel PIA de la CNIL.","note"]];
+}
+function docPurge(){
+  const o = docOrg();
+  return [["h1","Procédure de purge et d'archivage des données"],ver(o),
+    ["p","Les données personnelles ne sont conservées que le temps nécessaire à leur objectif (article 5.1.e du RGPD). Chaque traitement du registre comporte une durée de conservation ; cette procédure organise son application."],
+    ["h2","1. Les trois temps de la donnée"],["kv","Base active","Données utilisées au quotidien par les services, pendant la durée de l'objectif."],["kv","Archivage intermédiaire","Données qui ne servent plus mais doivent être gardées (obligation légale, contentieux possible) : accès restreint à quelques personnes habilitées."],["kv","Suppression","Effacement définitif ou anonymisation irréversible, y compris des copies et sauvegardes à leur rotation."],
+    ["h2","2. Pilotage"],["ul",["Chaque règle de conservation est programmée dans Égide (module Conservation), avec la direction concernée et son correspondant.","Égide prévient le DPO et la direction à l'approche de chaque échéance.","La direction procède à la suppression ou à l'archivage et le confirme dans Égide avec la preuve (capture, export, attestation du prestataire)."]],
+    ["h2","3. Méthodes de suppression"],["ul",["Applications : fonctions de purge ou d'anonymisation ; demander au prestataire une attestation.","Fichiers bureautiques et messagerie : suppression, puis vidage de la corbeille.","Papier : destruction par broyeur ou prestataire de destruction certifié, avec certificat.","Matériel réformé : effacement sécurisé ou destruction physique des supports."]],
+    ["h2","4. Contrôle"],["p","Le DPO vérifie chaque trimestre les échéances en retard et rend compte dans le rapport annuel du nombre de suppressions réalisées."]];
 }
 function docArt28(st){
   const o = docOrg(); const trts = st ? arr(st.traitementIds).map(id=>S.data.traitements.get(id)).filter(Boolean) : [];
   const nom = st?.nom || "[nom du prestataire]";
   return [["h1","Clauses relatives à la protection des données personnelles"],["p",`Annexe au contrat entre ${o.rs} (le responsable du traitement) et ${nom} (le sous-traitant)`,"sub"],
-    ["h2","1. Objet"],["p",`Le sous-traitant est autorisé à traiter, pour le compte du responsable du traitement, les données personnelles nécessaires à la prestation suivante : ${st?.prestation||"[description de la prestation]"}.`],
-    ["h2","2. Description du traitement"],["ul",[`Traitement(s) concerné(s) : ${trts.map(t=>t.nom).join(", ")||"[à préciser]"}.`,`Catégories de données : ${[...new Set(trts.flatMap(t=>arr(t.donnees)))].join(", ")||"[à préciser]"}.`,`Personnes concernées : ${[...new Set(trts.flatMap(t=>arr(t.personnes)))].join(", ")||"[à préciser]"}.`,"Durée : la durée du contrat."]],
-    ["h2","3. Obligations du sous-traitant (article 28.3 du RGPD)"],["ul",["Traiter les données uniquement sur instruction documentée du responsable du traitement, y compris pour les transferts hors de l'Union européenne.","Garantir la confidentialité : les personnes autorisées sont soumises à une obligation de confidentialité.","Mettre en œuvre les mesures de sécurité de l'article 32 (chiffrement, contrôle des accès, sauvegardes, journalisation…).","Ne recruter un autre sous-traitant qu'avec l'autorisation écrite préalable du responsable du traitement, en lui imposant les mêmes obligations.","Aider le responsable du traitement à répondre aux demandes d'exercice des droits des personnes.","Aider le responsable du traitement à garantir la sécurité, à notifier les violations et à réaliser les analyses d'impact.","Au terme de la prestation, supprimer ou restituer toutes les données, selon le choix du responsable du traitement, et en détruire les copies.","Mettre à disposition toutes les informations nécessaires pour démontrer le respect de ces obligations et permettre la réalisation d'audits."]],
-    ["h2","4. Violations de données"],["p","Le sous-traitant notifie au responsable du traitement toute violation de données dans un délai maximal de 48 heures après en avoir pris connaissance, avec les informations utiles à sa notification à la CNIL."],
-    ["h2","5. Localisation"],["p",st?.horsUE?`Les données sont hébergées ou accessibles hors de l'Union européenne (${st?.pays||"[pays]"}). Ce transfert est encadré par : ${st?.garanties||"[clauses contractuelles types ou décision d'adéquation]"}.`:`Les données sont hébergées dans l'Union européenne${st?.pays?" ("+st.pays+")":""}. Tout transfert hors de l'Union européenne requiert l'accord préalable écrit du responsable du traitement.`],
-    ["h2","6. Contacts"],["ul",[`Responsable du traitement : ${o.dpo}`,`Sous-traitant : ${st?.contact||"[nom]"}${st?.contactEmail?" ("+st.contactEmail+")":""}`]],
-    ["p","Fait en deux exemplaires. Signatures des parties :","note"]];
+    ["h2","1. Objet"],["p",`Les présentes clauses définissent les conditions dans lesquelles le sous-traitant traite, pour le compte du responsable du traitement, les données personnelles nécessaires à la prestation suivante : ${st?.prestation||"[description de la prestation]"}, conformément à l'article 28 du RGPD.`],
+    ["h2","2. Description du traitement"],["ul",[`Traitement(s) concerné(s) : ${trts.map(t=>t.nom).join(", ")||"[à préciser]"}.`,`Nature des opérations : [collecte, hébergement, consultation, modification, suppression…].`,`Catégories de données : ${[...new Set(trts.flatMap(t=>arr(t.donnees)))].join(", ")||"[à préciser]"}.`,`Personnes concernées : ${[...new Set(trts.flatMap(t=>arr(t.personnes)))].join(", ")||"[à préciser]"}.`,"Durée : la durée du contrat, augmentée du délai de restitution prévu à l'article 11."]],
+    ["h2","3. Instructions"],["p","Le sous-traitant traite les données uniquement sur instruction documentée du responsable du traitement, y compris pour les transferts hors de l'Union européenne. S'il estime qu'une instruction enfreint la réglementation, il en informe immédiatement le responsable du traitement."],
+    ["h2","4. Confidentialité"],["p","Le sous-traitant veille à ce que les personnes autorisées à traiter les données s'engagent à respecter la confidentialité, reçoivent la formation nécessaire et n'accèdent qu'aux données nécessaires à leur mission."],
+    ["h2","5. Sécurité"],["p","Le sous-traitant met en œuvre les mesures de l'article 32, au minimum : chiffrement des données en transit et au repos, contrôle et journalisation des accès, authentification forte des administrateurs, sauvegardes régulières et testées, plan de continuité, gestion des correctifs de sécurité. La liste des mesures figure en annexe."],
+    ["h2","6. Sous-traitance ultérieure"],["p","Le sous-traitant ne recourt à un autre sous-traitant qu'avec l'autorisation écrite préalable du responsable du traitement. [Option autorisation générale : la liste des sous-traitants ultérieurs figure en annexe ; tout changement est notifié au moins 30 jours à l'avance et le responsable du traitement peut s'y opposer.] Le sous-traitant impose les mêmes obligations à ses sous-traitants et reste pleinement responsable de leur exécution."],
+    ["h2","7. Droits des personnes"],["p","Le sous-traitant aide le responsable du traitement à répondre aux demandes d'exercice des droits. Toute demande reçue directement lui est transmise sans délai, et au plus tard sous 5 jours ouvrés."],
+    ["h2","8. Violations de données"],["p","Le sous-traitant notifie au responsable du traitement toute violation de données dans un délai maximal de 48 heures après en avoir pris connaissance, avec la nature de la violation, les catégories et le nombre approximatif de personnes concernées, les conséquences probables et les mesures prises ou envisagées."],
+    ["h2","9. Assistance"],["p","Le sous-traitant aide le responsable du traitement à garantir le respect des obligations de sécurité, de notification des violations, de réalisation des analyses d'impact et de consultation préalable de la CNIL."],
+    ["h2","10. Localisation et transferts"],["p",st?.horsUE?`Les données sont hébergées ou accessibles hors de l'Union européenne (${st?.pays||"[pays]"}). Ce transfert est encadré par : ${st?.garanties||"[clauses contractuelles types ou décision d'adéquation]"}.`:`Les données sont hébergées dans l'Union européenne${st?.pays?" ("+st.pays+")":""}. Tout transfert ou accès depuis un pays tiers requiert l'accord préalable écrit du responsable du traitement et des garanties appropriées.`],
+    ["h2","11. Fin du contrat"],["p","Au terme de la prestation, le sous-traitant, selon le choix du responsable du traitement, restitue les données dans un format exploitable ou les supprime, ainsi que toutes les copies, dans un délai de [30] jours, et en justifie par écrit, sauf obligation légale de conservation."],
+    ["h2","12. Audits et documentation"],["p","Le sous-traitant met à disposition toutes les informations nécessaires pour démontrer le respect de ses obligations et permet la réalisation d'audits, par le responsable du traitement ou un auditeur mandaté, moyennant un préavis de [15] jours. Il tient un registre des activités de traitement (article 30.2)."],
+    ["h2","13. Contacts"],["ul",[`Responsable du traitement : ${o.dpo}`,`Sous-traitant : ${st?.contact||"[nom]"}${st?.contactEmail?" ("+st.contactEmail+")":""}`]],
+    ["p","Fait en deux exemplaires, le ……………………  Pour le responsable du traitement :  Pour le sous-traitant :","note"]];
+}
+function docArt26(){
+  const o = docOrg();
+  return [["h1","Accord entre responsables conjoints du traitement"],["p",`Entre ${o.rs} et [nom du partenaire] · article 26 du RGPD`,"sub"],
+    ["h2","1. Objet"],["p","Les parties déterminent conjointement les finalités et les moyens du traitement suivant : [description, par exemple « organisation d'un événement commun », « programme de fidélité partagé »]. Le présent accord répartit leurs obligations."],
+    ["h2","2. Description du traitement"],["ul",["Finalités : [à préciser].","Catégories de données et de personnes : [à préciser].","Base légale : [à préciser].","Durée de conservation : [à préciser]."]],
+    ["h2","3. Répartition des obligations"],["kv","Information des personnes",`[${o.rs} / le partenaire] rédige et diffuse la mention d'information commune.`],["kv","Point de contact des personnes",`${o.dpoMail}, qui transmet à l'autre partie les demandes la concernant sous 5 jours ouvrés.`],["kv","Sécurité","Chaque partie sécurise les données qu'elle héberge ; [préciser l'outil commun et son administrateur]."],["kv","Sous-traitants","Chaque partie encadre ses propres prestataires (article 28)."],["kv","Violations","La partie qui découvre une violation prévient l'autre sous 24 heures ; [partie] notifie la CNIL."],["kv","Registre","Chaque partie inscrit le traitement dans son registre."],
+    ["h2","4. Information des personnes"],["p","Les grandes lignes du présent accord sont mises à la disposition des personnes concernées (article 26.2). Celles-ci peuvent exercer leurs droits auprès de chacune des parties."],
+    ["h2","5. Durée"],["p","Le présent accord prend effet à sa signature et dure autant que le traitement commun."],
+    ["p","Fait en deux exemplaires, le ……………………","note"]];
+}
+function docClauseTravail(){
+  const o = docOrg();
+  return [["h1","Clause « protection des données personnelles » du contrat de travail"],ver(o),
+    ["h2","Article [X] · Données personnelles du salarié"],["p",`${o.rs} traite les données personnelles du salarié nécessaires à la gestion de la relation de travail (administration du personnel, paie, gestion des carrières, formation, outils informatiques, sécurité des locaux), sur le fondement de l'exécution du contrat, de ses obligations légales et de son intérêt légitime. Ces données sont destinées aux services habilités et aux organismes et prestataires qui interviennent dans ces domaines. Le salarié est informé du détail de ces traitements par la note d'information des salariés, remise avec le présent contrat. Il dispose des droits d'accès, de rectification, d'effacement, de limitation et, selon les cas, d'opposition et de portabilité, qu'il exerce auprès du DPO (${o.dpoMail}), ainsi que du droit de saisir la CNIL.`],
+    ["h2","Article [Y] · Confidentialité et protection des données"],["p","Le salarié s'engage à traiter les données personnelles auxquelles il a accès dans le cadre de ses fonctions conformément aux instructions de l'employeur, à la charte informatique et à la réglementation, à ne les utiliser que pour les besoins de ses missions, à ne pas les divulguer à des personnes non autorisées et à signaler sans délai tout incident. Cette obligation demeure après la fin du contrat."]];
+}
+function docPolitique(){
+  const o = docOrg(); const trt = items("traitements").filter(t=>t.statut!=="archive");
+  const dirs = [...new Set(trt.map(t=>t.service).filter(Boolean))];
+  return [["h1","Politique de protection des données personnelles"],ver(o),
+    ["h2","1. Notre engagement"],["p",`${o.rs} s'engage à traiter les données personnelles de ses salariés, candidats, clients, prospects, fournisseurs et partenaires dans le respect du règlement général sur la protection des données (RGPD) et de la loi Informatique et Libertés. Cette politique, approuvée par la direction générale, s'applique à toutes les directions et à toute personne agissant pour le compte de l'entreprise.`],
+    ["h2","2. Organisation et responsabilités"],["kv","Direction générale",`${o.rep} : porte la politique, arbitre et donne les moyens.`],["kv","Délégué à la protection des données",`${o.dpo} : informe, conseille, contrôle, coopère avec la CNIL ; il dispose de l'indépendance et des moyens prévus aux articles 38 et 39.`],["kv","Directions",`Chaque direction${dirs.length?" ("+dirs.length+" concernées)":""} désigne un correspondant qui tient à jour ses traitements et applique les durées de conservation.`],["kv","Managers","Veillent à l'application des règles dans leurs équipes et signalent les nouveaux projets."],["kv","Chaque salarié","Applique la charte informatique et signale tout incident."],
+    ["h2","3. Nos principes"],["ul",["Licéité, loyauté et transparence : chaque traitement repose sur une base légale et les personnes sont informées.","Limitation des finalités : les données ne sont pas réutilisées pour un objectif incompatible.","Minimisation : seules les données nécessaires sont collectées.","Exactitude : les données sont tenues à jour.","Conservation limitée : chaque donnée a une durée définie, au terme de laquelle elle est supprimée ou archivée.","Sécurité et confidentialité : des mesures techniques et organisationnelles adaptées protègent les données.","Responsabilité : l'entreprise documente sa conformité pour pouvoir la démontrer."]],
+    ["h2","4. Le registre des traitements"],["p",`L'entreprise tient un registre de ses ${trt.length} traitements (article 30 du RGPD) dans l'outil Égide. Il est revu chaque année avec les correspondants des directions.`],
+    ["h2","5. Protection dès la conception"],["p","Tout nouveau projet, outil ou prestataire traitant des données personnelles est présenté au DPO en amont. Une analyse d'impact est menée lorsque le traitement présente un risque élevé."],
+    ["h2","6. Prestataires et transferts"],["p","Les prestataires sont choisis pour leurs garanties de sécurité et signent des clauses conformes à l'article 28. Les transferts hors de l'Union européenne sont encadrés par une décision d'adéquation ou des clauses contractuelles types, après analyse."],
+    ["h2","7. Sécurité"],["ul",["Gestion des habilitations selon le besoin d'en connaître, revue annuelle des accès.","Authentification forte, chiffrement des postes nomades et des échanges sensibles.","Sauvegardes, journalisation, mises à jour de sécurité.","Charte informatique annexée au règlement intérieur."]],
+    ["h2","8. Droits des personnes"],["p",`Toute personne peut exercer ses droits auprès de ${o.dpoMail}. Les demandes sont traitées dans un délai d'un mois, selon la procédure dédiée.`],
+    ["h2","9. Violations de données"],["p","Tout incident est signalé sans délai. Les violations présentant un risque sont notifiées à la CNIL dans les 72 heures et, en cas de risque élevé, les personnes concernées sont informées."],
+    ["h2","10. Sensibilisation"],["p","Les salariés sont sensibilisés à leur arrivée puis régulièrement ; les équipes les plus exposées (RH, commercial, informatique) suivent des modules spécifiques."],
+    ["h2","11. Contrôle et amélioration"],["p","Un rapport annuel est présenté à la direction générale avec une feuille de route. Cette politique est revue chaque année. Son non-respect peut donner lieu à des mesures disciplinaires."]];
+}
+function docLettreDpo(){
+  const o = docOrg();
+  return [["h1","Lettre de désignation et de mission du délégué à la protection des données"],ver(o),
+    ["p",`${o.rs}, représentée par ${o.rep}, désigne ${o.dpoNom} en qualité de délégué à la protection des données (DPO), conformément aux articles 37 à 39 du RGPD, à compter du ……………………`],
+    ["h2","Missions (article 39)"],["ul",["Informer et conseiller la direction et les salariés sur leurs obligations.","Contrôler le respect du RGPD et des règles internes : registre, répartition des responsabilités, sensibilisation, audits.","Conseiller sur les analyses d'impact et en vérifier l'exécution.","Coopérer avec la CNIL et être son point de contact.","Être le point de contact des personnes concernées pour l'exercice de leurs droits."]],
+    ["h2","Position et indépendance (article 38)"],["ul",["Le DPO est associé, en temps utile, à toutes les questions relatives à la protection des données.","Il ne reçoit aucune instruction pour l'exercice de ses missions.","Il ne peut être relevé de ses fonctions ni pénalisé pour l'exercice de ses missions.","Il rend compte directement à la direction générale, au moins une fois par an (rapport annuel).","Ses autres fonctions ne doivent pas entraîner de conflit d'intérêts."]],
+    ["h2","Moyens"],["ul",["Temps consacré : [x] % de son temps de travail.","Budget et outils : [formation annuelle, outil Égide, documentation, conseil extérieur si besoin].","Accès aux données, aux traitements et aux informations nécessaires à ses missions.","Appui des correspondants des directions et du service informatique."]],
+    ["h2","Formalités"],["p","La désignation est notifiée à la CNIL via son téléservice. Les coordonnées du DPO sont publiées (site internet, mentions d'information, intranet)."],
+    ["p","Fait à ……………………, le ……………………  Le représentant légal :  Le DPO :","note"]];
 }
 function docBuild(kind, id){
-  if (kind==="mention"){ const t=S.data.traitements.get(id) || items("traitements")[0]; return t ? {title:`Mention d'information – ${t.nom||""}`, blocks:docMention(t)} : null; }
-  if (kind==="art28"){ const st=S.data.soustraitants.get(id); return {title:`Clauses article 28${st?" – "+st.nom:""}`, blocks:docArt28(st)}; }
-  const f = {salaries:docSalaries, video:docVideo, politique:docPolitique, violation:docViolation, droits:docDroits}[kind];
-  return f ? {title:DOC_KINDS[kind].t, blocks:f()} : null;
+  const one = (title, b) => ({title, blocks:b});
+  if (kind==="mention" || kind==="encart"){ const t=S.data.traitements.get(id) || items("traitements")[0]; return t ? one(`${DOC_KINDS[kind].t} – ${t.nom||""}`, kind==="mention"?docMention(t):docEncart(t)) : null; }
+  if (kind==="art28"){ const st=S.data.soustraitants.get(id); return one(`Clauses article 28${st?" – "+st.nom:""}`, docArt28(st)); }
+  const per = {rep_acces:docRepAcces, rep_effacement:docRepEffacement, rep_precision:docRepPrecision, rep_prolong:docRepProlong, vio_personnes:docVioPersonnes}[kind];
+  if (per) return one(DOC_KINDS[kind].t, per(id));
+  const f = {site:docSite, cookies:docCookies, candidats:docCandidats, video:docVideo, image:docImage, salaries:docSalaries, charte:docCharte, confid:docConfid, reflexe:docReflexe, violation:docViolation, droits:docDroits, pbd:docPbd, aipdproc:docAipdProc, purge:docPurge, art26:docArt26, clausetravail:docClauseTravail, politique:docPolitique, lettredpo:docLettreDpo}[kind];
+  return f ? one(DOC_KINDS[kind].t, f()) : null;
 }
-function docHTML(blocks){ return blocks.map(b=>{ const [k,t,c]=b; if (k==="h1") return `<h1>${esc(t)}</h1>`; if (k==="h2") return `<h2>${esc(t)}</h2>`; if (k==="h3") return `<h3>${esc(t)}</h3>`; if (k==="ul") return `<ul>${t.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`; if (k==="kv") return `<p><b>${esc(t)} :</b> ${esc(c)}</p>`; return `<p class="${c||""}">${esc(t)}</p>`; }).join(""); }
-function docText(blocks){ return blocks.map(b=>{ const [k,t,c]=b; if (k==="h1") return t.toUpperCase()+"\n"; if (k==="h2") return "\n"+t; if (k==="h3") return "\n"+t; if (k==="ul") return t.map(x=>"• "+x).join("\n"); if (k==="kv") return `${t} : ${c}`; return t; }).join("\n"); }
-const docDocx = blocks => docxFrom(blocks.flatMap(b=>b[0]==="ul" ? b[1].map(x=>["p","•  "+x]) : b[0]==="p" ? [["p",b[1]]] : [b]));
+
+/* ---- Texte libre (Markdown simple) <-> blocs ---- */
+function blocksToMd(blocks){ return blocks.map(([k,t,c])=> k==="h1"?`# ${t}`:k==="h2"?`## ${t}`:k==="h3"?`### ${t}`:k==="ul"?t.map(x=>`- ${x}`).join("\n"):k==="kv"?`**${t} :** ${c}`:c==="sub"?`*${t}*`:t).join("\n\n"); }
+function mdToBlocks(md){
+  const B = []; let list = null; const flush = () => { if (list){ B.push(["ul",list]); list=null; } };
+  String(md||"").replace(/\r/g,"").split("\n").forEach(line=>{
+    const l = line.trimEnd(); const m = l.match(/^(#{1,3})\s+(.*)$/);
+    if (!l.trim()){ flush(); return; }
+    if (m){ flush(); B.push([["","h1","h2","h3"][m[1].length], m[2].replace(/\*\*/g,"")]); return; }
+    const li = l.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/); if (li){ (list||(list=[])).push(li[1].replace(/\*\*/g,"")); return; }
+    flush();
+    const kv = l.match(/^\*\*([^*]{1,60}?)\s*:?\*\*\s*:?\s*(.*)$/); if (kv && kv[2]){ B.push(["kv",kv[1].replace(/\s*:$/,""),kv[2]]); return; }
+    const last = B[B.length-1]; const txt = l.replace(/^\*(.*)\*$/,"$1").replace(/\*\*/g,"");
+    if (last && last[0]==="p" && !last[2] && !/^\*.*\*$/.test(l)) last[1] += " " + txt; else B.push(["p",txt, /^\*.*\*$/.test(l)?"sub":undefined]);
+  });
+  flush(); return B;
+}
+
+/* ---- Générateur sur mesure ---- */
+const GEN_TYPES = ["Courrier ou e-mail","Note interne","Procédure","Politique ou charte","Clause contractuelle","Mention d'information","Compte rendu ou avis du DPO","Support de sensibilisation","Autre"];
+function genPrompt(g){
+  const o = docOrg();
+  const ctx = g.useReg ? items("traitements").filter(t=>t.statut!=="archive" && (!g.trt || t._id===g.trt)).slice(0, g.trt?1:25).map(t=>`- ${t.nom} (direction : ${t.service||"?"}) : finalités et bases légales ${finText(t)||"?"} ; données ${[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", ")||"?"} ; destinataires ${[t.destinatairesInternes,t.destinatairesExternes,t.sousTraitants].filter(Boolean).join(", ")||"?"} ; conservation ${t.conservation||"?"}`).join("\n") : "";
+  return `Tu es juriste expert en protection des données personnelles (RGPD, loi Informatique et Libertés, doctrine de la CNIL). Tu rédiges, pour le délégué à la protection des données de l'entreprise ${o.rs}${S.org.secteur?" (secteur : "+S.org.secteur+")":""}${S.org.effectif?", "+S.org.effectif:""}, un document prêt à l'emploi.
+
+TYPE DE DOCUMENT : ${g.type||"Autre"}
+DESTINATAIRE : ${g.dest||"non précisé"}
+OBJET : ${g.objet||"non précisé"}
+TON : ${g.ton||"professionnel et clair"}
+LONGUEUR : ${g.len==="court"?"courte (une page au plus)":g.len==="long"?"détaillée (plusieurs pages, sections complètes)":"standard (une à deux pages)"}
+INDICATIONS DU DPO :
+${g.ind||"(aucune)"}
+
+INFORMATIONS SUR L'ENTREPRISE : ${o.rs}, ${o.adr}${o.siren?", SIREN "+o.siren:""} ; représentant légal : ${o.rep} ; DPO : ${o.dpo}.
+${ctx?`EXTRAIT DU REGISTRE DES TRAITEMENTS :\n${ctx}\n`:""}
+RÈGLES :
+- Exactitude juridique : cite les articles pertinents (RGPD, Code du travail, CPCE…) seulement si tu en es certain.
+- N'invente aucun fait, chiffre, date ou nom : écris [à compléter] à la place.
+- Rédige directement le document, sans préambule ni commentaire avant ou après.
+- Format : Markdown simple uniquement. « # » pour le titre, « ## » pour les sections, « ### » pour les sous-sections, « - » pour les listes, « **Libellé :** valeur » pour les champs. Pas de tableau, pas de lien, pas d'émoji.
+- Écris en français, phrases courtes, vocabulaire accessible au destinataire.`;
+}
+function genInit(){ return S.gen || (S.gen = {type:GEN_TYPES[0], dest:"", objet:"", ton:"Professionnel et clair", len:"std", ind:"", useReg:true, trt:"", busy:false, err:""}); }
+async function genRun(){
+  const g = genInit(); g.err = "";
+  if (!g.objet.trim() && !g.ind.trim()){ g.err = "Indiquez au moins l'objet ou quelques indications."; render(); return; }
+  const prompt = genPrompt(g); const title = g.objet.trim() || g.type;
+  if (S.sample){
+    g.busy = true; g.live = ""; render();
+    try{ const r = await S.sample([{role:"user", content:prompt}], {cache:false, onText:({text})=>{ g.live = text; const el=$("#gen-live"); if (el) el.innerHTML = docHTML(mdToBlocks(text)); }}); docSetCustom({titre:title, md:r.text, type:g.type, source:"Claude"}); }
+    catch(e){ g.err = e?.code==="not_granted" ? "Vous n'avez pas autorisé Égide à utiliser Claude." : e?.code==="rate_limited" ? "Trop de demandes rapprochées : réessayez dans un moment." : "La rédaction n'a pas abouti. Réessayez."; if (["not_granted","sampling_disabled","not_declared"].includes(e?.code)) S.sample=null; }
+    g.busy = false; g.live = ""; render(); return;
+  }
+  if (LOCAL){ copOpen("doc", "Rédiger le document avec Copilot", prompt, "Copilot rédige le document : copiez toute sa réponse puis collez-la ci-dessous.", async raw=>{ docSetCustom({titre:title, md:String(raw).replace(/^```(?:markdown)?\s*|\s*```$/g,""), type:g.type, source:"Copilot"}); render(); }); return; }
+  g.err = "La rédaction automatique n'est pas disponible ici."; render();
+}
+function docSetCustom(d){ S.docv = {kind:"custom", id:"", draft:{titre:d.titre, md:d.md, type:d.type, source:d.source}, editing:false}; window.scrollTo(0,0); }
+async function docSaveCustom(){
+  const v = S.docv, d = v.draft; if (!d || !W() || !S.db) return;
+  const ref = v.id ? S.db.collection("documents").doc(v.id) : S.db.collection("documents").doc();
+  const now = new Date().toISOString();
+  await ref.set({titre:d.titre||"Document", md:d.md||"", type:d.type||"", source:d.source||"", majLe:now, creeLe:(S.docs?.get(ref.id)?.creeLe)||now});
+  v.id = ref.id; toast("Document enregistré dans « Mes documents »");
+}
+function vDocGen(){
+  const g = genInit(), trts = items("traitements").filter(t=>t.statut!=="archive");
+  const engine = S.sample ? "Claude" : LOCAL ? "Copilot" : null;
+  return `<section class="panel gen">
+    <div class="panel-h"><h2>Rédiger un document sur mesure</h2><span class="pill t-neutral">${engine?`Rédigé par ${engine}`:"Indisponible ici"}</span></div>
+    <div class="panel-b">
+      <p class="muted" style="margin:0 0 12px;max-width:80ch">Décrivez le document voulu : ${engine||"l'assistant"} le rédige en tenant compte de votre entreprise${trts.length?" et, si vous le souhaitez, de votre registre":""}. Vous pourrez ensuite le modifier, l'enregistrer et l'exporter en Word.</p>
+      <div class="fields">
+        <div class="f"><label for="gen-type">Type de document</label><select id="gen-type" data-gen="type">${GEN_TYPES.map(x=>`<option ${g.type===x?"selected":""}>${esc(x)}</option>`).join("")}</select></div>
+        <div class="f"><label for="gen-dest">Destinataire</label><input type="text" id="gen-dest" data-gen="dest" value="${esc(g.dest)}" placeholder="Ex. : les managers, un client, la CNIL, le CSE"></div>
+        <div class="f full"><label for="gen-objet">Objet</label><input type="text" id="gen-objet" data-gen="objet" value="${esc(g.objet)}" placeholder="Ex. : note sur l'usage de l'IA générative au travail"></div>
+        <div class="f full"><label for="gen-ind">Vos indications</label><textarea id="gen-ind" data-gen="ind" rows="5" placeholder="Ce qui doit y figurer, le contexte, les points sensibles, les décisions prises… Ex. : interdire la saisie de données clients dans les outils publics, autoriser Copilot entreprise, rappeler qui contacter.">${esc(g.ind)}</textarea></div>
+        <div class="f"><label for="gen-ton">Ton</label><select id="gen-ton" data-gen="ton">${["Professionnel et clair","Pédagogique","Formel et juridique","Ferme"].map(x=>`<option ${g.ton===x?"selected":""}>${x}</option>`).join("")}</select></div>
+        <div class="f"><label for="gen-len">Longueur</label><select id="gen-len" data-gen="len"><option value="court" ${g.len==="court"?"selected":""}>Courte</option><option value="std" ${g.len==="std"?"selected":""}>Standard</option><option value="long" ${g.len==="long"?"selected":""}>Détaillée</option></select></div>
+        <div class="f full"><label class="chk"><input type="checkbox" data-gen="useReg" ${g.useReg?"checked":""}> S'appuyer sur le registre</label>${g.useReg?`<select id="gen-trt" data-gen="trt" aria-label="Traitement" style="margin-top:6px"><option value="">Tous les traitements (résumé)</option>${trts.map(t=>`<option value="${t._id}" ${g.trt===t._id?"selected":""}>${esc(t.ref)} · ${esc(t.nom)}</option>`).join("")}</select>`:""}</div>
+      </div>
+      ${g.err?`<div class="notice warn" role="alert" style="margin-top:10px">${I.alert}<div>${esc(g.err)}</div></div>`:""}
+      <div class="actions" style="margin-top:12px"><button class="btn primary" data-action="gen-run" ${g.busy||!engine?"disabled":""}>${I.spark}${g.busy?"Rédaction en cours…":"Rédiger le document"}</button></div>
+      ${g.busy?`<article class="docpaper" id="gen-live" style="margin-top:14px">${g.live?docHTML(mdToBlocks(g.live)):'<p class="muted">Rédaction en cours…</p>'}</article>`:""}
+    </div></section>`;
+}
 function vDocs(){
   const D = S.docv || (S.docv = {kind:"mention", id:items("traitements")[0]?._id||""});
-  const r = docBuild(D.kind, D.id);
+  const cat = D.kind==="custom" || D.kind==="gen" ? "mine" : (DOC_KINDS[D.kind]?.cat || "info");
+  const tab = S.docCat || cat;
   const trts = items("traitements").filter(t=>t.statut!=="archive"), sts = items("soustraitants");
+  const mine = [...(S.docs||new Map()).values()].sort((a,b)=>(b.majLe||"").localeCompare(a.majLe||""));
+  let r = null, isCustom = D.kind==="custom";
+  if (isCustom) r = {title:D.draft?.titre||"Document", blocks:mdToBlocks(D.draft?.md||"")};
+  else if (D.kind!=="gen") r = docBuild(D.kind, D.id);
+  const K = DOC_KINDS[D.kind] || {};
+  const sel = K.per===true ? `<select id="doc-sel" aria-label="Traitement">${trts.map(t=>`<option value="${t._id}" ${t._id===D.id?"selected":""}>${esc(t.ref)} · ${esc(t.nom)}</option>`).join("")}</select>`
+    : K.per==="st" ? `<select id="doc-sel" aria-label="Sous-traitant"><option value="">Modèle vierge</option>${sts.map(t=>`<option value="${t._id}" ${t._id===D.id?"selected":""}>${esc(t.nom)}</option>`).join("")}</select>`
+    : K.per==="dem" ? `<select id="doc-sel" aria-label="Demande"><option value="">Modèle vierge</option>${items("demandes").map(t=>`<option value="${t._id}" ${t._id===D.id?"selected":""}>${esc(t.ref)} · ${esc(t.demandeur||"")}</option>`).join("")}</select>`
+    : K.per==="vio" ? `<select id="doc-sel" aria-label="Violation"><option value="">Modèle vierge</option>${items("violations").map(t=>`<option value="${t._id}" ${t._id===D.id?"selected":""}>${esc(t.ref)} · ${esc(t.titre||"")}</option>`).join("")}</select>`
+    : isCustom ? `<input type="text" id="doc-titre" aria-label="Titre du document" value="${esc(D.draft?.titre||"")}" ${D.editing?"":"readonly"} style="min-width:240px">` : `<span class="muted">${esc(K.d||"")}</span>`;
   return `${roBanner()}
-  <div class="head"><div class="phead"><span class="pico" style="--c:#4A6B8A">${I.report}</span><div><h1>Modèles de documents</h1><p class="psub">Rédigés automatiquement à partir de votre registre et de l'organisation</p></div></div></div>
+  <div class="head"><div class="phead"><span class="pico" style="--c:#4A6B8A">${I.report}</span><div><h1>Modèles de documents</h1><p class="psub">${Object.keys(DOC_KINDS).length} modèles rédigés à partir de votre registre, et des documents sur mesure</p></div></div></div>
   ${!S.org.raisonSociale||(!S.org.dpoNom)?`<div class="notice warn">${I.alert}<div>Complétez la raison sociale et le contact du DPO dans la page <button class="lnk" data-action="nav" data-view="org">Organisation</button> : ils figurent dans chaque document.</div></div>`:""}
-  <div class="docgrid">${Object.entries(DOC_KINDS).map(([k,d])=>`<button class="doccard ${D.kind===k?"on":""}" data-action="doc-kind" data-k="${k}"><span class="e">${d.e}</span><b>${esc(d.t)}</b><span>${esc(d.d)}</span></button>`).join("")}</div>
-  <section class="docview">
+  <div class="doctabs" role="tablist">${DOC_CATS.map(([k,l])=>`<button role="tab" aria-selected="${tab===k}" class="${tab===k?"on":""}" data-action="doc-cat" data-k="${k}">${esc(l)}<span>${k==="mine"?mine.length||"":Object.values(DOC_KINDS).filter(d=>d.cat===k).length}</span></button>`).join("")}</div>
+  ${tab==="mine" ? `${vDocGen()}${mine.length?`<div class="docgrid">${mine.map(d=>`<button class="doccard ${isCustom&&D.id===d._id?"on":""}" data-action="doc-mine" data-id="${d._id}"><span class="e">📝</span><b>${esc(d.titre||"Document")}</b><span>${esc(d.type||"")}${d.source?" · "+esc(d.source):""} · ${fmtD((d.majLe||"").slice(0,10))}</span></button>`).join("")}</div>`:""}`
+   : `<div class="docgrid">${Object.entries(DOC_KINDS).filter(([,d])=>d.cat===tab).map(([k,d])=>`<button class="doccard ${D.kind===k?"on":""}" data-action="doc-kind" data-k="${k}"><span class="e">${d.e}</span><b>${esc(d.t)}</b><span>${esc(d.d)}</span></button>`).join("")}</div>`}
+  ${r ? `<section class="docview" id="docview">
     <div class="docbar">
-      ${DOC_KINDS[D.kind].per===true?`<select id="doc-sel" aria-label="Traitement">${trts.map(t=>`<option value="${t._id}" ${t._id===D.id?"selected":""}>${esc(t.ref)} · ${esc(t.nom)}</option>`).join("")}</select>`:DOC_KINDS[D.kind].per==="st"?`<select id="doc-sel" aria-label="Sous-traitant"><option value="">Modèle vierge</option>${sts.map(t=>`<option value="${t._id}" ${t._id===D.id?"selected":""}>${esc(t.nom)}</option>`).join("")}</select>`:`<span class="muted">${esc(DOC_KINDS[D.kind].d)}</span>`}
+      ${sel}
       <span style="flex:1"></span>
+      ${isCustom ? (D.editing ? `<button class="btn sm primary" data-action="doc-edit-done">${I.check}Terminer</button>` : `<button class="btn sm" data-action="doc-edit">${I.edit||""}Modifier</button>`) : `<button class="btn sm" data-action="doc-customize" title="Copier ce modèle dans « Mes documents » pour le modifier librement">${I.edit||""}Personnaliser</button>`}
+      ${isCustom && W() ? `<button class="btn sm ${D.id?"":"primary"}" data-action="doc-save">${I.check}${D.id?"Enregistrer":"Enregistrer dans Mes documents"}</button>` : ""}
       <button class="btn sm" data-action="doc-copy">Copier le texte</button>
       <button class="btn sm" data-action="doc-word" ${S.dl?"":"disabled"}>${I.dl}Word</button>
       ${pjCanUp()?`<button class="btn sm mod" data-action="doc-pj">${I.clip}Ranger dans les pièces</button>`:""}
+      ${isCustom && D.id && W() ? `<button class="btn sm ghost" data-action="doc-del" aria-label="Supprimer">${I.close}</button>` : ""}
     </div>
-    <article class="docpaper">${r?docHTML(r.blocks):`<p class="muted">Ajoutez d'abord un traitement au registre.</p>`}</article>
+    ${isCustom && D.editing ? `<div class="docedit"><textarea id="doc-md" spellcheck="true" aria-label="Texte du document">${esc(D.draft?.md||"")}</textarea><article class="docpaper" id="doc-prev">${docHTML(r.blocks)}</article></div><p class="muted nnote">Mise en forme : « # Titre », « ## Section », « - élément de liste », « **Libellé :** valeur ». L'aperçu se met à jour pendant la saisie.</p>`
+      : `<article class="docpaper">${docHTML(r.blocks)}</article>`}
     <p class="muted nnote">Modèles à relire et adapter : les passages entre crochets sont à compléter. Ils ne remplacent pas un conseil juridique pour les situations particulières.</p>
-  </section>`;
+  </section>` : (tab!=="mine" ? `<p class="muted">Ajoutez d'abord un traitement au registre.</p>` : "")}`;
 }
+const docCur = () => { const D=S.docv; if (!D) return null; return D.kind==="custom" ? {title:D.draft?.titre||"Document", blocks:mdToBlocks(D.draft?.md||"")} : docBuild(D.kind, D.id); };
+
+function docHTML(blocks){ return blocks.map(b=>{ const [k,t,c]=b; if (k==="h1") return `<h1>${esc(t)}</h1>`; if (k==="h2") return `<h2>${esc(t)}</h2>`; if (k==="h3") return `<h3>${esc(t)}</h3>`; if (k==="ul") return `<ul>${t.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`; if (k==="kv") return `<p><b>${esc(t)} :</b> ${esc(c)}</p>`; return `<p class="${c||""}">${esc(t)}</p>`; }).join(""); }
+function docText(blocks){ return blocks.map(b=>{ const [k,t,c]=b; if (k==="h1") return t.toUpperCase()+"\n"; if (k==="h2") return "\n"+t; if (k==="h3") return "\n"+t; if (k==="ul") return t.map(x=>"• "+x).join("\n"); if (k==="kv") return `${t} : ${c}`; return t; }).join("\n"); }
+const docDocx = blocks => docxFrom(blocks.flatMap(b=>b[0]==="ul" ? b[1].map(x=>["p","•  "+x]) : b[0]==="p" ? [["p",b[1]]] : [b]));
 
 /* ================= Correspondants et revue annuelle ================= */
 const APP_URL = "https://claude.ai/artifact/5bb4FgntY4zVFTMyjkcanC";
@@ -6681,7 +7206,7 @@ const chatSave = () => { try{ localStorage.setItem("egide-chat", JSON.stringify(
 const CHAT_SUGG = ["Que dois-je faire en priorité cette semaine ?","Quels traitements contiennent des données de santé ?","Résume l'état de notre conformité pour la direction","Comment répondre à une demande d'effacement d'un ancien salarié ?","Quels sous-traitants hébergent des données hors de l'Union européenne ?","Combien de temps garder les CV des candidats ?"];
 function findByRef(ref){ const r=String(ref||"").trim().toUpperCase(); for (const m of MOD_KEYS){ const t=items(m).find(x=>String(x.ref||"").toUpperCase()===r); if (t) return [m,t]; } return null; }
 function ficheText(m, t){
-  if (m==="traitements") return {ref:t.ref, module:"traitement", nom:t.nom, statut:optL(STATUTS,t.statut), direction:t.service, pilote:t.pilote, finalites:t.finalites, baseLegale:[baseOf(t.baseLegale)?.l,t.baseLegaleDetail].filter(Boolean).join(" — "), personnes:[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(", "), donnees:[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", "), sensibles:arr(t.sensibles).join(", "), destinatairesInternes:t.destinatairesInternes, destinatairesExternes:t.destinatairesExternes, sousTraitants:t.sousTraitants, horsUE:t.transfertHorsUE?`${t.transfertPays} (${t.transfertGaranties||"garanties à préciser"})`:"non", conservation:t.conservation, archivage:t.conservationArchivage, securite:arr(t.securite).join(", "), aipd:AIPD_FLAG[t.aipd], information:infoText(t), prochaineRevue:t.prochaineRevue, completude:completeness(t)+" %", points:MODS.traitements.alerts(t).map(a=>a.t)};
+  if (m==="traitements") return {ref:t.ref, module:"traitement", nom:t.nom, statut:optL(STATUTS,t.statut), direction:t.service, pilote:t.pilote, finalites:finText(t), baseLegale:[basesLabel(t),t.baseLegaleDetail].filter(Boolean).join(" — "), personnes:[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(", "), donnees:[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", "), sensibles:arr(t.sensibles).join(", "), destinatairesInternes:t.destinatairesInternes, destinatairesExternes:t.destinatairesExternes, sousTraitants:t.sousTraitants, horsUE:t.transfertHorsUE?`${t.transfertPays} (${t.transfertGaranties||"garanties à préciser"})`:"non", conservation:t.conservation, archivage:t.conservationArchivage, securite:arr(t.securite).join(", "), aipd:AIPD_FLAG[t.aipd], information:infoText(t), prochaineRevue:t.prochaineRevue, completude:completeness(t)+" %", points:MODS.traitements.alerts(t).map(a=>a.t)};
   const o = {ref:t.ref, module:MODS[m].single, titre:titleOf(m,t)}; MODS[m].sections.forEach(s=>s.fields.forEach(f=>{ if (f.t==="heading") return; const v=plainText(m,f,t); if (v && String(v).trim()) o[f.l]=String(v).slice(0,600); })); o.points = MODS[m].alerts(t).map(a=>a.t); return o;
 }
 function chatTools(){
@@ -6992,7 +7517,7 @@ const csvCell = v => { const s = String(v ?? "").replace(/\r?\n/g," "); return /
 function exportCSVMod(){
   let cols;
   if (S.mod==="traitements"){
-    cols = [["Référence","ref"],["Nom","nom"],["Statut",t=>optL(STATUTS,t.statut)],["Direction","service"],["Pilote","pilote"],["Finalités","finalites"],["Base légale",t=>baseOf(t.baseLegale)?.l||""],["Justification","baseLegaleDetail"],["Personnes concernées",t=>[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(" | ")],["Catégories de données",t=>[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(" | ")],["Données sensibles",t=>arr(t.sensibles).join(" | ")],["Exception art. 9.2","sensiblesJustif"],["Destinataires internes","destinatairesInternes"],["Destinataires externes","destinatairesExternes"],["Sous-traitants","sousTraitants"],["Transfert hors UE",t=>t.transfertHorsUE?"Oui":"Non"],["Pays","transfertPays"],["Garanties","transfertGaranties"],["Conservation active","conservation"],["Archivage","conservationArchivage"],["Mesures de sécurité",t=>[...arr(t.securite),t.securiteAutres].filter(Boolean).join(" | ")],["AIPD",t=>AIPD_FLAG[t.aipd]||""],["Dernière revue","derniereRevue"],["Prochaine revue","prochaineRevue"],["Complétude (%)",t=>completeness(t)],["Notes","notes"]];
+    cols = [["Référence","ref"],["Nom","nom"],["Statut",t=>optL(STATUTS,t.statut)],["Direction","service"],["Pilote","pilote"],["Finalités","finalites"],["Base légale",t=>basesLabel(t)],["Base légale par finalité",t=>finText(t)],["Justification","baseLegaleDetail"],["Personnes concernées",t=>[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(" | ")],["Catégories de données",t=>[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(" | ")],["Données sensibles",t=>arr(t.sensibles).join(" | ")],["Exception art. 9.2","sensiblesJustif"],["Destinataires internes","destinatairesInternes"],["Destinataires externes","destinatairesExternes"],["Sous-traitants","sousTraitants"],["Transfert hors UE",t=>t.transfertHorsUE?"Oui":"Non"],["Pays","transfertPays"],["Garanties","transfertGaranties"],["Conservation active","conservation"],["Archivage","conservationArchivage"],["Mesures de sécurité",t=>[...arr(t.securite),t.securiteAutres].filter(Boolean).join(" | ")],["AIPD",t=>AIPD_FLAG[t.aipd]||""],["Dernière revue","derniereRevue"],["Prochaine revue","prochaineRevue"],["Complétude (%)",t=>completeness(t)],["Notes","notes"]];
   } else {
     cols = [["Référence","ref"]];
     MODS[S.mod].sections.forEach(s=>s.fields.forEach(f=>{ if(f.t!=="heading") cols.push([f.l, t=>plainText(S.mod,f,t)]); }));
@@ -7168,7 +7693,7 @@ const orgRows = () => { const o=S.org; return [["Responsable du traitement",o.ra
 const trtRows = t => [
   ["Rôle de l'entreprise",ROLES[t.role||"responsable"]+(t.roleClient?" - "+t.roleClient:"")],
   ["Direction concernée",t.service],["Pilote opérationnel",t.pilote],["Source des données",t.source],
-  ["Finalité(s)",t.finalites],["Base légale",baseOf(t.baseLegale)?`${baseOf(t.baseLegale).l} (${baseOf(t.baseLegale).a})`:""],["Justification",t.baseLegaleDetail],["Information des personnes",infoText(t)],
+  ["Finalités et bases légales",finText(t)],["Base(s) légale(s)",basesLabel(t,true)],["Justification",t.baseLegaleDetail],["Information des personnes",infoText(t)],
   ["Personnes concernées",[...arr(t.personnes),t.personnesAutres].filter(Boolean).join(", ")],["Catégories de données",[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", ")],
   ["Données sensibles",arr(t.sensibles).join(", ")||"Aucune"], arr(t.sensibles).length?["Exception art. 9.2",t.sensiblesJustif]:null,
   ["Destinataires internes",t.destinatairesInternes],["Destinataires externes",t.destinatairesExternes],
@@ -7192,7 +7717,7 @@ function pdfRegistre(){
     if ([...trts,...sts].some(t=>t.exemple)) doc.callout("Ce registre contient encore des fiches d'exemple, signalées comme telles. Retirez-les avant de l'utiliser officiellement.", "warn", "Fiches d'exemple");
     doc.h2("Responsable du traitement"); doc.kv(orgRows());
     doc.h2("Sommaire");
-    doc.table([{h:"Réf.",w:30},{h:"Traitement",w:78},{h:"Direction",w:36},{h:"Base légale",w:34}], trts.map(t=>[{t:t.ref,b:true},t.nom+(t.exemple?" (exemple)":""),t.service||"",baseOf(t.baseLegale)?.l||""]));
+    doc.table([{h:"Réf.",w:30},{h:"Traitement",w:78},{h:"Direction",w:36},{h:"Base légale",w:34}], trts.map(t=>[{t:t.ref,b:true},t.nom+(t.exemple?" (exemple)":""),t.service||"",basesLabel(t)]));
     trts.forEach(t=>{ doc.ensure(60); doc.h2(`${t.ref} · ${t.nom}${t.exemple?" (exemple)":""}`); doc.pills([[optL(STATUTS,t.statut),optT(STATUTS,t.statut)],[`Fiche complète à ${completeness(t)} %`, completeness(t)===100?"ok":"info"]]); doc.kv(trtRows(t)); });
     if (sts.length){ doc.ensure(40); doc.h2("Annexe · Sous-traitants", RGB.navy);
       doc.table([{h:"Prestataire",w:44},{h:"Prestation",w:62},{h:"Hébergement",w:38},{h:"Contrat art. 28",w:34}], sts.map(x=>[{t:x.nom+(x.exemple?" (exemple)":""),b:true}, x.prestation||"", (x.pays||"")+(x.horsUE?` (hors UE${x.garanties?" - "+x.garanties:""})`:""), optCell(MODS.soustraitants.opts.contrat,x.contrat)]), {head:RGB.navy}); }
@@ -7402,7 +7927,7 @@ function go(view, mod){ S.consGen=null; S.consDone=false; S.pjEdit=null; S.pjDel
 function startEdit(mod, draft){ S.addOpen=false; S.pending=null; S.dirty=false; S.tplHidden=false; S.mod=mod; S.draft=draft; S.view="edit"; S.confirmDel=false; render(); window.scrollTo(0,0); }
 function prefillAipd(d, t, force){
   const set = (k,v) => { if (v && (force || !String(d[k]||"").trim())) d[k]=v; };
-  set("contexte", [t.finalites && "Finalités : "+t.finalites, baseOf(t.baseLegale) && "Base légale : "+baseOf(t.baseLegale).l+(t.baseLegaleDetail?" – "+t.baseLegaleDetail:""), t.service && "Service : "+t.service+(t.pilote?" (pilote : "+t.pilote+")":"")].filter(Boolean).join("\n"));
+  set("contexte", [t.finalites && "Finalités : "+t.finalites, basesOf(t).length && "Bases légales : "+finText(t)+(t.baseLegaleDetail?" – "+t.baseLegaleDetail:""), t.service && "Service : "+t.service+(t.pilote?" (pilote : "+t.pilote+")":"")].filter(Boolean).join("\n"));
   set("donneesTraitees", [[...arr(t.donnees),t.donneesAutres].filter(Boolean).join(", "), arr(t.sensibles).length && "Données sensibles : "+arr(t.sensibles).join(", "), t.conservation && "Conservation : "+t.conservation+(t.conservationArchivage?" ; archivage : "+t.conservationArchivage:"")].filter(Boolean).join("\n"));
   set("supports", [t.sousTraitants && "Sous-traitants : "+t.sousTraitants, t.transfertHorsUE && `Transfert hors UE : ${t.transfertPays||""} (${t.transfertGaranties||"garanties non renseignées"})`].filter(Boolean).join("\n"));
   if (arr(t.sensibles).length && !arr(d.criteres).includes(CRITERES[3])) d.criteres=[...arr(d.criteres), CRITERES[3]];
@@ -7426,7 +7951,7 @@ const actions = {
   "ar-preview"(){ const Y=+arNextDate().slice(0,4); arOpen(arBuild(Y), Y); },
   "ar-close"(){ arClose(); },
   "ar-print"(){ document.body.classList.add("ar-print"); const a=$("#arv-host"); const z=a?.style.zoom; if (a) a.style.zoom=""; try{ window.print(); }catch{ toast("L'impression n'est pas disponible ici : téléchargez le rapport puis imprimez-le."); } setTimeout(()=>{ document.body.classList.remove("ar-print"); if (a) a.style.zoom=z; }, 500); },
-  async "ar-dl"(){ if (!S.dl || !ARV.r) return; try{ await S.dl.save({filename:`${slugOrg()}-rapport-annuel-rgpd-${ARV.year}${ARV.r.preview?"-apercu":""}.html`, data:arDoc(ARV.r)}); }catch(e){ if (e?.code!=="declined") toast("Le téléchargement a échoué."); } },
+  async "ar-dl"(){ if (!S.dl || !ARV.r) return; try{ await S.dl.save({filename:`${slugOrg()}-rapport-annuel-rgpd-${ARV.year}${ARV.r.preview?"-apercu":""}.html`, data:arDoc({...ARV.r, body:arApplyEdits(ARV.r.body, arEd(ARV.year))})}); }catch(e){ if (e?.code!=="declined") toast("Le téléchargement a échoué."); } },
   "ar-seen"(el){ savePrefs({arSeen:{...(S.prefs?.arSeen||{}), [el.dataset.y]:true}}); render(); },
   async "ar-gen"(el){ const Y=+el.dataset.y; if (await arGenerate(Y,false)){ toast("Rapport "+Y+" généré et archivé"); render(); } else toast("La génération a échoué."); },
   "fin-open"(){ S.fin=null; go("finaliser"); },
@@ -7434,10 +7959,18 @@ const actions = {
   "fin-save"(){ finNext("save"); },
   "fin-skip"(){ finNext("skip"); },
   "doc-open"(el){ S.docv={kind:el.dataset.doc, id:el.dataset.id||""}; go("docs"); },
-  "doc-kind"(el){ const k=el.dataset.k; S.docv={kind:k, id: DOC_KINDS[k].per===true ? (S.docv?.kind==="mention"&&S.docv.id) || items("traitements")[0]?._id || "" : DOC_KINDS[k].per==="st" ? items("soustraitants")[0]?._id||"" : ""}; render(); },
-  async "doc-copy"(){ const r=docBuild(S.docv.kind, S.docv.id); if(!r) return; try{ await navigator.clipboard.writeText(docText(r.blocks)); toast("Texte copié"); }catch{ toast("Copie impossible : utilisez le téléchargement Word."); } },
-  "doc-word"(){ const r=docBuild(S.docv.kind, S.docv.id); if(!r) return; save(`${slugOrg()}-${slug(r.title).slice(0,60)}.docx`, docDocx(r.blocks)); },
-  async "doc-pj"(){ const r=docBuild(S.docv.kind, S.docv.id); if(!r) return; const f=new File([docDocx(r.blocks)], `${slug(r.title).slice(0,60)}.docx`, {type:PJ_TYPES.docx.m}); const mod = S.docv.kind==="mention"&&S.docv.id ? "traitements" : S.docv.kind==="art28"&&S.docv.id ? "soustraitants" : ""; await pjUpload([f], mod, mod?S.docv.id:"", S.docv.kind==="art28"?"dpa":S.docv.kind==="mention"?"information":"procedure"); },
+  "doc-kind"(el){ const k=el.dataset.k; S.docv={kind:k, id: DOC_KINDS[k].per===true ? (DOC_KINDS[S.docv?.kind]?.per===true&&S.docv.id) || items("traitements")[0]?._id || "" : DOC_KINDS[k].per==="st" ? items("soustraitants")[0]?._id||"" : ""}; render(); setTimeout(()=>$("#docview")?.scrollIntoView({behavior:"smooth",block:"start"}),40); },
+  "doc-cat"(el){ S.docCat=el.dataset.k; render(); },
+  "doc-mine"(el){ const d=S.docs?.get(el.dataset.id); if(!d) return; S.docv={kind:"custom", id:d._id, draft:{titre:d.titre, md:d.md, type:d.type, source:d.source}, editing:false}; render(); setTimeout(()=>$("#docview")?.scrollIntoView({behavior:"smooth",block:"start"}),40); },
+  "doc-customize"(){ const r=docBuild(S.docv.kind, S.docv.id); if(!r) return; S.docv={kind:"custom", id:"", draft:{titre:r.title, md:blocksToMd(r.blocks), type:"Modèle personnalisé", source:"Modèle Égide"}, editing:true}; S.docCat="mine"; render(); setTimeout(()=>{ $("#docview")?.scrollIntoView({block:"start"}); $("#doc-md")?.focus(); },40); },
+  "doc-edit"(){ if (S.docv?.kind!=="custom") return; S.docv.editing=true; render(); setTimeout(()=>$("#doc-md")?.focus(),30); },
+  "doc-edit-done"(){ if (S.docv) S.docv.editing=false; render(); },
+  async "doc-save"(){ await docSaveCustom(); render(); },
+  async "doc-del"(){ const v=S.docv; if(!v?.id || !W()) return; if (!confirmTwice("doc-del","Cliquez à nouveau pour supprimer ce document")) return; try{ await S.db.collection("documents").doc(v.id).delete(); S.docs?.delete(v.id); S.docv={kind:"gen", id:""}; toast("Document supprimé"); }catch(e){ writeError(e); } render(); },
+  "gen-run"(){ genRun(); },
+  async "doc-copy"(){ const r=docCur(); if(!r) return; try{ await navigator.clipboard.writeText(docText(r.blocks)); toast("Texte copié"); }catch{ toast("Copie impossible : utilisez le téléchargement Word."); } },
+  "doc-word"(){ const r=docCur(); if(!r) return; save(`${slugOrg()}-${slug(r.title).slice(0,60)}.docx`, docDocx(r.blocks)); },
+  async "doc-pj"(){ const r=docCur(); if(!r) return; const f=new File([docDocx(r.blocks)], `${slug(r.title).slice(0,60)}.docx`, {type:PJ_TYPES.docx.m}); const mod = S.docv.kind==="mention"&&S.docv.id ? "traitements" : S.docv.kind==="art28"&&S.docv.id ? "soustraitants" : ""; await pjUpload([f], mod, mod?S.docv.id:"", S.docv.kind==="art28"?"dpa":S.docv.kind==="mention"?"information":"procedure"); },
   async "rev-refs"(){ if(!W()) return; const dirs=revDirs(); const refs={...(S.org.referents||{})}; document.querySelectorAll("[data-ref]").forEach(i=>{ const d=dirs[+i.dataset.ref]; if(!d) return; refs[d]={...(refs[d]||{}), [i.dataset.k]:i.value.trim()}; }); const doc={...S.org, referents:refs}; try{ await S.db.doc("config/org").set(doc); S.org=doc; S.refDirty=false; toast("Correspondants enregistrés"); }catch(e){ writeError(e); } render(); },
   async "rev-launch"(){ if(!W()) return; const ech=$("#rev-ech")?.value||addDays(30); const y=new Date().getFullYear(); const id=`revue-${y}-${Date.now().toString(36)}`; const doc={titre:`Revue ${y}`, lanceLe:new Date().toISOString(), echeance:ech, statut:"ouverte", fiches:{}}; try{ await S.db.collection("campagnes").doc(id).set(doc); S.camps.set(id,{...doc,_id:id}); toast("Campagne lancée : envoyez la demande à chaque correspondant"); }catch(e){ writeError(e); } render(); },
   async "rev-ok"(el){ await revMark(el.dataset.id, "confirmee"); toast("Fiche confirmée"); render(); },
@@ -7465,7 +7998,7 @@ const actions = {
   "copilot-side"(){ const r=copSide(); toast(r?"Copilot est ouvert à droite d'Égide.":"La fenêtre Copilot a été bloquée : autorisez les fenêtres contextuelles pour Égide."); },
   "cop-show"(){ COP.show=!COP.show; const a=$("#cop-answer")?.value||""; copRender(); const t=$("#cop-answer"); if(t) t.value=a; },
   async "cop-copy"(){ const a=$("#cop-answer")?.value||""; try{ await navigator.clipboard.writeText(COP.prompt); COP.copied=true; copRender(); }catch{ COP.show=true; copRender(); const t=$("#cop-prompt"); t?.focus(); t?.select(); toast("Sélection prête : utilisez Ctrl + C pour copier"); } const t=$("#cop-answer"); if(t) t.value=a; },
-  async "cop-import"(){ const raw=$("#cop-answer")?.value||""; try{ if (COP.kind==="chat"){ if (!raw.trim()) throw new Error("vide"); await COP.onImport(raw); COP.open=false; copRender(); return; } const d=copParse(raw); await COP.onImport(d); COP.open=false; copRender(); }catch(e){ COP.err = e?.message==="vide" ? "Collez d'abord la réponse de Copilot." : e?.message && !["json","vide"].includes(e.message) && !(e instanceof SyntaxError) ? e.message : "La réponse ne contient pas de données lisibles. Demandez à Copilot : « Réponds uniquement avec le JSON demandé », puis recollez sa réponse."; copRender(); const t=$("#cop-answer"); if(t) t.value=raw; } },
+  async "cop-import"(){ const raw=$("#cop-answer")?.value||""; try{ if (["chat","doc"].includes(COP.kind)){ if (!raw.trim()) throw new Error("vide"); await COP.onImport(raw); COP.open=false; copRender(); return; } const d=copParse(raw); await COP.onImport(d); COP.open=false; copRender(); }catch(e){ COP.err = e?.message==="vide" ? "Collez d'abord la réponse de Copilot." : e?.message && !["json","vide"].includes(e.message) && !(e instanceof SyntaxError) ? e.message : "La réponse ne contient pas de données lisibles. Demandez à Copilot : « Réponds uniquement avec le JSON demandé », puis recollez sa réponse."; copRender(); const t=$("#cop-answer"); if(t) t.value=raw; } },
   "cop-news"(){ copOpen("news","Mettre à jour les actualités", copNewsPrompt(), "Vérifiez que la recherche web de Copilot est activée.", async d=>{ const n=await copImportNews(d); toast(n?`${n} actualité${n>1?"s":""} ajoutée${n>1?"s":""}`:"Aucune nouvelle actualité dans la réponse"); go("news"); }); },
   "cop-plan"(){ const news=npScopeNews("recent"); if(!news.length) return toast("Aucune actualité à analyser."); copOpen("plan","Plan d'action depuis l'actualité", npPrompt(news), "", async d=>{ const r=npClean(d,news); if(!r.actions.length) throw new Error("Aucune action trouvée dans la réponse."); const plan={...r, source:"copilot", genereLe:new Date().toISOString(), newsIds:news.map(n=>n._id), scope:"recent"}; S.np={...(S.np||{}), plan, open:true}; if (W()) { try{ await S.db.doc("config/veille").set(plan); }catch{} } toast(r.actions.length+" actions proposées par Copilot"); go("news"); setTimeout(()=>document.getElementById("np-plan")?.scrollIntoView({block:"start"}),60); }); },
   "cop-one"(el){ const n=S.news.get(el.dataset.id); if(!n) return; copOpen("one","Que faire ? · "+String(n.titre).slice(0,60), npPrompt([n]), "", async d=>{ const r=npClean(d,[n]); S.np={...(S.np||{})}; S.np.single={...(S.np.single||{}), [n._id]:{...r, source:"copilot", genereLe:new Date().toISOString(), newsIds:[n._id]}}; render(); }); },
@@ -7580,7 +8113,6 @@ const actions = {
   async "sec-change"(){ const c=$("#sec-cur")?.value||"", n1=$("#sec-n1")?.value||"", n2=$("#sec-n2")?.value||""; S.secErr=""; S.secOpen="change"; if (n1.length<10){ S.secErr="Le nouveau mot de passe doit compter 10 caractères au moins."; render(); return; } if (n1!==n2){ S.secErr="Les deux saisies sont différentes."; render(); return; } S.secBusy=true; render(); try{ await LS.changePassword(c,n1); S.secOpen=null; toast("Mot de passe changé. Prévenez votre collègue."); }catch(e){ S.secErr="Mot de passe actuel incorrect."; } S.secBusy=false; render(); },
   async "sec-remove"(){ const c=$("#sec-rm")?.value||""; S.secErr=""; S.secOpen="remove"; S.secBusy=true; render(); try{ await LS.removePassword(c); S.secOpen=null; toast("Protection retirée"); }catch(e){ S.secErr="Mot de passe actuel incorrect."; } S.secBusy=false; render(); },
   async "local-forget"(){ await LS.forget(); toast("Les données restent enregistrées dans ce navigateur"); render(); },
-  "news-export"(){ const items=newsItems().map(({_id,...n})=>({id:_id,...n})); save(`egide-actualites-${today()}.json`, JSON.stringify({app:"egide-news", exporteLe:new Date().toISOString(), items},null,1)); },
   "news-import"(){ $("#news-file").value=""; $("#news-file").click(); },
   "toggle-add"(){ S.addOpen=!S.addOpen; render(); },
   "open-edit"(el){ S.mod=el.dataset.mod; S.selId=el.dataset.id; S.view="detail"; actions.edit(); },
@@ -7624,14 +8156,14 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
   if (e.target?.id==="chat-in" && e.key==="Enter" && !e.shiftKey){ e.preventDefault(); const q=e.target.value; e.target.value=""; chatAsk(q); return; }
   if (CHAT.open && e.key==="Escape" && !COP.open){ CHAT.open=false; chatRender(); return; }
   if (COP.open){ if (e.key==="Escape"){ e.preventDefault(); COP.open=false; copRender(); } return; }
-  if (ARV.open){ if (e.key==="Escape"){ e.preventDefault(); arClose(); } return; }
+  if (ARV.open){ if (e.key==="Escape" && !ARV.editing){ e.preventDefault(); arClose(); } else if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s" && ARV.editing){ e.preventDefault(); actions["ar-save"](); } return; }
   if (PJV.id){ if (e.key==="Escape"){ e.preventDefault(); pjClose(); } else if ((e.key==="ArrowRight"||e.key==="ArrowLeft") && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName||"")){ const b=document.querySelector(`#pjv [data-action="pj-nav"][data-d="${e.key==="ArrowRight"?1:-1}"]`); if (b && !b.disabled){ e.preventDefault(); b.click(); } } return; }
   if (S.view==="jeu" && G.mode==="valise" && !G.done && G.v?.state==="play" && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName||"")){ const k=e.key.toLowerCase(); if (k==="g"){ e.preventDefault(); valPick(true); return; } if (k==="r"){ e.preventDefault(); valPick(false); return; } }
   if (S.view==="jeu" && G.mode==="vf" && !G.done && !e.ctrlKey && !e.metaKey && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName||"")){ const k=e.key.toLowerCase(); if (k==="v"||k==="arrowright"){ e.preventDefault(); answerGame(true); return; } if (k==="f"||k==="arrowleft"){ e.preventDefault(); answerGame(false); return; } }
@@ -7653,6 +8185,10 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("input", e => {
   const el = e.target;
+  if (el.dataset?.gen!=null){ const g=genInit(); g[el.dataset.gen] = el.type==="checkbox" ? el.checked : el.value; if (el.type==="checkbox" || el.dataset.gen==="useReg") render(); return; }
+  if (el.id==="doc-md" && S.docv?.draft){ S.docv.draft.md=el.value; const p=$("#doc-prev"); if (p) p.innerHTML=docHTML(mdToBlocks(el.value)); return; }
+  if (el.id==="doc-titre" && S.docv?.draft){ S.docv.draft.titre=el.value; return; }
+  if (el.dataset?.fin!=null && S.draft){ const L=S.draft.finalitesL||(S.draft.finalitesL=finL(S.draft)); const r=L[+el.dataset.fin]; if (r){ r[el.dataset.fk]=el.value; finSync(S.draft); S.dirty=true; refreshEdit(); } return; }
   if (el.dataset.field && S.draft && el.type!=="checkbox" && el.type!=="radio" && el.tagName!=="SELECT"){ S.draft[el.dataset.field] = el.value; S.dirty=true; refreshEdit(); }
   if (el.id==="gq"){ S.gq = el.value;
     if (S.view==="edit" && S.dirty){ if (!S.pending){ S.pending = () => { S.view="search"; render(); }; render(); } return; }
@@ -7668,6 +8204,8 @@ document.addEventListener("input", e => {
 });
 document.addEventListener("change", e => {
   const el = e.target;
+  if (el.dataset?.gen!=null){ const g=genInit(); g[el.dataset.gen] = el.type==="checkbox" ? el.checked : el.value; if (el.type==="checkbox") render(); return; }
+  if (el.dataset?.fin!=null && S.draft){ const L=S.draft.finalitesL||(S.draft.finalitesL=finL(S.draft)); const r=L[+el.dataset.fin]; if (r){ r[el.dataset.fk]=el.value; finSync(S.draft); S.dirty=true; refreshEdit(); } return; }
   if (el.dataset.trnC!=null || el.id==="trn-dpo" || el.id==="trn-up"){ trnSaveCfg(); return; }
   if (el.dataset.trnFiles!=null){ const fs=[...(el.files||[])]; el.value=""; (async()=>{ let all=[]; for (const f of fs){ try{ all=all.concat(parseResults(await f.text())); }catch{} } await importResults(all); })(); return; }
   if (el.id==="sec-auto" && LS){ LS.setLockMinutes(el.value); toast(Number(el.value)?"Verrouillage automatique réglé":"Verrouillage automatique désactivé"); return; }
@@ -7691,7 +8229,7 @@ document.addEventListener("change", e => {
     render(); return; }
   if (el.dataset.col!=null && S.imp){ const ci=+el.dataset.col; const v=el.value; Object.keys(S.imp.map).forEach(c=>{ if (S.imp.map[c]===v && v) delete S.imp.map[c]; }); if (v) S.imp.map[ci]=v; else delete S.imp.map[ci]; render(); return; }
   if (el.id==="xls-file" && el.files?.[0]){ readExcel(el.files[0]); return; }
-  if (el.id==="news-file" && el.files?.[0]){ const r=new FileReader(); r.onload=async()=>{ try{ const d=JSON.parse(r.result); if (d?.app!=="egide-news"||!Array.isArray(d.items)) throw 0; let n=0; for (const it of d.items){ if (!it||!it.url||!it.titre) continue; const id=String(it.id||slug(it.titre)).replace(/[^A-Za-z0-9_\-.~:@+]/g,"-").slice(0,120); const {id:_x,...body}=it; await S.db.collection("actualites").doc(id).set(body); n++; } toast(n+" actualité(s) importée(s)"); }catch{ toast("Ce fichier n'est pas un export d'actualités d'Égide."); } }; r.readAsText(el.files[0]); return; }
+  if (el.id==="news-file" && el.files?.[0]){ const r=new FileReader(); r.onload=async()=>{ try{ await newsImportData(newsParse(r.result)); }catch{ toast("Ce fichier n'est pas un export d'actualités d'Égide."); } }; r.readAsText(el.files[0]); return; }
   if (el.dataset.arr && S.draft){
     const set = new Set(arr(S.draft[el.dataset.arr])); el.checked ? set.add(el.value) : set.delete(el.value);
     S.draft[el.dataset.arr] = [...set];
@@ -7880,6 +8418,9 @@ render(); renderWelcome();
   db.collection("resultats").onSnapshot(snap => { S.results = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (S.view==="list" && S.mod==="formations" && !quiet() && !(document.activeElement?.matches?.("input,textarea,select") && document.activeElement.closest(".trn-adm,.trn-res"))) render(); }, () => {});
   db.doc("config/formationDistance").onSnapshot(snap => { if (snap.exists) S.trainCfg = snap.data(); }, () => {});
   db.collection("campagnes").onSnapshot(snap => { S.camps = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (quiet()) renderNav(); else if (["revue","dashboard","detail"].includes(S.view)) render(); else renderNav(); }, () => {});
+  db.collection("rapportsTextes").onSnapshot(snap => { S.arEdits = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); }, () => {});
+  db.collection("documents").onSnapshot(snap => { S.docs = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); if (S.view==="docs" && !quiet() && !S.docv?.editing) render(); }, () => {});
+  if (LOCAL) db.doc("config/newsImport").onSnapshot(snap => { if (snap.exists) S.newsImp = snap.data(); }, () => {});
   db.collection("rapports").onSnapshot(snap => { S.rapports = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); S.rapportsLoaded = true; arAutoCheck(); if (!quiet() && ["rapport","dashboard"].includes(S.view)) render(); }, () => { S.rapportsLoaded = true; });
   db.collection("pieces").onSnapshot(snap => { S.pieces = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); S.piecesLoaded = true; if (quiet() || S.pjBusy || S.pjEdit || S.consDone) renderNav(); else if (["detail","pieces"].includes(S.view) || (S.view==="list" && S.mod==="soustraitants")) render(); else renderNav(); }, () => { S.piecesLoaded = true; });
   db.collection("actualites").onSnapshot(snap => { S.news = new Map(snap.docs.map(d=>[d.id,{...d.data(),_id:d.id}])); S.newsLoaded = true; if (S.view==="news") render(); else renderNav(); }, () => { S.newsLoaded = true; });
