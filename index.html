@@ -2593,13 +2593,37 @@ window.__EGIDE_LOCAL__ = true;
   const aDel = id => kv("a", "readwrite", s => s.delete(id)).catch(() => null);
   const safe = n => String(n || "fichier").replace(/[\\/:*?"<>|]+/g, "_").slice(0, 120);
   L.dir = null; L.dirName = ""; L.dirNeedsPerm = false;
-  async function dirWrite(id, name, blob){ if (!L.dir) return; try { const fh = await L.dir.getFileHandle(id + "__" + safe(name), {create:true}); const w = await fh.createWritable(); await w.write(blob); await w.close(); } catch (e) {} }
-  async function dirFind(id){ if (!L.dir) return null; try { for await (const [n, h] of L.dir.entries()) { if (h.kind === "file" && n.startsWith(id + "__")) return h; } } catch (e) {} return null; }
+  /* Pièces : le fichier garde son nom d'origine dans le dossier ; la correspondance avec la pièce est gardée dans les données. */
+  const FMAP = "_local/fichiers";
+  const fmap = () => store[FMAP] || (store[FMAP] = {});
+  const fmapSet = (id, n) => { const m = fmap(); if (n) m[id] = n; else delete m[id]; persist(FMAP); };
+  const LEGACY = /^(a[0-9a-z]{8,})__(.+)$/;
+  async function dirHas(n){ try { await L.dir.getFileHandle(n); return true; } catch (e) { return false; } }
+  async function dirFree(name){
+    const base = safe(name); const i = base.lastIndexOf("."); const stem = i > 0 ? base.slice(0, i) : base, ext = i > 0 ? base.slice(i) : "";
+    let n = base, k = 2; while (await dirHas(n)) n = `${stem} (${k++})${ext}`; return n;
+  }
+  async function dirWrite(id, name, blob){ if (!L.dir) return; try { const n = await dirFree(name); const fh = await L.dir.getFileHandle(n, {create:true}); const w = await fh.createWritable(); await w.write(blob); await w.close(); fmapSet(id, n); } catch (e) {} }
+  async function dirFind(id){
+    if (!L.dir) return null;
+    const n = fmap()[id]; if (n){ try { return await L.dir.getFileHandle(n); } catch (e) {} }
+    try { for await (const [nm, h] of L.dir.entries()) { if (h.kind === "file" && nm.startsWith(id + "__")) return h; } } catch (e) {}
+    return null;
+  }
+  /* Anciens fichiers « identifiant__nom » : renommés avec leur nom d'origine */
+  async function dirTidy(){
+    if (!L.dir) return 0; let n = 0; const old = [];
+    try { for await (const [nm, h] of L.dir.entries()) { const m = h.kind === "file" && nm.match(LEGACY); if (m) old.push([m[1], m[2], h]); } } catch (e) { return 0; }
+    for (const [id, orig, h] of old){
+      try { const f = await h.getFile(); const nn = await dirFree(orig); const fh = await L.dir.getFileHandle(nn, {create:true}); const w = await fh.createWritable(); await w.write(f); await w.close(); await L.dir.removeEntry(h.name); fmapSet(id, nn); n++; } catch (e) {}
+    }
+    return n;
+  }
   const names = {};
   const assets = {
     upload: async (blob, o = {}) => { const id = "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); const b = new Blob([blob], {type:o.type || blob.type}); await aPut(id, b); names[id] = o.name; await dirWrite(id, o.name, b); return {id, url:URL.createObjectURL(b), sizeBytes:b.size, contentType:b.type}; },
     list: async () => ({assets:[], usage:null}),
-    delete: async id => { await aDel(id); const h = await dirFind(id); if (h) { try { await L.dir.removeEntry(h.name); } catch (e) {} } return {deleted:true}; }
+    delete: async id => { await aDel(id); const h = await dirFind(id); if (h) { try { await L.dir.removeEntry(h.name); } catch (e) {} } if (fmap()[id]) fmapSet(id, null); return {deleted:true}; }
   };
   L.getAsset = async id => { let b = await aGet(id); if (!b) { const h = await dirFind(id); if (h) { b = await h.getFile(); try { await aPut(id, b); } catch (e) {} } } return b || null; };
   L.pickDir = async () => {
@@ -2607,11 +2631,12 @@ window.__EGIDE_LOCAL__ = true;
     let h = L.dir; if (!h || !L.dirNeedsPerm) h = await window.showDirectoryPicker({id:"egide-pieces", mode:"readwrite"});
     if ((await h.requestPermission({mode:"readwrite"})) !== "granted") return -1;
     L.dir = h; L.dirName = h.name; L.dirNeedsPerm = false; await kv("h", "readwrite", s => s.put(h, "dir"));
+    await dirTidy();
     let n = 0; const pieces = Object.entries(store).filter(([p]) => p.startsWith("pieces/"));
     for (const [, p] of pieces) { if (!p.asset || await dirFind(p.asset)) continue; const b = await aGet(p.asset); if (b) { await dirWrite(p.asset, p.nom, b); n++; } }
     changed(); return n;
   };
-  (async () => { try { const h = await kv("h", "readonly", s => s.get("dir")); if (!h) return; L.dirName = h.name; const p = await h.queryPermission({mode:"readwrite"}); if (p === "granted") L.dir = h; else L.dirNeedsPerm = true; } catch (e) {} })();
+  (async () => { try { const h = await kv("h", "readonly", s => s.get("dir")); if (!h) return; L.dirName = h.name; const p = await h.queryPermission({mode:"readwrite"}); if (p === "granted"){ L.dir = h; ready.then(() => setTimeout(() => { if (!locked) dirTidy().catch(() => {}); }, 2000)); } else L.dirNeedsPerm = true; } catch (e) {} })();
 
   /* ---------- Écran de verrouillage ---------- */
   let resolveReady; const ready = new Promise(r => { resolveReady = r; }); if (!locked) resolveReady();
@@ -2788,7 +2813,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.14-h";
+const EGIDE_VERSION = "2026.11.14-i";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
