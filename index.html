@@ -2523,6 +2523,27 @@ body:has(#edit-form) .chatfab{bottom:calc(92px + env(safe-area-inset-bottom,0px)
   .jrn li{grid-template-columns:minmax(0,1fr);gap:2px}
   .qimp dl{grid-template-columns:minmax(0,1fr)}
 }
+.prj-rg{padding:14px 16px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.prj-rg-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.prj-rg-h b{color:var(--heading)}
+.prj-rg-l{display:flex;flex-wrap:wrap;gap:6px}
+.prj-rg-os{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.prj-rg-o{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font:inherit;color:var(--ink)}
+.prj-rg-o:hover:not(:disabled){border-color:var(--c)}
+.prj-rg-o.on{border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c);background:var(--cs)}
+.prj-rg-o:disabled{opacity:.5;cursor:not-allowed}
+.prj-rg-i{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--cs);color:var(--c)}
+.prj-rg-i svg{width:16px;height:16px}
+.prj-rg-o b{display:block;font-size:.86rem;color:var(--heading)}
+.prj-rg-o small{display:block;font-size:.76rem;color:var(--muted)}
+.prj-pick{display:flex;flex-direction:column;gap:8px;padding-top:4px}
+.prj-pick-l{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.prj-pick-l label{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border-top:1px solid var(--line);cursor:pointer}
+.prj-pick-l label:first-child{border-top:0}
+.prj-pick-l label:hover{background:var(--surface-2)}
+.prj-pick-l label[hidden]{display:none}
+.prj-pick-l b{display:block;font-size:.86rem;color:var(--heading)}
+.prj-pick-l small{display:block;font-size:.76rem;color:var(--muted)}
 </style>
 
 <div class="app">
@@ -2940,7 +2961,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.15-a";
+const EGIDE_VERSION = "2026.11.15-b";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -6733,6 +6754,7 @@ function arCompute(Y, P){
   const months = []; for (let i=0;i<12;i++){ const d=new Date(Y-1, 11+i, 1); months.push([arIso(d).slice(0,7), d.toLocaleDateString("fr-FR",{month:"short"}).replace(".","")]); }
   const cnt = {}; MOD_KEYS.forEach(m=>items(m).forEach(t=>arr(t.history).forEach(h=>{ if (h.at && inP(h.at,P)){ const mk=String(h.at).slice(0,7); cnt[mk]=(cnt[mk]||0)+1; } })));
   k.months = months.map(([mk,l])=>[l, cnt[mk]||0, mk]); k.ops = Object.values(cnt).reduce((a,b)=>a+b,0);
+  arComputeMore(k, Y, P);
   return k;
 }
 function arBuild(Y, o={}){
@@ -6760,6 +6782,7 @@ function arBuild(Y, o={}){
   msgs.push([k.vio?"🚨":"🛡️", k.vio ? `<b>${n(k.vio,"violation de données a été déclarée","violations de données ont été déclarées")}</b> sur la période${k.vioNotif?`, dont ${k.vioNotif} notifiée${k.vioNotif>1?"s":""} à la CNIL${k.vioNotifTime===k.vioNotif?" dans le délai de 72 heures":""}`:", aucune n'ayant nécessité de notification à la CNIL"}.` : `<b>Aucune violation de données</b> n'a été déclarée sur la période.`]);
   msgs.push(["🙋", k.dem ? `<b>${n(k.dem,"demande d'exercice des droits","demandes d'exercice des droits")}</b> reçue${k.dem>1?"s":""}${k.demRep?`, traitée${k.demRep>1?"s":""} en ${k.demDelai} jours en moyenne (${pct(k.demInTime,k.demRep)} % dans le délai légal)`:""}.` : `Aucune demande d'exercice des droits n'a été reçue sur la période.`]);
   msgs.push(["🎓", k.forSess ? (k.forPart ? `<b>${n(k.forPart,"personne sensibilisée","personnes sensibilisées")}</b> lors de ${n(k.forSess,"session","sessions")} de formation` : `<b>${n(k.forSess,"session de sensibilisation tenue","sessions de sensibilisation tenues")}</b> (nombre de participants à renseigner)`)+(k.quizAvg!=null?`, quiz réussi à ${k.quizAvg} % en moyenne.`:".") : `Aucune session de sensibilisation n'a été enregistrée : c'est une priorité pour l'année à venir.`]);
+  msgs.push(["🚀", k.prj ? `<b>${n(k.prj,"projet accompagné","projets accompagnés")}</b> dès leur conception${k.prjEleve?`, dont ${k.prjEleve} à enjeu élevé`:""} ; privacy by design avancé à ${k.prjPbd} % en moyenne${k.rsPeople?`. <b>${n(k.rsPeople,"collaborateur formé","collaborateurs formés")}</b> à distance`:""}.` : `Aucun projet n'a encore été suivi au titre de la protection des données dès la conception${k.rsPeople?` ; <b>${n(k.rsPeople,"collaborateur formé","collaborateurs formés")}</b> à distance`:""}.`]);
   msgs.push(["🗑️", k.cons ? `<b>${n(k.cons,"règle de conservation programmée","règles de conservation programmées")}</b>, ${n(k.purges.length,"suppression réalisée","suppressions réalisées")} et consignée${k.purges.length>1?"s":""} sur la période.` : `Les durées de conservation ne sont pas encore pilotées par des échéances de suppression.`]);
   // forces / vigilances
   const good = [], vig = [];
@@ -6772,6 +6795,9 @@ function arBuild(Y, o={}){
   if (k.aipdMissing) vig.push(`${n(k.aipdMissing,"analyse d'impact obligatoire non lancée","analyses d'impact obligatoires non lancées")}`);
   if (k.trtBrouillon) vig.push(`${k.trtBrouillon} fiches du registre à valider`);
   if (k.crit) vig.push(`${n(k.crit,"point urgent ouvert","points urgents ouverts")} à la date du rapport`);
+  if (k.prj && !k.prjSansFiche) good.push("Tous les projets qui traitent des données sont reliés au registre"); else if (k.prjSansFiche) vig.push(`${n(k.prjSansFiche,"projet sans fiche du registre","projets sans fiche du registre")}`);
+  if (k.rsOk) good.push(`${n(k.rsOk,"collaborateur a validé","collaborateurs ont validé")} une formation à distance`);
+  if (k.news) good.push(`${k.news} actualités réglementaires suivies`);
   if (k.actDone) good.push(`${n(k.actDone,"action de mise en conformité réalisée","actions de mise en conformité réalisées")}`);
   // recommandations
   const reco = [];
@@ -6781,6 +6807,8 @@ function arBuild(Y, o={}){
   if (k.trtBrouillon || k.compl<90) reco.push(["Moyenne","Finaliser et faire valider le registre", `${k.trtBrouillon} fiche${k.trtBrouillon>1?"s":""} en brouillon ; viser 90 % de complétude et une revue annuelle de chaque traitement.`, "Pilotes des traitements"]);
   if (!k.forSess || k.forPart<10) reco.push(["Moyenne","Déployer le plan de sensibilisation", "Présenter « L'essentiel du RGPD » à tous les salariés, puis les modules Cybersécurité, Managers et RH, Commercial et marketing aux équipes concernées.", "DPO et RH"]);
   if (k.consLate || k.cons) reco.push(["Moyenne","Tenir les durées de conservation", `${k.consLate?`Rattraper ${k.consLate} suppression${k.consLate>1?"s":""} en retard, puis `:""}confirmer chaque purge avec sa preuve dans Égide.`, "Directions concernées"]);
+  if (k.prjSansFiche || k.prjAl.some(a=>a.sev==="crit")) reco.push(["Haute","Documenter les projets en cours", `${k.prjSansFiche?`${n(k.prjSansFiche,"projet traite","projets traitent")} des données sans fiche du registre. `:""}Terminer les points de privacy by design avant chaque mise en production.`, "DPO et chefs de projet"]);
+  else if (!k.prj) reco.push(["Moyenne","Associer le DPO aux nouveaux projets", "Qualifier chaque nouveau projet dès son lancement dans le module Projets, et envoyer le questionnaire aux opérationnels.", "Direction générale et chefs de projet"]);
   reco.push(["Continue","Faire vivre la conformité", "Point trimestriel avec la direction, revue annuelle du registre et test de la procédure de violation de données.", "DPO"]);
   const pcol = {Haute:"crit", Moyenne:"warn", Continue:"info"};
   const prio = k.alerts.slice(0,9);
@@ -6811,6 +6839,10 @@ function arBuild(Y, o={}){
       <div class="kpi" style="--c:#1A8A80"><b>${k.purges.length}</b><span>suppressions réalisées</span><em>${k.cons} échéances pilotées</em></div>
       <div class="kpi" style="--c:#2E7DB8"><b>${k.forPart}</b><span>personnes sensibilisées</span><em>${k.forSess} session${k.forSess>1?"s":""}</em></div>
       <div class="kpi" style="--c:#3C3732"><b>${k.actDone}</b><span>actions réalisées</span><em>${k.actOpen} en cours</em></div>
+      <div class="kpi" style="--c:#6B4FBB"><b>${k.prj}</b><span>projets accompagnés</span><em>${k.prjEleve} à enjeu élevé</em></div>
+      <div class="kpi" style="--c:#1F8A52"><b>${k.rsPeople}</b><span>formés à distance</span><em>${k.rsOk} formation${k.rsOk>1?"s":""} validée${k.rsOk>1?"s":""}</em></div>
+      <div class="kpi" style="--c:#800064"><b>${k.news}</b><span>actualités suivies</span><em>${k.actVeille} action${k.actVeille>1?"s":""} issue${k.actVeille>1?"s":""} de la veille</em></div>
+      <div class="kpi" style="--c:#4A6B8A"><b>${k.journal.length}</b><span>opérations consignées</span><em>détail en annexe</em></div>
     </div>
     <h3>Les messages clés</h3>
     <div class="msgs" data-ed="messages">${msgs.map(([e,t])=>`<div class="msg"><i>${e}</i><p>${t}</p></div>`).join("")}</div>
@@ -6856,14 +6888,15 @@ function arBuild(Y, o={}){
     <div class="two"><div><h3>Pièces justificatives</h3>${k.pj?bars(k.pjCats.slice(0,6).map(([c,v])=>[PJ_CATS[c]||"Autre",v]), k.pjCats[0]?.[1], "#4A6B8A"):`<div class="empty">Aucune pièce jointe pour l'instant : contrats signés, émargements et notifications sont à archiver dans Égide.</div>`}</div>
       <div><h3>Activité de conformité par mois</h3><div class="cols">${k.months.map(([l,v,mk])=>`<div title="${esc(l)} : ${v} opération${v>1?"s":""}">${v===maxM&&v?`<em>${v}</em>`:""}<i style="height:${(100*v/maxM).toFixed(1)}%;${mk>T.slice(0,7)?"background:#E8ECF0":""}"></i><small>${esc(l)}</small></div>`).join("")}</div><p class="note" style="margin-top:20px">${k.ops} opérations consignées (créations, mises à jour, revues, suppressions).</p></div></div>
     ${foot(p++)}</section>`);
+  pages.push(...arMorePages(k, {run, foot, n, pct, bars, meter, per, Y, T, nextP:()=>p++}));
   pages.push(`<section class="pg">${run("Priorités et feuille de route")}
-    <div class="sh" style="--c:#800064"><span class="n">8</span><div><h2>Feuille de route ${Y+1}</h2><p>Nos recommandations, par ordre de priorité</p></div></div>
+    <div class="sh" style="--c:#800064"><span class="n">11</span><div><h2>Feuille de route ${Y+1}</h2><p>Nos recommandations, par ordre de priorité</p></div></div>
     <p class="lead" data-ed="reco-intro">Ces recommandations découlent directement de l'état du registre et des points ouverts dans Égide. Elles sont proposées à la validation de la direction générale.</p>
     <div data-ed="recommandations">${reco.map((r,i)=>`<div class="reco"><span class="k">${i+1}</span><div><b>${esc(r[1])}</b><span>${esc(r[2])}</span><br><span class="note">Porteur suggéré : ${esc(r[3])}</span></div><span class="pill ${pcol[r[0]]}">${esc(r[0])}</span></div>`).join("")}</div>
     <div class="sign" data-ed="signature"><div><b>${esc(author)}</b>${esc(role)}<br>Date et signature</div><div><b>La direction générale</b>Feuille de route validée le<br><br>Signature</div></div>
     ${foot(p++)}</section>`);
   pages.push(`<section class="pg">${run("Points ouverts et plan d'actions")}
-    <div class="sh" style="--c:#3C3732"><span class="n">9</span><div><h2>Points ouverts et plan d'actions</h2><p>Situation à la date du rapport</p></div></div>
+    <div class="sh" style="--c:#3C3732"><span class="n">12</span><div><h2>Points ouverts et plan d'actions</h2><p>Situation à la date du rapport</p></div></div>
     <h3>Points ouverts à la date du rapport</h3>
     ${prio.length?`<table><thead><tr><th>Point</th><th>Dossier</th><th>Niveau</th></tr></thead><tbody>${prio.map(a=>`<tr><td><b>${esc(a.t)}</b><br><span class="note">${esc(a.s)}</span></td><td>${a.mod?esc(MODS[a.mod].single)+" · "+esc(a.name):"Général"}</td><td><span class="pill ${a.sev==="crit"?"crit":"warn"}">${a.sev==="crit"?"Urgent":"Important"}</span></td></tr>`).join("")}</tbody></table>${k.alerts.length>prio.length?`<p class="note" style="margin-top:6px">Et ${k.alerts.length-prio.length} autre${k.alerts.length-prio.length>1?"s":""} point${k.alerts.length-prio.length>1?"s":""}, détaillés dans Égide.</p>`:""}`:`<div class="empty">Aucun point urgent ou important ouvert.</div>`}
     <h3>Plan d'actions en cours</h3>
@@ -6871,6 +6904,7 @@ function arBuild(Y, o={}){
     <h3>Méthode et périmètre</h3>
     <p class="note" data-ed="methode">Méthode : le score de conformité (sur 100) combine la qualité du registre (45 %, une fiche en brouillon comptant pour 60 % de sa complétude), la part des dossiers en cours sans point d'attention (40 %) et la part des fiches validées (15 %), moins 3 points par point urgent ouvert (15 points au plus). Les chiffres de la période portent ${per}. ${items("traitements").some(t=>t.exemple)?"Certaines fiches d'exemple fournies avec l'application sont incluses dans les chiffres.":""}</p>
     ${foot(p++)}</section>`);
+  pages.push(...arAnnexPages(k, {run, foot, nextP:()=>p++}));
   const body = `<div class="ar">${pages.join("").replace(/(<div class="sh"[^>]*><span class="n">(\d+)<\/span><div><h2)>([\s\S]*?<\/h2><p)>([\s\S]*?<\/p><\/div><\/div>)/g, (m,a,n,b,c)=>`${a} data-ed="h-${n}">${b} data-ed="hs-${n}">${c}<div class="dponote" data-ed="note-${n}"></div>`)}<section class="pg dpoann" data-ed-wrap><div class="dponote big" data-ed="annexe"></div></section></div>`;
   return {body, k, preview, P:Pv, title:`Rapport annuel de conformité RGPD ${Y}`};
 }
@@ -6972,6 +7006,7 @@ function arClean(html){
 }
 function arApplyEdits(body, ed){
   if (!ed?.blocks || !Object.keys(ed.blocks).length) return body;
+  if (ed.schema!==2 && body.includes('data-ed="h-11"')){ const M = {"8":"11","9":"12"}, b = {}; Object.entries(ed.blocks).forEach(([key,v])=>{ const m = key.match(/^(h|hs|note)-(\d+)$/); b[m && M[m[2]] ? `${m[1]}-${M[m[2]]}` : key] = v; }); ed = {...ed, blocks:b}; }
   const t=document.createElement("template"); t.innerHTML=body;
   t.content.querySelectorAll("[data-ed]").forEach(n=>{ const v=ed.blocks[n.dataset.ed]; if (v!=null) n.innerHTML=arClean(v); });
   return t.innerHTML;
@@ -6997,7 +7032,7 @@ const arActions = {
     ar.querySelectorAll("[data-ed]").forEach(n=>{ let v=arClean(n.innerHTML); if (/^(<br>|\s|&nbsp;)*$/i.test(v)) v=""; if (v!==(auto[n.dataset.ed]??"")) blocks[n.dataset.ed]=v; });
     const ref = S.db.collection("rapportsTextes").doc(String(ARV.year));
     try{
-      if (Object.keys(blocks).length){ const doc={blocks, majLe:new Date().toISOString(), annee:ARV.year}; await ref.set(doc); S.arEdits.set(String(ARV.year), doc); }
+      if (Object.keys(blocks).length){ const doc={blocks, majLe:new Date().toISOString(), annee:ARV.year, schema:2}; await ref.set(doc); S.arEdits.set(String(ARV.year), doc); }
       else { await ref.delete(); S.arEdits.delete(String(ARV.year)); }
       toast(Object.keys(blocks).length ? `Rapport ${ARV.year} enregistré avec vos modifications` : "Aucune modification à enregistrer");
     }catch(e){ writeError(e); return; }
@@ -8727,6 +8762,7 @@ MODS.projets.sections = [
 ];
 MODS.projets.columns = [
   {h:"Projet", w:"minmax(0,1fr)", v:t=>`<span class="nm">${esc(t.nom||"Sans titre")}${exTag(t)}${flags("projets",t)}<small>${esc([optL(MODS.projets.opts.type,t.type), dirLabel(t), t.chefProjet].filter(Boolean).join(" · "))}</small></span>`},
+  {h:"Registre", w:"150px", cls:"hide-sm", v:t=>{ const L=prjTrts(t); return L.length ? `<span class="pill t-ok">${L.length} fiche${L.length>1?"s":""} liée${L.length>1?"s":""}</span>` : t.donneesPerso==="non" ? '<span class="muted">Non concerné</span>' : t.rattach==="nouveau" ? '<span class="pill t-info">Fiche à créer</span>' : t.rattach==="plus_tard" ? '<span class="pill t-neutral">Plus tard</span>' : '<span class="pill t-warn">À rattacher</span>'; }},
   {h:"Enjeu RGPD", w:"170px", cls:"hide-sm", v:t=>{ const e=prjEnjeu(t); return `<span class="pill t-${e.tone}">${esc(e.l)}</span>`; }},
   {h:"Privacy by design", w:"150px", cls:"hide-sm", v:t=>`<span class="pbdmini"><span><i style="width:${pbdPct(t)}%"></i></span><small class="num">${pbdPct(t)} %</small></span>`},
   {h:"Phase", w:"160px", cls:"c-st", v:t=>pill(MODS.projets.opts.statut,t.statut)}
@@ -9839,18 +9875,30 @@ MODS.projets.extra = t => {
   const act = (a, ic, l, s, dis) => `<button class="prj-act" data-action="${a}" ${dis||!w?"disabled":""}><span class="prj-act-i">${ic}</span><span><b>${esc(l)}</b><small>${esc(s)}</small></span></button>`;
   const mail = t.contactEmail ? `mailto:${encodeURIComponent(t.contactEmail)}?subject=${encodeURIComponent(`Projet « ${t.nom} » : questionnaire protection des données`)}&body=${encodeURIComponent(`Bonjour${t.contactOp?" "+String(t.contactOp).split(/[ ,]/)[0]:""},\n\nPour inscrire le projet « ${t.nom} » au registre des traitements, pouvez-vous remplir le questionnaire joint ? Il prend environ 15 minutes : il suffit de répondre dans les zones grisées et de cocher les cases.\n\nMerci de me le retourner par retour de mail. Je reste disponible pour en parler.\n\nBien cordialement,\n${S.org.dpoNom||""}\nDélégué à la protection des données`)}` : "";
   return `<section class="panel prj-go"><div class="panel-h"><h2>Pour avancer</h2></div><div class="panel-b">
+    ${prjRegBlock(t)}
     <div class="prj-acts">
-      ${act("prj-trt", I.list||I.doc||"", "Créer la fiche de traitement", "Pré-remplie avec les informations du projet")}
       ${act("prj-aipd", I.shield, aipds.length?"Lancer une autre AIPD":"Lancer l'AIPD", prjCrit(t).length>=2?`${prjCrit(t).length} critères CNIL remplis`:"Pré-remplie avec le contexte et les critères")}
       ${act("prj-q", I.dl, "Questionnaire pour l'opérationnel", `Document Word à remplir${t.contactOp?" par "+t.contactOp:""}`, !S.dl)}
       ${act("prj-qimp", I.up, "Importer le questionnaire rempli", "Crée une fiche de traitement en brouillon")}
     </div>
     ${mail?`<p class="prj-mail">${I.send}<span>Téléchargez le questionnaire, puis <a href="${esc(mail)}">préparez l'e-mail à ${esc(t.contactOp||t.contactEmail)}</a> et joignez-le.</span></p>`:""}
-    <div class="prj-links"><div><span class="muted">Fiches du registre :</span>${trts.length?trts.map(x=>`<button class="chip m-trt" data-action="open" data-mod="traitements" data-id="${esc(x._id)}">${esc(x.ref)} · ${esc(x.nom)}</button>`).join(""):'<span class="muted">aucune</span>'}</div>
-      <div><span class="muted">AIPD :</span>${aipds.length?aipds.map(a=>`<button class="chip m-aipd" data-action="open" data-mod="aipd" data-id="${esc(a._id)}">${esc(a.ref)} · ${esc(optL(MODS.aipd.opts.statut,a.statut))}</button>`).join(""):'<span class="muted">aucune</span>'}</div></div>
+    <div class="prj-links"><div><span class="muted">AIPD :</span>${aipds.length?aipds.map(a=>`<button class="chip m-aipd" data-action="open" data-mod="aipd" data-id="${esc(a._id)}">${esc(a.ref)} · ${esc(optL(MODS.aipd.opts.statut,a.statut))}</button>`).join(""):'<span class="muted">aucune</span>'}</div></div>
     <input type="file" accept=".docx" id="q-file" hidden data-qimp="${esc(t._id)}">
   </div></section>`;
 };
+function prjRegBlock(t){
+  const trts = prjTrts(t), w = W(), cur = t.rattach || "";
+  const opt = (a, v, ic, l, s) => `<button class="prj-rg-o ${cur===v?"on":""}" data-action="${a}" ${w?"":"disabled"} aria-pressed="${cur===v}"><span class="prj-rg-i">${ic}</span><span><b>${esc(l)}</b><small>${esc(s)}</small></span></button>`;
+  const picker = S.prjPick===t._id ? (()=>{ const L = items("traitements").filter(x=>x.statut!=="archive" && !arr(t.traitementIds).includes(x._id)).sort((a,b)=>String(a.ref).localeCompare(String(b.ref)));
+    return `<div class="prj-pick"><input type="search" id="prj-pick-q" placeholder="Rechercher un traitement (nom, référence, direction)…" aria-label="Rechercher un traitement">
+      <div class="prj-pick-l" id="prj-pick-l">${L.length?L.map(x=>`<label data-h="${esc(norm([x.ref,x.nom,dirLabel(x)].join(" ")))}"><input type="checkbox" value="${esc(x._id)}"><span><b>${esc(x.ref)} · ${esc(x.nom||"")}</b><small>${esc([dirLabel(x), optL(STATUTS,x.statut)].filter(Boolean).join(" · "))}</small></span></label>`).join(""):`<p class="muted">Aucun autre traitement dans le registre.</p>`}</div>
+      <div class="actions"><button class="btn primary sm" data-action="prj-pick-ok">${I.check}Rattacher la sélection</button><button class="btn ghost sm" data-action="prj-pick-x">Annuler</button></div></div>`; })() : "";
+  return `<div class="prj-rg"><div class="prj-rg-h"><b>Registre des traitements</b>${trts.length?`<span class="muted">${trts.length} fiche${trts.length>1?"s":""} liée${trts.length>1?"s":""}</span>`:t.donneesPerso==="non"?`<span class="muted">pas de données personnelles</span>`:`<span class="pill t-warn">à rattacher</span>`}</div>
+    ${trts.length?`<div class="prj-rg-l">${trts.map(x=>`<button class="chip m-trt" data-action="open" data-mod="traitements" data-id="${esc(x._id)}">${esc(x.ref)} · ${esc(x.nom)}</button>`).join("")}</div>`:""}
+    <div class="prj-rg-os">${opt("prj-pick","existant",I.link||I.list||"", trts.length?"Rattacher un autre traitement existant":"Rattacher à un traitement existant", "Choisir dans le registre")}${opt("prj-trt-new","nouveau",I.plus,"Créer un nouveau traitement","Fiche pré-remplie avec le projet")}${trts.length?"":opt("prj-later","plus_tard",I.cal,"Décider plus tard","Le projet est encore en amont")}</div>
+    ${picker}</div>`;
+}
+document.addEventListener("input", e => { if (e.target?.id!=="prj-pick-q") return; const q = norm(e.target.value||""); document.querySelectorAll("#prj-pick-l label").forEach(l=>{ l.hidden = q && !l.dataset.h.includes(q); }); });
 function prjDraftTrt(t){
   const d = blankOf("traitements");
   Object.assign(d, {nom:t.nom||"", service:t.service||"", pilote:t.chefProjet||"", statut:"brouillon", projetId:t._id, decisionAuto:t.q_decision==="oui",
@@ -10124,6 +10172,17 @@ document.addEventListener("change", e => { const el = e.target; if (el?.dataset?
 async function qDownload(p){ if (!S.dl) return toast("Téléchargement indisponible dans cette vue."); await save(`Questionnaire-protection-donnees${p?"-"+String(p.nom||"projet").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60):""}.docx`, qDocx(p)); }
 
 const prjActions = {
+  "prj-pick"(){ if (!W()) return; S.prjPick = S.prjPick===S.selId ? null : S.selId; render(); setTimeout(()=>$("#prj-pick-q")?.focus(), 30); },
+  "prj-pick-x"(){ S.prjPick = null; render(); },
+  async "prj-pick-ok"(){
+    const t = S.data.projets.get(S.selId); if (!t || !W()) return;
+    const ids = [...document.querySelectorAll("#prj-pick-l input:checked")].map(x=>x.value);
+    if (!ids.length) return toast("Cochez au moins un traitement.");
+    try{ await persist("projets", t._id, {...t, rattach:"existant", traitementIds:[...new Set([...arr(t.traitementIds), ...ids])]}, `Rattaché au registre (${ids.length} fiche${ids.length>1?"s":""})`); }catch(e){ return writeError(e); }
+    S.prjPick = null; toast(`${ids.length} traitement${ids.length>1?"s":""} rattaché${ids.length>1?"s":""} au projet`); render();
+  },
+  async "prj-trt-new"(){ const t = S.data.projets.get(S.selId); if (!t || !W()) return; if (t.rattach!=="nouveau" && !prjTrts(t).length){ try{ await persist("projets", t._id, {...t, rattach:"nouveau"}, "Nouveau traitement à créer"); }catch(e){} } startEdit("traitements", prjDraftTrt(S.data.projets.get(t._id)||t)); },
+  async "prj-later"(){ const t = S.data.projets.get(S.selId); if (!t || !W()) return; try{ await persist("projets", t._id, {...t, rattach:"plus_tard"}, "Rattachement au registre reporté"); }catch(e){ return writeError(e); } render(); },
   "prj-trt"(){ if (!W()) return; const t = S.data.projets.get(S.selId); if (t) startEdit("traitements", prjDraftTrt(t)); },
   "prj-aipd"(){ if (!W()) return; const t = S.data.projets.get(S.selId); if (t) startEdit("aipd", prjDraftAipd(t)); },
   "prj-q"(){ const t = S.mod==="projets" ? S.data.projets.get(S.selId) : null; qDownload(t); },
@@ -10132,6 +10191,156 @@ const prjActions = {
   "q-imp"(){ $("#q-file-reg")?.click(); },
   "q-panel"(){ S.qpanel = !S.qpanel; render(); }
 };
+
+/* ================= Rapport annuel : tout ce qui a été fait sur l'année ================= */
+function arComputeMore(k, Y, P){
+  const inPd = d => !!d && inP(d, P);
+  const byDate = f => (a,b) => String(f(a)||"").localeCompare(String(f(b)||""));
+  /* Projets */
+  const PR = items("projets"), live = PR.filter(t=>t.statut!=="abandonne");
+  const PH = Object.keys(MODS.projets.opts.statut);
+  k.prj = live.length; k.prjNew = PR.filter(t=>inPd(t.dateCreation)).length; k.prjAband = PR.filter(t=>t.statut==="abandonne").length;
+  k.prjPhases = PH.filter(s=>s!=="abandonne").map(s=>[MODS.projets.opts.statut[s].l, live.filter(t=>(t.statut||"idee")===s).length]);
+  const EN = {eleve:"Enjeu élevé", modere:"Enjeu modéré", faible:"Enjeu faible", aucun:"Sans données personnelles", aq:"À qualifier"};
+  k.prjEnjeu = Object.keys(EN).map(e=>[EN[e], live.filter(t=>prjEnjeu(t).k===e).length]).filter(x=>x[1]);
+  k.prjEleve = live.filter(t=>prjEnjeu(t).k==="eleve").length;
+  k.prjPbd = live.length ? Math.round(live.reduce((n,t)=>n+pbdPct(t),0)/live.length) : 0;
+  k.prjFiches = live.filter(t=>prjTrts(t).length).length;
+  k.prjSansFiche = live.filter(t=>t.donneesPerso==="oui" && !prjTrts(t).length).length;
+  k.prjAipd = live.filter(t=>prjAipds(t).length).length;
+  k.prjAvis = ["favorable","reserves","defavorable","attente"].map(a=>[optL(MODS.projets.opts.avis,a), PR.filter(t=>(t.avis||"")===a).length]).filter(x=>x[1]);
+  k.prjAvisN = PR.filter(t=>t.avis && t.avis!=="attente").length;
+  k.prjJrn = PR.flatMap(t=>arr(t.jrnL).filter(r=>inPd(r.date) && String(r.texte||"").trim()).map(r=>({...r, p:t}))).sort(byDate(r=>r.date));
+  k.prjQuest = k.prjJrn.filter(r=>r.type==="questionnaire").length;
+  k.prjIA = live.filter(prjIA);
+  k.prjIArisk = Object.entries(MODS.projets.opts.risque).map(([r,o])=>[o.l, k.prjIA.filter(t=>t.risque===r).length]).filter(x=>x[1]);
+  if (k.prjIA.some(t=>!t.risque)) k.prjIArisk.push(["À qualifier", k.prjIA.filter(t=>!t.risque).length]);
+  k.prjAl = live.flatMap(t=>MODS.projets.alerts(t).filter(a=>a.sev!=="info").map(a=>({...a, p:t})));
+  k.prjList = [...live].sort((a,b)=>PH.indexOf(b.statut)-PH.indexOf(a.statut) || String(a.nom).localeCompare(String(b.nom)));
+  /* Listes de l'année */
+  k.trtNewList = items("traitements").filter(t=>inPd(t.dateCreation)).sort(byDate(t=>t.dateCreation));
+  k.trtRevList = items("traitements").filter(t=>inPd(t.derniereRevue)).sort(byDate(t=>t.derniereRevue));
+  k.aipdNewList = items("aipd").filter(t=>inPd(t.dateCreation)).sort(byDate(t=>t.dateCreation));
+  k.stNewList = items("soustraitants").filter(t=>inPd(t.dateCreation)).sort(byDate(t=>t.dateCreation));
+  k.actDoneList = items("actions").filter(t=>t.statut==="fait" && inPd(t.dateRealisation||t.dateMaj)).sort(byDate(t=>t.dateRealisation||t.dateMaj));
+  k.actNew = items("actions").filter(t=>inPd(t.dateCreation)).length;
+  k.actVeille = items("actions").filter(t=>t.origine==="veille" && inPd(t.dateCreation)).length;
+  k.demList = items("demandes").filter(t=>inPd(t.dateReception)).sort(byDate(t=>t.dateReception));
+  k.consNewList = items("conservation").filter(t=>inPd(t.dateCreation));
+  /* Formation à distance et jeux */
+  const RS = [...(S.results||new Map()).values()].filter(r=>inPd(r.date||r.importeLe));
+  const em = r => String(r.email||r.nom||"").toLowerCase();
+  k.rs = RS.length; k.rsPeople = new Set(RS.map(em)).size; k.rsOk = new Set(RS.filter(r=>r.reussi).map(em)).size;
+  k.rsAvg = RS.length ? Math.round(RS.reduce((n,r)=>n+(+r.pct||0),0)/RS.length) : null;
+  k.rsCours = Object.entries(RS.reduce((o,r)=>{ const c=r.coursTitre||r.cours||"Formation"; o[c]=(o[c]||0)+1; return o; },{})).sort((a,b)=>b[1]-a[1]);
+  k.rsDirs = Object.entries(RS.reduce((o,r)=>{ const d=dirCanon(r.service)||r.service||"Non renseignée"; (o[d]=o[d]||new Set()).add(em(r)); return o; },{})).map(([d,s])=>[d,s.size]).sort((a,b)=>b[1]-a[1]);
+  k.rsList = RS;
+  const SC = [...(S.scores||new Map()).values()].filter(s=>inPd(s.at));
+  k.jeu = SC.length;
+  /* Revue annuelle et correspondants */
+  k.camps = [...(S.camps?.values()||[])].filter(c=>inPd(c.lanceLe)).map(c=>{ const F=Object.values(c.fiches||{}); return {lance:c.lanceLe, statut:c.statut, n:F.length, conf:F.filter(f=>f.statut==="confirmee").length, mod:F.filter(f=>f.statut==="modifiee").length}; });
+  k.refs = S.org.referents || {};
+  /* Directions, contrôle CNIL et contrôle du registre */
+  k.dirStats = orgDirections().map(dirStats).filter(st=>st.trt.length || st.ref.nom);
+  k.cnil = cnilChecks(); k.cnilOk = k.cnil.filter(x=>x.ok).length;
+  const C = coherence(); k.coh = {crit:0, warn:0, info:0}; C.forEach(r=>k.coh[r.sev]+=r.list.length); k.cohTop = C.filter(r=>r.sev!=="info");
+  /* Évolution du score */
+  const H = [...(S.hist||new Map()).values()].filter(r=>r.mois>=P.from.slice(0,7) && r.mois<=P.to.slice(0,7));
+  const cur = histNow(); if (cur.mois>=P.from.slice(0,7) && cur.mois<=P.to.slice(0,7) && !H.some(r=>r.mois===cur.mois)) H.push(cur);
+  k.hist = H.sort((a,b)=>a.mois.localeCompare(b.mois));
+  /* Veille et communication */
+  const N = newsItems().filter(n=>inPd(n.date));
+  k.news = N.length; k.newsCats = Object.entries(N.reduce((o,n)=>{ const c=(NEWS_CATS[n.categorie]||{l:"Autre"}).l; o[c]=(o[c]||0)+1; return o; },{})).sort((a,b)=>b[1]-a[1]);
+  k.newsWeeks = new Set(N.map(n=>ltMonday(String(n.date).slice(0,10)))).size;
+  k.newsTop = N.filter(n=>["sanction","cnil","legislation","europe","jurisprudence"].includes(n.categorie)).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  k.lettres = Object.keys(LT.edito||{}).filter(m=>inPd(m)).length;
+  /* Pièces ajoutées */
+  k.pjNewList = (typeof pjItems==="function" ? pjItems() : []).filter(p=>inPd(p.ajouteLe));
+  /* Journal complet de l'année */
+  const J = [];
+  MOD_KEYS.forEach(m=>items(m).forEach(t=>arr(t.history).forEach(h=>{ if (h.at && inP(h.at,P)) J.push({at:h.at, m:MODS[m].single, ref:t.ref||"", name:titleOf(m,t)||"", op:h.action||"Mise à jour"}); })));
+  k.pjNewList.forEach(p=>J.push({at:p.ajouteLe, m:"pièce justificative", ref:"", name:p.nom||"", op:"Pièce ajoutée"}));
+  k.purges.forEach(x=>J.push({at:x.date, m:"conservation", ref:"", name:x.titre||"", op:"Suppression réalisée et consignée"}));
+  RS.forEach(r=>J.push({at:r.date||r.importeLe, m:"formation à distance", ref:"", name:r.coursTitre||r.cours||"Formation", op:r.reussi?"Formation validée par un collaborateur":"Formation suivie par un collaborateur"}));
+  k.camps.forEach(c=>J.push({at:c.lance, m:"revue annuelle", ref:"", name:"Campagne de revue des traitements", op:"Campagne lancée"}));
+  k.prjJrn.forEach(r=>J.push({at:r.date, m:"projet", ref:r.p.ref||"", name:r.p.nom||"", op:`Échange : ${String(r.texte).slice(0,90)}`}));
+  k.journal = J.sort((a,b)=>String(a.at).localeCompare(String(b.at)));
+}
+/* --- Pages ajoutées au rapport --- */
+function arMorePages(k, h){
+  const {run, foot, n, pct, bars, meter, per, Y, T, nextP} = h;
+  const pill = (tone, txt) => `<span class="pill ${tone}">${esc(txt)}</span>`;
+  const tone = e => ({eleve:"crit", modere:"warn", faible:"info", aucun:"ok", aq:"info"})[e] || "info";
+  const pages = [];
+  /* 8. Projets */
+  const PL = k.prjList.slice(0,12);
+  pages.push(`<section class="pg">${run("Projets et privacy by design")}
+    <div class="sh" style="--c:#6B4FBB"><span class="n">8</span><div><h2>Projets et protection des données dès la conception</h2><p>Article 25 · accompagnement des projets de l'entreprise</p></div></div>
+    <p class="lead" data-ed="projets-intro">${k.prj ? `Le DPO a accompagné <b>${n(k.prj,"projet","projets")}</b> cette année${k.prjNew?`, dont ${n(k.prjNew,"nouveau projet","nouveaux projets")} sur la période`:""}. Chaque projet est qualifié dès son lancement pour savoir s'il nécessite une fiche du registre, une analyse d'impact ou un contrat de sous-traitance, puis suivi phase par phase.` : `Aucun projet n'a encore été suivi dans Égide. Le module Projets permet d'intégrer la protection des données dès la conception des nouveaux outils et des projets d'innovation.`}</p>
+    <div class="grid3"><div class="kpi" style="--c:#6B4FBB"><b>${k.prj}</b><span>projets suivis</span><em>${k.prjNew} nouveau${k.prjNew>1?"x":""} sur la période</em></div><div class="kpi" style="--c:#C8243D"><b>${k.prjEleve}</b><span>projets à enjeu élevé</span><em>deux critères CNIL ou plus</em></div><div class="kpi" style="--c:#1F8A52"><b>${k.prjPbd} %</b><span>privacy by design</span><em>avancement moyen des points de contrôle</em></div>
+      <div class="kpi" style="--c:#0088CE"><b>${k.prjFiches}</b><span>projets reliés au registre</span><em>${k.prjSansFiche?`${k.prjSansFiche} sans fiche`:"tous documentés"}</em></div><div class="kpi" style="--c:#800064"><b>${k.prjAipd}</b><span>projets avec une AIPD</span></div><div class="kpi" style="--c:#2E7DB8"><b>${k.prjAvisN}</b><span>avis rendus par le DPO</span><em>${k.prjQuest} questionnaire${k.prjQuest>1?"s":""} d'opérationnels reçu${k.prjQuest>1?"s":""}</em></div></div>
+    <div class="two" style="margin-top:12px"><div><h3>Projets par phase</h3>${bars(k.prjPhases.filter(x=>x[1]), Math.max(1,...k.prjPhases.map(x=>x[1])), "#6B4FBB")}</div><div><h3>Niveau d'enjeu RGPD</h3>${bars(k.prjEnjeu, Math.max(1,...k.prjEnjeu.map(x=>x[1])), "#C8243D")}${k.prjAvis.length?`<h3 style="margin-top:10px">Avis du DPO</h3>${bars(k.prjAvis, Math.max(1,...k.prjAvis.map(x=>x[1])), "#2E7DB8")}`:""}</div></div>
+    ${PL.length?`<h3>Les projets suivis</h3><table><thead><tr><th>Projet</th><th>Direction</th><th>Phase</th><th>Enjeu</th><th>Privacy by design</th></tr></thead><tbody>${PL.map(t=>{ const e=prjEnjeu(t); return `<tr><td><b>${esc(t.nom||"")}</b>${t.exemple?' <span class="note">(exemple)</span>':""}${prjIA(t)?' <span class="note">· IA</span>':""}</td><td>${esc(dirLabel(t)||"—")}</td><td>${esc(optL(MODS.projets.opts.statut,t.statut))}</td><td>${pill(tone(e.k), e.l)}</td><td>${pbdPct(t)} %</td></tr>`; }).join("")}</tbody></table>${k.prjList.length>PL.length?`<p class="note">${k.prjList.length-PL.length} autre(s) projet(s) figurent dans l'inventaire en annexe.</p>`:""}`:""}
+    ${k.prjIA.length?`<h3>Intelligence artificielle (AI Act)</h3><div class="two"><div><p class="note">${n(k.prjIA.length,"projet utilise","projets utilisent")} l'intelligence artificielle. Le règlement européen sur l'IA impose de qualifier chaque système selon son niveau de risque et de former les utilisateurs (article 4).</p></div><div>${bars(k.prjIArisk, Math.max(1,...k.prjIArisk.map(x=>x[1])), "#6B4FBB")}</div></div>`:""}
+    ${foot(nextP())}</section>`);
+  /* 9. Pilotage par direction */
+  const DS = k.dirStats;
+  pages.push(`<section class="pg">${run("Directions et revue annuelle")}
+    <div class="sh" style="--c:#003865"><span class="n">9</span><div><h2>Le pilotage par direction</h2><p>Correspondants, revue annuelle et contrôles</p></div></div>
+    <p class="lead" data-ed="directions-intro">Chaque direction est responsable de ses traitements, avec l'appui d'un correspondant. ${Object.values(k.refs).filter(r=>r?.nom).length ? `${n(Object.values(k.refs).filter(r=>r?.nom).length,"correspondant est désigné","correspondants sont désignés")}.` : "Les correspondants des directions restent à désigner."}</p>
+    ${DS.length?`<table><thead><tr><th>Direction</th><th>Correspondant</th><th>Traitements</th><th>Complétude</th><th>Points à corriger</th><th>Suppressions en retard</th><th>Formés</th></tr></thead><tbody>${DS.map(st=>`<tr><td><b>${esc(st.d)}</b></td><td>${esc(st.ref.nom||"—")}</td><td>${st.trt.length}</td><td>${st.trt.length?st.compl+" %":"—"}</td><td>${st.al.length?pill("warn",String(st.al.length)):pill("ok","0")}</td><td>${st.consLate.length?pill("crit",String(st.consLate.length)):"0"}</td><td>${st.okp||0}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">Les directions ne sont pas encore déclarées dans Égide.</div>`}
+    <h3>Revue annuelle des traitements</h3>
+    ${k.camps.length?`<table><thead><tr><th>Lancée le</th><th>Fiches</th><th>Confirmées</th><th>Mises à jour</th><th>Statut</th></tr></thead><tbody>${k.camps.map(c=>`<tr><td>${fmtD(String(c.lance).slice(0,10))}</td><td>${c.n}</td><td>${c.conf}</td><td>${c.mod}</td><td>${c.statut==="close"?pill("ok","Clôturée"):pill("info","En cours")}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucune campagne de revue annuelle n'a été lancée sur la période.</div>`}
+    <div class="two" style="margin-top:12px"><div><h3>Préparation à un contrôle de la CNIL</h3>${meter("Points prêts", pct(k.cnilOk,k.cnil.length), `${k.cnilOk} sur ${k.cnil.length}`)}${k.cnil.filter(x=>!x.ok).length?`<ul class="note" style="margin:6px 0 0 16px;padding:0">${k.cnil.filter(x=>!x.ok).slice(0,6).map(x=>`<li>${esc(x.t)}</li>`).join("")}</ul>`:`<p class="note">Tous les points sont prêts.</p>`}</div>
+      <div><h3>Contrôle de cohérence du registre</h3><div class="grid3"><div class="kpi" style="--c:#C8243D"><b>${k.coh.crit}</b><span>critiques</span></div><div class="kpi" style="--c:#B86A06"><b>${k.coh.warn}</b><span>à corriger</span></div><div class="kpi" style="--c:#6B7785"><b>${k.coh.info}</b><span>à surveiller</span></div></div>${k.cohTop.length?`<ul class="note" style="margin:6px 0 0 16px;padding:0">${k.cohTop.slice(0,5).map(r=>`<li>${esc(r.titre)} (${r.list.length})</li>`).join("")}</ul>`:""}</div></div>
+    ${k.hist.length>1?`<h3>Évolution du score de conformité</h3><div class="cols">${k.hist.map(r=>`<div title="${esc(r.mois)} : ${r.score}"><em>${r.score}</em><i style="height:${Math.max(3,r.score)}%"></i><small>${esc(new Date(r.mois+"-15").toLocaleDateString("fr-FR",{month:"short"}).replace(".",""))}</small></div>`).join("")}</div>`:`<p class="note">L'évolution mensuelle du score est enregistrée depuis cette année : elle sera présentée mois par mois dans le prochain rapport.</p>`}
+    ${foot(nextP())}</section>`);
+  /* 10. Formation à distance, veille et communication */
+  pages.push(`<section class="pg">${run("Formation à distance et veille")}
+    <div class="sh" style="--c:#2E7DB8"><span class="n">10</span><div><h2>Formation à distance, veille et communication</h2><p>Faire grandir la culture de la protection des données</p></div></div>
+    <h3>Formation à distance et jeux de sensibilisation</h3>
+    <div class="grid3"><div class="kpi" style="--c:#2E7DB8"><b>${k.rsPeople}</b><span>collaborateurs formés à distance</span><em>${k.rs} parcours suivi${k.rs>1?"s":""}</em></div><div class="kpi" style="--c:#1F8A52"><b>${k.rsOk}</b><span>formations validées</span><em>${k.rsAvg!=null?`score moyen ${k.rsAvg} %`:"aucun score"}</em></div><div class="kpi" style="--c:#BA6AA7"><b>${k.jeu}</b><span>participants aux jeux et quiz</span></div></div>
+    ${k.rsCours.length?`<div class="two" style="margin-top:10px"><div><h3>Par module</h3>${bars(k.rsCours.slice(0,6), k.rsCours[0][1], "#2E7DB8")}</div><div><h3>Par direction</h3>${bars(k.rsDirs.slice(0,6), k.rsDirs[0]?.[1], "#1F8A52")}</div></div>`:""}
+    <h3>Veille réglementaire</h3>
+    <div class="grid3"><div class="kpi" style="--c:#800064"><b>${k.news}</b><span>actualités suivies</span><em>${k.newsWeeks} semaine${k.newsWeeks>1?"s":""} couverte${k.newsWeeks>1?"s":""}</em></div><div class="kpi" style="--c:#800064"><b>${k.lettres}</b><span>lettres RGPD préparées</span><em>éditorial personnalisé</em></div><div class="kpi" style="--c:#3C3732"><b>${k.actVeille}</b><span>actions issues de la veille</span></div></div>
+    ${k.newsCats.length?`<div class="two" style="margin-top:10px"><div><h3>Actualités par thème</h3>${bars(k.newsCats, k.newsCats[0][1], "#800064")}</div><div><h3>Faits marquants</h3>${k.newsTop.length?`<table><tbody>${k.newsTop.slice(0,6).map(x=>`<tr><td style="white-space:nowrap">${fmtD(String(x.date).slice(0,10))}</td><td><b>${esc(x.titre)}</b><br><span class="note">${esc((NEWS_CATS[x.categorie]||{}).l||"")}</span></td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucun fait marquant.</div>`}</div></div>`:`<div class="empty">Aucune actualité enregistrée sur la période.</div>`}
+    ${foot(nextP())}</section>`);
+  return pages;
+}
+/* --- Annexes : inventaire et journal complets --- */
+function arAnnexPages(k, h){
+  const {run, foot, nextP} = h, pages = [];
+  /* Découpage en pages selon la hauteur estimée de chaque ligne (texte qui passe à la ligne) */
+  const chunk = (rows, lines) => { const out = []; let cur = [], h = 0, cap = 800; rows.forEach(r=>{ const rh = 28 + 16*(lines(r)-1); if (cur.length && h+rh>cap){ out.push(cur); cur = []; h = 0; cap = 900; } cur.push(r); h += rh; }); if (cur.length || !out.length) out.push(cur); return out; };
+  const L = (txt, per) => Math.max(1, Math.ceil(String(txt||"").length/per));
+  const d10 = v => v ? fmtD(String(v).slice(0,10)) : "—";
+  const inv = [];
+  const add = (cat, list, f) => list.forEach(x=>inv.push([cat, ...f(x)]));
+  add("Traitement créé", k.trtNewList, t=>[d10(t.dateCreation), `${t.ref||""} · ${t.nom||""}`]);
+  add("Fiche revue", k.trtRevList, t=>[d10(t.derniereRevue), `${t.ref||""} · ${t.nom||""}`]);
+  add("AIPD lancée", k.aipdNewList, t=>[d10(t.dateCreation), `${t.ref||""} · ${t.titre||""} (${optL(MODS.aipd.opts.statut,t.statut).toLowerCase()})`]);
+  add("Sous-traitant ajouté", k.stNewList, t=>[d10(t.dateCreation), `${t.nom||""}${t.prestation?" · "+t.prestation:""}`]);
+  add("Projet suivi", k.prjList.concat(items("projets").filter(t=>t.statut==="abandonne")), t=>[d10(t.dateCreation), `${t.ref||""} · ${t.nom||""} (${optL(MODS.projets.opts.statut,t.statut).toLowerCase()})`]);
+  add("Demande de droits", k.demList, t=>[d10(t.dateReception), `${t.ref||""} · ${optL(TYPES_DROIT,t.type).replace(/\s*\(art\.[^)]*\)/,"")} (${optL(MODS.demandes.opts.statut,t.statut).toLowerCase()})`]);
+  add("Violation de données", k.vioList, t=>[d10(t.dateDecouverte), `${t.ref||""} · ${t.titre||"Incident"}`]);
+  add("Règle de conservation créée", k.consNewList, t=>[d10(t.dateCreation), `${t.titre||""}${t.service?" · "+t.service:""}`]);
+  add("Suppression réalisée", k.purges, x=>[d10(x.date), `${x.titre||""}${x.volume?" · "+x.volume:""}`]);
+  add("Session de sensibilisation", k.forList, t=>[d10(t.date), `${t.intitule||"Sensibilisation"}${nbPart(t)?` · ${nbPart(t)} participant(s)`:""}`]);
+  add("Action réalisée", k.actDoneList, t=>[d10(t.dateRealisation||t.dateMaj), `${t.ref||""} · ${t.titre||""}`]);
+  add("Pièce justificative", k.pjNewList, p=>[d10(p.ajouteLe), `${p.nom||""} (${(PJ_CATS[p.categorie]||"pièce").toLowerCase()})`]);
+  add("Revue annuelle", k.camps, c=>[d10(c.lance), `Campagne de revue : ${c.n} fiche(s), ${c.conf} confirmée(s), ${c.mod} mise(s) à jour`]);
+  const C1 = chunk(inv, r=>Math.max(L(r[0],22), L(r[2],60)));
+  C1.forEach((rows,i)=>pages.push(`<section class="pg">${run("Annexe A · Inventaire de l'année")}
+    ${i===0?`<div class="sh" style="--c:#4A6B8A"><span class="n">A</span><div><h2>Inventaire de l'année</h2><p>Tout ce qui a été créé, revu, traité ou réalisé sur la période, sans exception (${inv.length} élément${inv.length>1?"s":""})</p></div></div>`:`<h3>Inventaire de l'année (suite)</h3>`}
+    ${rows.length?`<table><thead><tr><th style="width:24%">Nature</th><th style="width:14%">Date</th><th>Élément</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r[0])}</td><td style="white-space:nowrap">${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucun élément sur la période.</div>`}
+    ${foot(nextP())}</section>`));
+  const C2 = chunk(k.journal, r=>Math.max(L(r.m,18), L([r.ref,r.name].filter(Boolean).join(" · "),34), L(r.op,26)));
+  C2.forEach((rows,i)=>pages.push(`<section class="pg">${run("Annexe B · Journal des opérations")}
+    ${i===0?`<div class="sh" style="--c:#3C3732"><span class="n">B</span><div><h2>Journal complet des opérations</h2><p>Chaque création, modification, validation, suppression et formation consignée dans Égide (${k.journal.length} opération${k.journal.length>1?"s":""})</p></div></div>`:`<h3>Journal des opérations (suite)</h3>`}
+    ${rows.length?`<table><thead><tr><th style="width:14%">Date</th><th style="width:20%">Module</th><th>Dossier</th><th style="width:28%">Opération</th></tr></thead><tbody>${rows.map(r=>`<tr><td style="white-space:nowrap">${esc(d10(r.at))}</td><td>${esc(r.m)}</td><td>${esc([r.ref, r.name].filter(Boolean).join(" · "))}</td><td>${esc(r.op)}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucune opération consignée sur la période.</div>`}
+    ${foot(nextP())}</section>`));
+  return pages;
+}
 
 /* ================= Exports ================= */
 const slugOrg = () => (norm(S.org.raisonSociale||"registre").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")) || "registre";
