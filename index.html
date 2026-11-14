@@ -2961,7 +2961,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.15-b";
+const EGIDE_VERSION = "2026.11.15-c";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -6705,7 +6705,7 @@ const AR_CSS = `.ar .dponote{margin:6px 0 12px;padding:9px 13px;border-left:3px 
 .ar .sign b{color:var(--navy);display:block}
 @media print{ .ar .pg{box-shadow:none;margin:0} }
 @page{size:A4;margin:0}
-`;
+/* --- Présentation 2026 : plus lisible et plus accueillante --- */.ar .pg{padding:15mm 15mm 16mm}.ar .sh{position:relative;gap:14px;padding:13px 16px 13px 14px;margin:0 0 14px;border-radius:16px;background:linear-gradient(115deg,color-mix(in srgb,var(--c,var(--blue)) 13%,#fff) 0%,color-mix(in srgb,var(--c,var(--blue)) 4%,#fff) 60%,#fff 100%);border:1px solid color-mix(in srgb,var(--c,var(--blue)) 18%,#fff);overflow:hidden}.ar .sh::after{content:"";position:absolute;right:-18mm;top:-14mm;width:46mm;height:46mm;border-radius:50%;background:color-mix(in srgb,var(--c,var(--blue)) 9%,transparent)}.ar .sh .n{width:42px;height:42px;border-radius:13px;font-size:15pt;box-shadow:0 4px 12px color-mix(in srgb,var(--c,var(--blue)) 35%,transparent)}.ar .sh h2{font-size:16.5pt;line-height:1.15;color:var(--navy)}.ar .sh p{font-size:8.8pt;margin-top:2px}.ar .takeaway{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;margin:0 0 14px;padding:11px 14px;border-radius:14px;background:#FFF8E8;border:1px solid #F3DFB2;break-inside:avoid}.ar .takeaway::before{content:"💡";width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#fff;font-size:13pt;box-shadow:0 1px 3px rgba(0,0,0,.08)}.ar .takeaway b{display:block;font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:#9A6A00;margin-bottom:1px}.ar .takeaway p{margin:0;font-size:10.3pt;line-height:1.45;color:#3C3732}.ar .lead{font-size:10.5pt;line-height:1.55;color:#3d4650}.ar h3{font-size:10.8pt;color:var(--navy);margin:16px 0 8px}.ar h3::before{width:5px;height:15px;border-radius:3px}.ar .kpi{border:0;border-radius:14px;padding:11px 13px 10px;background:color-mix(in srgb,var(--c,var(--blue)) 7%,#fff);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c,var(--blue)) 14%,#fff);border-top:0;position:relative;overflow:hidden}.ar .kpi::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:0 4px 4px 0;background:var(--c,var(--blue))}.ar .kpi b{color:var(--c,var(--navy));font-size:20pt}.ar .kpi span{color:#4d5560;font-weight:500}.ar .kpi em{color:color-mix(in srgb,var(--c,var(--blue)) 80%,#000)}.ar .msgs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ar .msg{grid-template-columns:30px 1fr;padding:10px 12px;border-radius:13px;background:#F6F8FB;font-size:9.4pt;line-height:1.45;align-items:center;break-inside:avoid}.ar .msg i{width:30px;height:30px;border-radius:50%;background:#fff;font-size:12pt;box-shadow:0 1px 3px rgba(0,0,0,.08)}.ar .msg p{margin:0}.ar .box{border-radius:16px;padding:13px 16px}.ar .box ul{gap:4px}.ar .box.good{background:linear-gradient(135deg,#E1F3E9,#F1FAF4)}.ar .box.vig{background:linear-gradient(135deg,#FCEFD9,#FEF8EE)}.ar .bar .t{height:11px;border-radius:6px}.ar .bar .t i{border-radius:6px}.ar .bar{font-size:9pt}.ar table{border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}.ar th{background:#F1F5F9;border-bottom:0;color:#4d5a68;padding:7px 9px}.ar td{padding:7px 9px}.ar tbody tr:nth-child(even) td{background:#FAFBFD}.ar tbody tr:last-child td{border-bottom:0}.ar .empty{display:flex;gap:9px;align-items:center;background:#F6F8FB;border:1px dashed #D7DEE6;border-radius:12px;color:#5e6873}.ar .empty::before{content:"i";flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#E3EAF1;color:#5e6873;font-weight:700;font-size:8.5pt;font-family:Georgia,serif;font-style:italic}.ar .reco{grid-template-columns:30px 1fr auto;padding:11px 12px;margin-bottom:6px;border:0;border-radius:13px;background:#F8F9FB}.ar .reco .k{width:30px;height:30px;border-radius:50%}.ar .stack{height:18px;border-radius:9px}.ar .meter .t{height:10px}.ar .hero{border-radius:18px}/* Sommaire */.ar .toc-ed{padding:16px 18px;border-radius:16px;background:linear-gradient(120deg,#E2F1FA,#F6E7F2);margin-bottom:16px;font-size:10.6pt;line-height:1.6;color:#2f3a46}.ar .toc-ed b.sig{display:block;margin-top:8px;font-size:9pt;color:var(--navy)}.ar .toc{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}.ar .toc a{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:13px;text-decoration:none;color:inherit;background:color-mix(in srgb,var(--c) 6%,#fff);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 14%,#fff);break-inside:avoid}.ar .toc .tn{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--c);color:#fff;font-family:"Sora",sans-serif;font-weight:700;font-size:12pt}.ar .toc b{display:block;font-size:10pt;color:var(--navy);line-height:1.25}.ar .toc small{display:block;font-size:8pt;color:var(--muted);margin-top:1px}.ar .toc .tp{font-family:"Sora",sans-serif;font-weight:700;color:var(--c);font-size:11pt}.ar .toc-help{display:flex;gap:10px;margin-top:16px;padding:12px 14px;border-radius:14px;background:#F6F8FB;font-size:9pt;color:#4d5560;line-height:1.5}.ar .toc-help i{font-style:normal;font-size:13pt}.ar .kpis{gap:7px;margin-bottom:12px}.ar .kpi{padding:9px 12px 8px}.ar .kpi b{font-size:18pt}.ar .msg{padding:8px 11px;font-size:9.1pt}.ar .msgs{gap:6px;margin-bottom:10px}.ar .hero{padding:13px 16px;margin-bottom:12px}.ar .reco{padding:8px 11px;margin-bottom:4px}.ar .takeaway{padding:9px 13px;margin-bottom:12px}.ar .sh{padding:11px 15px 11px 13px;margin-bottom:12px}.ar .box{padding:11px 14px}.ar .box ul{font-size:9pt}.ar .reco span{font-size:8.7pt;line-height:1.4}.ar .reco{padding:7px 11px}`;
 const arIso = d => isoLocal(d);
 function arPeriod(Y){ return {from:`${Y-1}-12-01`, to:`${Y}-11-30`}; }
 const arLastYear = () => { const t=today(), y=+t.slice(0,4); return t>=`${y}-12-01` ? y : y-1; };
@@ -6826,6 +6826,7 @@ function arBuild(Y, o={}){
     <div class="cv-bot"><div>Présenté à<b>La direction générale</b></div><div>Préparé par<b>${esc(author)}</b>${esc(role)}</div><div>Édité le<b>${fmtD(T)}</b>${preview?"Aperçu, version définitive le 1er décembre":"Généré automatiquement par Égide"}</div></div>
   </section>`);
   p++;
+  const tocAt = p++;
   pages.push(`<section class="pg">${run("Synthèse")}
     <div class="sh" style="--c:#0088CE"><span class="n">1</span><div><h2>L'année en un coup d'œil</h2><p>Synthèse pour la direction générale</p></div></div>
     <div class="hero">${ring(k.score)}<div><h3>${lv[4]} ${lv[1]}</h3><p data-ed="synthese">${esc(lv[2])} Le score tient compte de la complétude et de la validation du registre, des dossiers sans point d'attention et des points urgents.</p>
@@ -6842,7 +6843,7 @@ function arBuild(Y, o={}){
       <div class="kpi" style="--c:#6B4FBB"><b>${k.prj}</b><span>projets accompagnés</span><em>${k.prjEleve} à enjeu élevé</em></div>
       <div class="kpi" style="--c:#1F8A52"><b>${k.rsPeople}</b><span>formés à distance</span><em>${k.rsOk} formation${k.rsOk>1?"s":""} validée${k.rsOk>1?"s":""}</em></div>
       <div class="kpi" style="--c:#800064"><b>${k.news}</b><span>actualités suivies</span><em>${k.actVeille} action${k.actVeille>1?"s":""} issue${k.actVeille>1?"s":""} de la veille</em></div>
-      <div class="kpi" style="--c:#4A6B8A"><b>${k.journal.length}</b><span>opérations consignées</span><em>détail en annexe</em></div>
+      <div class="kpi" style="--c:#4A6B8A"><b>${k.journal.length}</b><span>opérations consignées</span><em>sur l'année</em></div>
     </div>
     <h3>Les messages clés</h3>
     <div class="msgs" data-ed="messages">${msgs.map(([e,t])=>`<div class="msg"><i>${e}</i><p>${t}</p></div>`).join("")}</div>
@@ -6876,7 +6877,7 @@ function arBuild(Y, o={}){
     <div class="legend"><span style="--lc:#1F8A52">Contrat signé · <b>${k.stSigne}</b></span><span style="--lc:#E0A23B">En négociation · <b>${k.stNego}</b></span><span style="--lc:#C8243D">Sans contrat · <b>${k.stAbsent}</b></span><span style="--lc:#003865">Hors UE · <b>${k.stHorsUE}</b></span></div>
     ${k.st?`<table style="margin-top:8px"><thead><tr><th>Prestataire</th><th>Prestation</th><th>Contrat</th></tr></thead><tbody>${items("soustraitants").filter(t=>t.statut!=="termine").slice(0,8).map(t=>`<tr><td><b>${esc(t.nom||"—")}</b>${t.exemple?' <span class="note">(exemple)</span>':""}</td><td>${esc(t.prestation||"—")}</td><td><span class="pill ${t.contrat==="signe"?"ok":t.contrat==="en_cours"?"warn":"crit"}">${esc(optL(MODS.soustraitants.opts.contrat,t.contrat)||"Absent")}</span></td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucun sous-traitant enregistré : à recenser (paie, hébergement, logiciels en ligne…).</div>`}
     ${foot(p++)}</section>`);
-  pages.push(`<section class="pg">${run("Conservation, sensibilisation et preuves")}
+  pages.push(`<section class="pg">${run("Conservation et sensibilisation")}
     <div class="sh" style="--c:#1A8A80"><span class="n">5</span><div><h2>Durées de conservation</h2><p>Article 5.1.e · ne garder les données que le temps nécessaire</p></div></div>
     <div class="grid3"><div class="kpi" style="--c:#1A8A80"><b>${k.cons}</b><span>règles de suppression programmées</span></div><div class="kpi" style="--c:#1A8A80"><b>${k.purges.length}</b><span>suppressions réalisées et prouvées</span></div><div class="kpi" style="--c:${k.consLate?"#C8243D":"#1A8A80"}"><b>${k.consLate}</b><span>suppressions en retard</span><em>${k.consNext} prévue${k.consNext>1?"s":""} dans les 3 mois</em></div></div>
     ${k.purges.length?`<table style="margin-top:10px"><thead><tr><th>Date</th><th>Règle</th><th>Direction</th><th>Volume</th></tr></thead><tbody>${k.purges.slice(0,8).map(x=>`<tr><td>${fmtD(x.date)}</td><td><b>${esc(x.titre||"")}</b></td><td>${esc(x.service||"—")}</td><td>${esc(x.volume||"—")}</td></tr>`).join("")}</tbody></table>`:`<p class="note" style="margin-top:8px">Les premières suppressions programmées interviendront à partir des échéances fixées dans Égide ; chacune sera consignée avec sa preuve.</p>`}
@@ -6884,7 +6885,9 @@ function arBuild(Y, o={}){
     <div class="two"><div class="grid3" style="grid-template-columns:1fr 1fr"><div class="kpi" style="--c:#2E7DB8"><b>${k.forSess}</b><span>sessions réalisées</span></div><div class="kpi" style="--c:#2E7DB8"><b>${k.forPart}</b><span>participants</span><em>${k.quizAvg!=null?`quiz : ${k.quizAvg} % de réussite`:""}</em></div></div>
       <div>${k.forList.length?`<table><thead><tr><th>Date</th><th>Session</th></tr></thead><tbody>${k.forList.slice(0,5).map(f=>`<tr><td>${fmtD(f.date)}</td><td><b>${esc(f.intitule||"Sensibilisation")}</b>${f.scoreQuiz?` <span class="note">· quiz ${esc(f.scoreQuiz)}</span>`:""}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucune session enregistrée sur la période.</div>`}</div></div>
     <p class="note" style="margin-top:6px">Quatre formations prêtes à présenter sont disponibles dans Égide : L'essentiel du RGPD, Cybersécurité, Managers et RH, Commercial et marketing.</p>
-    <div class="sh" style="--c:#4A6B8A;margin-top:18px"><span class="n">7</span><div><h2>Preuves et activité</h2><p>Principe de responsabilité (art. 5.2) : pouvoir démontrer la conformité</p></div></div>
+    ${foot(p++)}</section>`);
+  pages.push(`<section class="pg">${run("Preuves et activité")}
+    <div class="sh" style="--c:#4A6B8A"><span class="n">7</span><div><h2>Preuves et activité</h2><p>Principe de responsabilité (art. 5.2) : pouvoir démontrer la conformité</p></div></div>
     <div class="two"><div><h3>Pièces justificatives</h3>${k.pj?bars(k.pjCats.slice(0,6).map(([c,v])=>[PJ_CATS[c]||"Autre",v]), k.pjCats[0]?.[1], "#4A6B8A"):`<div class="empty">Aucune pièce jointe pour l'instant : contrats signés, émargements et notifications sont à archiver dans Égide.</div>`}</div>
       <div><h3>Activité de conformité par mois</h3><div class="cols">${k.months.map(([l,v,mk])=>`<div title="${esc(l)} : ${v} opération${v>1?"s":""}">${v===maxM&&v?`<em>${v}</em>`:""}<i style="height:${(100*v/maxM).toFixed(1)}%;${mk>T.slice(0,7)?"background:#E8ECF0":""}"></i><small>${esc(l)}</small></div>`).join("")}</div><p class="note" style="margin-top:20px">${k.ops} opérations consignées (créations, mises à jour, revues, suppressions).</p></div></div>
     ${foot(p++)}</section>`);
@@ -6904,8 +6907,29 @@ function arBuild(Y, o={}){
     <h3>Méthode et périmètre</h3>
     <p class="note" data-ed="methode">Méthode : le score de conformité (sur 100) combine la qualité du registre (45 %, une fiche en brouillon comptant pour 60 % de sa complétude), la part des dossiers en cours sans point d'attention (40 %) et la part des fiches validées (15 %), moins 3 points par point urgent ouvert (15 points au plus). Les chiffres de la période portent ${per}. ${items("traitements").some(t=>t.exemple)?"Certaines fiches d'exemple fournies avec l'application sont incluses dans les chiffres.":""}</p>
     ${foot(p++)}</section>`);
-  pages.push(...arAnnexPages(k, {run, foot, nextP:()=>p++}));
-  const body = `<div class="ar">${pages.join("").replace(/(<div class="sh"[^>]*><span class="n">(\d+)<\/span><div><h2)>([\s\S]*?<\/h2><p)>([\s\S]*?<\/p><\/div><\/div>)/g, (m,a,n,b,c)=>`${a} data-ed="h-${n}">${b} data-ed="hs-${n}">${c}<div class="dponote" data-ed="note-${n}"></div>`)}<section class="pg dpoann" data-ed-wrap><div class="dponote big" data-ed="annexe"></div></section></div>`;
+  const nRec = reco.length, nHaute = reco.filter(r=>r[0]==="Haute").length;
+  const TA = {
+    2:`${n(k.trt,"traitement est recensé","traitements sont recensés")} au registre, complétés à ${k.compl} % en moyenne. ${k.trtBrouillon?`${n(k.trtBrouillon,"fiche reste","fiches restent")} à valider par les directions.`:"Toutes les fiches sont validées."}${k.aipdMissing?` ${n(k.aipdMissing,"analyse d'impact obligatoire est","analyses d'impact obligatoires sont")} à lancer.`:""}`,
+    3:`${k.dem?`${n(k.dem,"demande d'exercice des droits reçue","demandes d'exercice des droits reçues")}${k.demRep?`, traitées en ${k.demDelai} jours en moyenne`:""}.`:"Aucune demande d'exercice des droits sur la période."} ${k.vio?`${n(k.vio,"violation de données déclarée","violations de données déclarées")}, ${k.vioNotif} notifiée${k.vioNotif>1?"s":""} à la CNIL.`:"Aucune violation de données déclarée."}`,
+    4:k.st?`${k.stSigne} prestataire${k.stSigne>1?"s":""} sur ${k.st} ${k.stSigne>1?"ont":"a"} signé les clauses de protection des données (article 28).${k.stAbsent?` ${n(k.stAbsent,"contrat reste","contrats restent")} à obtenir.`:""}`:"Aucun sous-traitant n'est encore suivi dans Égide.",
+    5:k.cons?`${n(k.cons,"règle de suppression est pilotée","règles de suppression sont pilotées")}, ${n(k.purges.length,"suppression réalisée","suppressions réalisées")} sur la période${k.consLate?`, ${k.consLate} en retard`:""}.`:"Les durées de conservation ne sont pas encore pilotées par des échéances de suppression.",
+    6:k.forSess?`${n(k.forSess,"session de sensibilisation","sessions de sensibilisation")}${k.forPart?` pour ${n(k.forPart,"participant","participants")}`:""} cette année.`:"Aucune session de sensibilisation en salle n'a été enregistrée : c'est une priorité pour l'année à venir.",
+    7:`${n(k.pj,"pièce justificative est archivée","pièces justificatives sont archivées")} dans Égide et ${n(k.ops,"opération de conformité a été consignée","opérations de conformité ont été consignées")} sur l'année.`,
+    8:k.prj?`${n(k.prj,"projet est accompagné","projets sont accompagnés")} dès leur conception${k.prjEleve?`, dont ${k.prjEleve} à enjeu élevé`:""}. Les points de privacy by design sont traités à ${k.prjPbd} % en moyenne.`:"Aucun projet n'est encore suivi : associer le DPO dès le lancement des nouveaux projets est un levier simple et efficace.",
+    9:`${k.cnilOk} point${k.cnilOk>1?"s":""} sur ${k.cnil.length} ${k.cnilOk>1?"sont prêts":"est prêt"} en cas de contrôle de la CNIL. ${k.coh.crit?`${n(k.coh.crit,"incohérence critique","incohérences critiques")} à corriger dans le registre.`:"Aucune incohérence critique dans le registre."}`,
+    10:`${k.news} actualité${k.news>1?"s":""} réglementaire${k.news>1?"s":""} suivie${k.news>1?"s":""} sur l'année${k.rsPeople?` et ${n(k.rsPeople,"collaborateur formé","collaborateurs formés")} à distance`:""}.`,
+    11:`${n(nRec,"recommandation est proposée","recommandations sont proposées")} pour ${Y+1}, dont ${n(nHaute,"prioritaire","prioritaires")}. Elles sont soumises à la validation de la direction générale.`,
+    12:`${n(k.crit,"point urgent","points urgents")} et ${n(k.warn,"point important","points importants")} restent ouverts ; ${n(k.actOpen,"action est en cours","actions sont en cours")}.`
+  };
+  const PG = [];
+  pages.forEach((pg,i)=>{ for (const m of pg.matchAll(/<div class="sh" style="--c:([^;"]+)[^"]*"><span class="n">(\d+)<\/span><div><h2>([^<]*)<\/h2><p>([^<]*)<\/p>/g)) PG.push({n:+m[2], t:m[3], s:m[4], c:m[1]||"#0088CE", page:i+2}); });
+  pages.splice(1, 0, `<section class="pg">${run("Sommaire")}
+    <div class="sh" style="--c:#003865"><span class="n">☰</span><div><h2>Sommaire</h2><p>Comment lire ce rapport</p></div></div>
+    <div class="toc-ed" data-ed="edito">Ce rapport présente le bilan de la protection des données personnelles chez ${esc(org)} ${per}. Il s'adresse à la direction générale : la <b>synthèse</b> (page 3) donne l'essentiel en une page, chaque chapitre commence par un encadré « À retenir », et la <b>feuille de route</b> propose les priorités pour ${Y+1}.<b class="sig">${esc(author)}, ${esc(role.toLowerCase())}</b></div>
+    <div class="toc">${PG.map(x=>`<a style="--c:${x.c}"><span class="tn">${x.n}</span><span><b>${esc(x.t)}</b><small>${esc(x.s)}</small></span><span class="tp">${x.page}</span></a>`).join("")}</div>
+    <div class="toc-help"><i>🧭</i><span>Les chiffres portent sur la période ${per}. Les pastilles de couleur signalent le niveau d'attention : <b style="color:#1F8A52">vert</b> pour ce qui est maîtrisé, <b style="color:#B86A06">orange</b> pour ce qui est à améliorer, <b style="color:#C8243D">rouge</b> pour ce qui est urgent.</span></div>
+    ${foot(tocAt)}</section>`);
+  const body = `<div class="ar">${pages.join("").replace(/(<div class="sh"[^>]*><span class="n">(\d+)<\/span><div><h2)>([\s\S]*?<\/h2><p)>([\s\S]*?<\/p><\/div><\/div>)/g, (m,a,n,b,c)=>`${a} data-ed="h-${n}">${b} data-ed="hs-${n}">${c}${TA[n]?`<div class="takeaway"><div><b>À retenir</b><p data-ed="ta-${n}">${TA[n]}</p></div></div>`:""}<div class="dponote" data-ed="note-${n}"></div>`)}<section class="pg dpoann" data-ed-wrap><div class="dponote big" data-ed="annexe"></div></section></div>`;
   return {body, k, preview, P:Pv, title:`Rapport annuel de conformité RGPD ${Y}`};
 }
 function arDoc(r){
@@ -10307,41 +10331,6 @@ function arMorePages(k, h){
     ${foot(nextP())}</section>`);
   return pages;
 }
-/* --- Annexes : inventaire et journal complets --- */
-function arAnnexPages(k, h){
-  const {run, foot, nextP} = h, pages = [];
-  /* Découpage en pages selon la hauteur estimée de chaque ligne (texte qui passe à la ligne) */
-  const chunk = (rows, lines) => { const out = []; let cur = [], h = 0, cap = 800; rows.forEach(r=>{ const rh = 28 + 16*(lines(r)-1); if (cur.length && h+rh>cap){ out.push(cur); cur = []; h = 0; cap = 900; } cur.push(r); h += rh; }); if (cur.length || !out.length) out.push(cur); return out; };
-  const L = (txt, per) => Math.max(1, Math.ceil(String(txt||"").length/per));
-  const d10 = v => v ? fmtD(String(v).slice(0,10)) : "—";
-  const inv = [];
-  const add = (cat, list, f) => list.forEach(x=>inv.push([cat, ...f(x)]));
-  add("Traitement créé", k.trtNewList, t=>[d10(t.dateCreation), `${t.ref||""} · ${t.nom||""}`]);
-  add("Fiche revue", k.trtRevList, t=>[d10(t.derniereRevue), `${t.ref||""} · ${t.nom||""}`]);
-  add("AIPD lancée", k.aipdNewList, t=>[d10(t.dateCreation), `${t.ref||""} · ${t.titre||""} (${optL(MODS.aipd.opts.statut,t.statut).toLowerCase()})`]);
-  add("Sous-traitant ajouté", k.stNewList, t=>[d10(t.dateCreation), `${t.nom||""}${t.prestation?" · "+t.prestation:""}`]);
-  add("Projet suivi", k.prjList.concat(items("projets").filter(t=>t.statut==="abandonne")), t=>[d10(t.dateCreation), `${t.ref||""} · ${t.nom||""} (${optL(MODS.projets.opts.statut,t.statut).toLowerCase()})`]);
-  add("Demande de droits", k.demList, t=>[d10(t.dateReception), `${t.ref||""} · ${optL(TYPES_DROIT,t.type).replace(/\s*\(art\.[^)]*\)/,"")} (${optL(MODS.demandes.opts.statut,t.statut).toLowerCase()})`]);
-  add("Violation de données", k.vioList, t=>[d10(t.dateDecouverte), `${t.ref||""} · ${t.titre||"Incident"}`]);
-  add("Règle de conservation créée", k.consNewList, t=>[d10(t.dateCreation), `${t.titre||""}${t.service?" · "+t.service:""}`]);
-  add("Suppression réalisée", k.purges, x=>[d10(x.date), `${x.titre||""}${x.volume?" · "+x.volume:""}`]);
-  add("Session de sensibilisation", k.forList, t=>[d10(t.date), `${t.intitule||"Sensibilisation"}${nbPart(t)?` · ${nbPart(t)} participant(s)`:""}`]);
-  add("Action réalisée", k.actDoneList, t=>[d10(t.dateRealisation||t.dateMaj), `${t.ref||""} · ${t.titre||""}`]);
-  add("Pièce justificative", k.pjNewList, p=>[d10(p.ajouteLe), `${p.nom||""} (${(PJ_CATS[p.categorie]||"pièce").toLowerCase()})`]);
-  add("Revue annuelle", k.camps, c=>[d10(c.lance), `Campagne de revue : ${c.n} fiche(s), ${c.conf} confirmée(s), ${c.mod} mise(s) à jour`]);
-  const C1 = chunk(inv, r=>Math.max(L(r[0],22), L(r[2],60)));
-  C1.forEach((rows,i)=>pages.push(`<section class="pg">${run("Annexe A · Inventaire de l'année")}
-    ${i===0?`<div class="sh" style="--c:#4A6B8A"><span class="n">A</span><div><h2>Inventaire de l'année</h2><p>Tout ce qui a été créé, revu, traité ou réalisé sur la période, sans exception (${inv.length} élément${inv.length>1?"s":""})</p></div></div>`:`<h3>Inventaire de l'année (suite)</h3>`}
-    ${rows.length?`<table><thead><tr><th style="width:24%">Nature</th><th style="width:14%">Date</th><th>Élément</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r[0])}</td><td style="white-space:nowrap">${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucun élément sur la période.</div>`}
-    ${foot(nextP())}</section>`));
-  const C2 = chunk(k.journal, r=>Math.max(L(r.m,18), L([r.ref,r.name].filter(Boolean).join(" · "),34), L(r.op,26)));
-  C2.forEach((rows,i)=>pages.push(`<section class="pg">${run("Annexe B · Journal des opérations")}
-    ${i===0?`<div class="sh" style="--c:#3C3732"><span class="n">B</span><div><h2>Journal complet des opérations</h2><p>Chaque création, modification, validation, suppression et formation consignée dans Égide (${k.journal.length} opération${k.journal.length>1?"s":""})</p></div></div>`:`<h3>Journal des opérations (suite)</h3>`}
-    ${rows.length?`<table><thead><tr><th style="width:14%">Date</th><th style="width:20%">Module</th><th>Dossier</th><th style="width:28%">Opération</th></tr></thead><tbody>${rows.map(r=>`<tr><td style="white-space:nowrap">${esc(d10(r.at))}</td><td>${esc(r.m)}</td><td>${esc([r.ref, r.name].filter(Boolean).join(" · "))}</td><td>${esc(r.op)}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">Aucune opération consignée sur la période.</div>`}
-    ${foot(nextP())}</section>`));
-  return pages;
-}
-
 /* ================= Exports ================= */
 const slugOrg = () => (norm(S.org.raisonSociale||"registre").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")) || "registre";
 const clean = t => { const {_id, ...rest} = t; return {id:_id, ...rest}; };
