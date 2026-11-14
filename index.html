@@ -2424,6 +2424,7 @@ body:has(#edit-form) .chatfab{bottom:calc(92px + env(safe-area-inset-bottom,0px)
 .prjb-l li.ok .prjb-i{background:var(--ok);border-color:var(--ok)}
 .prjb-l li.ok b{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line-2)}
 .prjb-l b{display:block;font-size:.9rem;color:var(--heading)}
+.prjb-b{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .prjb-l small{display:block;font-size:.78rem;color:var(--muted)}
 .qdl{list-style:none;margin:0 0 6px;padding:0;display:flex;flex-direction:column;gap:5px}
 .qdl li{display:flex;gap:8px;align-items:baseline;font-size:.9rem}
@@ -2939,7 +2940,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.14-j";
+const EGIDE_VERSION = "2026.11.15-a";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -8658,6 +8659,7 @@ MODS.projets.opts = {
   entrainement:{non:{l:"Non (désactivé ou exclu par contrat)",tone:"ok"}, oui:{l:"Oui",tone:"crit"}, inconnu:{l:"À vérifier",tone:"warn"}},
   role:{deployeur:{l:"Déployeur (nous utilisons l'outil)",tone:"info",d:"Cas le plus fréquent : l'entreprise utilise un système d'IA fourni par un tiers."}, fournisseur:{l:"Fournisseur (nous développons l'outil)",tone:"warn",d:"L'entreprise développe ou met sur le marché le système d'IA sous son nom."}},
   risque:{inacceptable:{l:"Pratique interdite",tone:"crit",d:"Notation sociale, reconnaissance des émotions au travail, manipulation… (art. 5) : interdit depuis le 2 février 2025."}, haut:{l:"Haut risque",tone:"warn",d:"Recrutement, évaluation ou gestion des salariés, accès à des services essentiels… (annexe III) : obligations applicables au 2 décembre 2027."}, transparence:{l:"Transparence",tone:"info",d:"Agent conversationnel, contenus générés : informer les personnes qu'elles interagissent avec une IA ou que le contenu est généré."}, minimal:{l:"Risque minimal",tone:"ok",d:"Filtres anti-spam, correcteurs, outils bureautiques : pas d'obligation spécifique au-delà de la maîtrise de l'IA (art. 4)."}},
+  rattach:{existant:{l:"Rattacher à un traitement existant",tone:"info",d:"Le projet s'appuie sur un ou plusieurs traitements déjà inscrits au registre."}, nouveau:{l:"Créer un nouveau traitement",tone:"info",d:"Après l'enregistrement du projet, Égide ouvre une fiche de traitement pré-remplie avec ses informations."}, plus_tard:{l:"Décider plus tard",tone:"neutral",d:"Le projet n'est pas encore assez avancé pour le dire."}},
   avis:{attente:{l:"En attente",tone:"neutral"}, favorable:{l:"Favorable",tone:"ok"}, reserves:{l:"Favorable avec réserves",tone:"warn"}, defavorable:{l:"Défavorable",tone:"crit"}}
 };
 const PRJ_Q = [
@@ -8690,6 +8692,11 @@ MODS.projets.sections = [
     {k:"description", l:"Description du projet", t:"textarea", full:true, ph:"Objectifs, périmètre, outils envisagés, personnes concernées…"},
     {k:"iaUtilise", l:"Le projet utilise-t-il l'intelligence artificielle ?", t:"radio", o:"iaUtilise", full:true}
   ]},
+  {id:"liens", t:"Registre des traitements", sub:"Art. 30", done:d=>!!d.rattach || prjTrtsD(d).length>0, intro:"Le projet repose-t-il sur un traitement déjà inscrit au registre, ou faut-il en créer un ?", fields:[
+    {k:"rattach", l:"Rattachement au registre", t:"radio", o:"rattach", full:true},
+    {k:"traitementIds", l:"Traitements du registre liés au projet", t:"links", full:true, showIf:d=>d.rattach==="existant" || prjTrtsD(d).length>0},
+    {k:"rattachInfo", l:"", t:"html", full:true, noImport:true, hideDetail:true, showIf:d=>d.rattach==="nouveau" && !prjTrtsD(d).length, render:()=>`<div class="notice">${I.info}<div>Après l'enregistrement du projet, Égide ouvrira une <b>nouvelle fiche de traitement</b> pré-remplie (nom, direction, chef de projet, description). Vous la complétez puis l'enregistrez : elle sera reliée automatiquement au projet.</div></div>`}
+  ]},
   {id:"qualif", t:"Qualification RGPD", sub:"Art. 25 et 35", req:["donneesPerso"], intro:"Quelques questions pour savoir ce que le projet implique : fiche du registre, AIPD, contrat, information des personnes.", fields:[
     {k:"donneesPerso", l:"Le projet traite-t-il des données personnelles ?", t:"radio", o:"donneesPerso", full:true},
     {k:"qualif", l:"Questions de qualification", t:"qgrid", full:true, noImport:true, showIf:d=>d.donneesPerso!=="non", fmt:t=>prjQDetail(t), plain:t=>PRJ_Q.filter(q=>t[q.k]).map(q=>`${q.l} ${optL(PRJ_ON3,t[q.k])}`).join(" | ")},
@@ -8717,9 +8724,6 @@ MODS.projets.sections = [
     {k:"avisDate", l:"Date de l'avis", t:"date"},
     {k:"prochainPoint", l:"Prochain point avec l'équipe projet", t:"date"}
   ]},
-  {id:"liens", t:"Registre", intro:"Les fiches du registre qui décrivent les traitements du projet.", fields:[
-    {k:"traitementIds", l:"Traitements du registre liés au projet", t:"links", full:true}
-  ]}
 ];
 MODS.projets.columns = [
   {h:"Projet", w:"minmax(0,1fr)", v:t=>`<span class="nm">${esc(t.nom||"Sans titre")}${exTag(t)}${flags("projets",t)}<small>${esc([optL(MODS.projets.opts.type,t.type), dirLabel(t), t.chefProjet].filter(Boolean).join(" · "))}</small></span>`},
@@ -9288,7 +9292,7 @@ function vTrtDetail(){
   <div class="glance" aria-label="La fiche en un coup d'œil">${glance}</div>
   ${al.length?`<div class="panel dalerts"><div class="panel-h"><h2>Points à revoir <span class="num muted">${al.length}</span></h2></div><ul class="alerts">${al.map(a=>`<li><button data-action="edit" ${W()?"":"disabled"}><span class="sev ${a.sev}"></span><span><span class="t">${esc(a.t)}</span><br><span class="s">${esc(a.s)}</span></span><span class="muted">›</span></button></li>`).join("")}</ul></div>`:""}
   ${revBanner(t)}
-  <div class="linkline"><span class="muted">Éléments liés :</span>${["aipd","soustraitants","demandes","violations"].flatMap(m=>linkedTo(m,t._id).map(x=>`<button class="chip ${MODS[m].cls}" data-action="open" data-mod="${m}" data-id="${esc(x._id)}">${esc(MODS[m].single)} · ${esc(x.ref||titleOf(m,x))}</button>`)).join("")||'<span class="muted">aucun</span>'}${W()&&!linkedTo("aipd",t._id).length?`<button class="lnk" data-action="aipd-from-trt">+ Lancer une AIPD</button>`:""}</div>
+  <div class="linkline"><span class="muted">Éléments liés :</span>${["projets","aipd","soustraitants","demandes","violations"].flatMap(m=>linkedTo(m,t._id).map(x=>`<button class="chip ${MODS[m].cls}" data-action="open" data-mod="${m}" data-id="${esc(x._id)}">${esc(MODS[m].single)} · ${esc(x.ref||titleOf(m,x))}</button>`)).join("")||'<span class="muted">aucun</span>'}${W()&&!linkedTo("aipd",t._id).length?`<button class="lnk" data-action="aipd-from-trt">+ Lancer une AIPD</button>`:""}</div>
   <div class="dcards">
     ${card("s-id","Identification","",`<dt>Direction concernée</dt><dd>${val(t.service)}</dd><dt>Pilote opérationnel</dt><dd>${val(t.pilote)}</dd><dt>Rôle de l'entreprise</dt><dd>${esc(optL(ROLES,t.role||"responsable"))}${t.roleClient?` · ${esc(t.roleClient)}`:""}</dd><dt>Sources de collecte</dt><dd>${tagv("source")}</dd>`)}
     ${card("s-fin","Finalité et base légale","Art. 30.1.b · art. 6",`<dt>Finalités et bases légales</dt><dd>${finDetail(t)}</dd>${String(t.baseLegaleDetail||"").trim()&&!t.bljAuto?`<dt>Précisions générales</dt><dd>${val(t.baseLegaleDetail)}</dd>`:""}<dt>Information des personnes</dt><dd>${arr(t.infoModes).length||t.informationPersonnes?chips(t.infoModes,t.informationPersonnes):none}</dd>`)}
@@ -9738,6 +9742,7 @@ const ltActions = {
 const prjCrit = t => PRJ_Q.filter(q=>q.c!=null && t[q.k]==="oui").sort((a,b)=>a.c-b.c).map(q=>CRITERES[q.c]);
 const prjAipds = t => items("aipd").filter(a=>(t._id && a.projetId===t._id) || arr(a.traitementIds).some(id=>arr(t.traitementIds).includes(id)));
 const prjTrts = t => arr(t.traitementIds).map(id=>S.data.traitements.get(id)).filter(Boolean);
+const prjTrtsD = d => arr(d.traitementIds).filter(id=>S.data.traitements.has(id));
 const pbdS = (t,k) => (t.pbd||{})[k]?.s || "";
 function prjEnjeu(t){
   if (t.donneesPerso==="non") return {k:"aucun", l:"Pas de données personnelles", tone:"ok"};
@@ -9764,7 +9769,7 @@ function prjBilan(t, live){
   const e = prjEnjeu(t), C = prjCrit(t), L = prjTodo(t);
   return `<div class="prjb ${e.k}">
     <div class="prjb-h"><span class="pill t-${e.tone}">${esc(e.l)}</span>${t.donneesPerso==="oui"?`<span class="muted">${C.length} critère${C.length>1?"s":""} CNIL sur 9${C.length?` : ${esc(C.join(" · "))}`:""}</span>`:""}</div>
-    ${L.length?`<ul class="prjb-l">${L.map(x=>`<li class="${x.done?"ok":""}"><span class="prjb-i" aria-hidden="true">${x.done?"✓":""}</span><div><b>${esc(x.t)}</b><small>${esc(x.s)}</small></div>${!live&&!x.done&&x.act&&W()?`<button class="btn sm" data-action="${x.act}">${esc(x.b)}</button>`:""}</li>`).join("")}</ul>`
+    ${L.length?`<ul class="prjb-l">${L.map(x=>`<li class="${x.done?"ok":""}"><span class="prjb-i" aria-hidden="true">${x.done?"✓":""}</span><div><b>${esc(x.t)}</b><small>${esc(x.s)}</small></div>${!live&&!x.done&&x.act&&W()?`<span class="prjb-b"><button class="btn sm" data-action="${x.act}">${esc(x.b)}</button>${x.act==="prj-trt"?`<button class="btn sm ghost" data-action="edit-at" data-to="sec-liens">Rattacher un existant</button>`:""}</span>`:""}</li>`).join("")}</ul>`
       : `<p class="muted">${t.donneesPerso==="non"?"Aucune démarche RGPD n'est nécessaire tant que le projet ne traite pas de données personnelles.":"Répondez aux questions ci-dessus pour savoir ce qu'il faut faire."}</p>`}
   </div>`;
 }
@@ -9861,8 +9866,15 @@ function prjDraftAipd(t){
   const trt = prjTrts(t)[0]; if (trt) prefillAipd(d, trt);
   return d;
 }
+function prjCheck(d){
+  const go2 = () => { const s = document.getElementById("sec-liens"); if (s){ s.scrollIntoView({block:"start"}); s.querySelector("input")?.focus({preventScroll:true}); } };
+  if (d.rattach==="existant" && !prjTrtsD(d).length){ toast("Choisissez le ou les traitements du registre auxquels rattacher le projet."); go2(); return false; }
+  if (!d._id && !d.rattach && d.donneesPerso!=="non"){ toast("Indiquez si le projet se rattache à un traitement existant ou s'il faut en créer un nouveau."); go2(); return false; }
+  return true;
+}
 async function prjAfterSave(mod, id, d, isNew){
-  if (mod==="traitements" && d.projetId){ const p = S.data.projets.get(d.projetId); if (p && !arr(p.traitementIds).includes(id)) { try{ await persist("projets", p._id, {...p, traitementIds:[...arr(p.traitementIds), id]}, "Fiche du registre liée"); }catch(e){} } }
+  if (mod==="traitements" && d.projetId){ const p = S.data.projets.get(d.projetId); if (p && !arr(p.traitementIds).includes(id)) { try{ await persist("projets", p._id, {...p, rattach:"existant", traitementIds:[...arr(p.traitementIds), id]}, "Fiche du registre liée"); }catch(e){} } }
+  if (mod==="projets" && d.rattach==="nouveau" && !prjTrtsD(d).length && W()) S.afterSave = () => { render(); const p = S.data.projets.get(id); if (p) startEdit("traitements", prjDraftTrt(p)); };
   if (mod==="traitements" && S.qimp?.file){ const f = S.qimp.file; S.qimp = null; setTimeout(()=>pjUpload([f], "traitements", id, "questionnaire").catch(()=>{}), 500); }
 }
 function prjPreSave(mod, d){
@@ -9885,7 +9897,7 @@ function vPilProjets(){
 function iaToProjet(x, ref){
   const st = x.statut==="abandonne" ? "abandonne" : x.statut==="en_test" ? "recette" : "service";
   return {ref, refAnciennes:[...arr(x.refAnciennes), x.ref].filter(Boolean), nom:x.nom||"Outil d'IA", type:"ia", iaUtilise:"oui", statut:st, service:x.service||"", description:x.usage||"",
-    fournisseur:x.fournisseur||"", utilisateurs:x.utilisateurs||"", iaStatut:x.statut&&x.statut!=="abandonne"?x.statut:"", donneesPerso:x.donneesPerso||"", iaCategories:arr(x.categories), entrainement:x.entrainement||"",
+    rattach:arr(x.traitementIds).length?"existant":"", fournisseur:x.fournisseur||"", utilisateurs:x.utilisateurs||"", iaStatut:x.statut&&x.statut!=="abandonne"?x.statut:"", donneesPerso:x.donneesPerso||"", iaCategories:arr(x.categories), entrainement:x.entrainement||"",
     hebergement:x.hebergement||"", traitementIds:arr(x.traitementIds), role:x.role||"", risque:x.risque||"", mesures:arr(x.mesures), iaCommentaire:x.commentaire||"",
     q_innovation:"oui", q_sensibles:arr(x.categories).some(c=>/sensibles/i.test(c))?"oui":"", q_prestataire:x.fournisseur?"oui":"",
     exemple:!!x.exemple, dateCreation:x.dateCreation||new Date().toISOString(), history:[...arr(x.history), {at:new Date().toISOString(), by:S.uid||null, action:"Repris depuis l'ancien module Outils d'IA"}]};
@@ -10101,7 +10113,10 @@ async function qImport(file, projId){
   } catch(e){ toast(e?.msg || "Ce fichier n'a pas pu être lu. Vérifiez qu'il s'agit du questionnaire Word d'Égide."); }
 }
 function qimpBanner(){
-  const q = S.qimp; if (!q || S.mod!=="traitements") return "";
+  const q = S.qimp;
+  if (!q && S.mod==="traitements" && S.draft && !S.draft._id && S.draft.projetId){ const p = S.data.projets.get(S.draft.projetId);
+    return p ? `<div class="qimp"><span class="qimp-i">${I.rocket}</span><div class="qimp-t"><b>Nouvelle fiche pour le projet ${esc(p.ref||"")} « ${esc(p.nom||"")} »</b><span>Elle est pré-remplie avec les informations du projet et sera reliée au projet à l'enregistrement. Complétez les finalités, les bases légales, les données et les durées.</span></div></div>` : ""; }
+  if (!q || S.mod!=="traitements") return "";
   return `<div class="qimp"><span class="qimp-i">${I.check}</span><div class="qimp-t"><b>Fiche pré-remplie à partir du questionnaire${q.by?" de "+esc(q.by):""}</b><span>${q.n} réponse${q.n>1?"s":""} reprise${q.n>1?"s":""}. Vérifiez chaque rubrique et choisissez la base légale de chaque finalité avant d'enregistrer. Le questionnaire sera joint à la fiche comme pièce justificative.</span>
     <details><summary>Voir les réponses de l'opérationnel</summary><dl>${q.raw.map(([l,v])=>`<dt>${esc(l)}</dt><dd>${v?esc(v).replace(/\n/g,"<br>"):'<span class="none">Sans réponse</span>'}</dd>`).join("")}</dl></details></div></div>`;
 }
@@ -10581,6 +10596,7 @@ async function saveDraft(){
   const reqFields = mod==="traitements" ? [{k:"nom",l:"Nom du traitement"}] : MODS[mod].sections.flatMap(s=>s.fields).filter(f=>f.req);
   const miss = reqFields.find(f=>!filled(d[f.k]));
   if (miss){ toast("Champ obligatoire : "+miss.l); document.querySelector(`[data-field="${miss.k}"]`)?.focus(); return; }
+  if (mod==="projets" && !prjCheck(d)) return;
   S.busy = true;
   try{
     const isNew = !d._id;
@@ -10595,6 +10611,7 @@ async function saveDraft(){
     await prjAfterSave(mod, id, d, isNew);
     S.draft = null; S.dirty=false; S.selId = id; S.view = "detail"; S.confirmDel=false;
     S.justSaved = {id, isNew};
+    if (S.afterSave){ const f=S.afterSave; S.afterSave=null; S.busy=false; f(); return; }
     if (S.pending){ const p=S.pending; S.pending=null; S.busy=false; p(); return; }
   } catch(e){ writeError(e); }
   S.busy = false; render(); window.scrollTo(0,0);
