@@ -1968,7 +1968,7 @@ body.train .rail,body.train #chatfab,body.train #welcome,body.train #savebtn{dis
 /* --- Conservation et sécurité --- */
 .durref{padding:12px 14px;border-radius:14px;background:var(--primary-soft);border:1px solid color-mix(in srgb,var(--primary) 18%,transparent)}
 .durref-src{font-size:.8rem;color:var(--primary);min-height:0}
-.secg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
+.secg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px;align-items:start}
 .secg-b{border:1px solid var(--line);border-radius:14px;padding:10px 12px 12px;margin:0;min-width:0}
 .secg-b legend{font-size:.8rem;font-weight:700;color:var(--heading);padding:0 6px}.secg-b legend span{color:var(--muted);font-weight:600;margin-left:4px}
 .secg-b .checks{grid-template-columns:minmax(0,1fr)!important;display:grid;gap:4px}
@@ -2058,6 +2058,31 @@ ul.senswhy li{display:flex;flex-direction:column;padding:6px 10px;border-radius:
 .tour-card{position:fixed;width:360px;max-width:calc(100vw - 32px);background:var(--surface,#fff);color:var(--ink);border-radius:16px;padding:16px 18px;box-shadow:0 20px 50px rgba(0,0,0,.3);pointer-events:auto;display:flex;flex-direction:column;gap:6px}
 .tour-card h3{margin:0;color:var(--heading)}.tour-card p{margin:0;font-size:.9rem;line-height:1.5}
 @media (max-width:640px){.prel li{grid-template-columns:10px minmax(0,1fr)}.prel li .btn{grid-column:2}.pdir-k{grid-template-columns:repeat(2,1fr)}}
+
+/* --- Fiche v3 --- */
+.checks-desc{grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))!important}
+.checks-desc label{align-items:flex-start}.checks-desc label>span{display:flex;flex-direction:column;gap:1px}
+.cdesc{font-size:.74rem;color:var(--muted);font-weight:400;line-height:1.35}
+.rl{display:flex;flex-direction:column;gap:6px}
+.rl-row{position:relative;display:grid;gap:8px 10px;grid-template-columns:repeat(3,minmax(0,1fr));padding:10px 46px 10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--sunk,rgba(0,0,0,.02))}
+.rl-consL{grid-template-columns:repeat(2,minmax(0,1fr))}.rl-consL .rlf-objet{grid-column:1/-1}
+.rl-dexL .rlf-prec{grid-column:1/-1}
+.rlf{display:flex;flex-direction:column;gap:3px;min-width:0;margin:0}.rlf>span{font-size:.72rem;font-weight:700;color:var(--muted)}
+.rlf input,.rlf select{min-width:0;width:100%}
+.rl-x{position:absolute;top:8px;right:6px}
+.rl-hint{display:flex;flex-direction:column;gap:4px}.rl-hint p{margin:0;display:flex;gap:6px;align-items:flex-start;font-size:.82rem;color:#B86A06}.rl-hint svg{width:15px;height:15px;flex:none;margin-top:2px}
+ul.rlv{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}ul.rlv li{display:flex;flex-direction:column;padding:6px 10px;border-radius:10px;background:var(--sunk,rgba(0,0,0,.03))}ul.rlv li span{color:var(--muted);font-size:.84rem}
+table.consv td,table.consv th{font-size:.84rem}
+.secg-b{padding:0}.secg-b summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-size:.86rem;font-weight:700;color:var(--heading);list-style:none}
+.secg-b summary::-webkit-details-marker{display:none}
+.secg-b summary::after{content:"▾";margin-left:8px;color:var(--muted);transition:transform .2s}.secg-b[open] summary::after{transform:rotate(180deg)}
+.secg-n{margin-left:auto;font-size:.75rem;font-weight:700;color:var(--muted);background:var(--sunk,rgba(0,0,0,.05));padding:1px 8px;border-radius:99px}
+.secg-b.has .secg-n{background:var(--primary-soft);color:var(--primary)}
+.secg-b .checks{padding:0 12px 12px}.secg-all{justify-self:start;font-size:.78rem}
+.stdisc-l{display:flex;flex-direction:column;gap:4px;max-height:280px;overflow:auto}
+.stdisc-l label{display:flex;gap:8px;align-items:baseline;padding:5px 8px;border-radius:8px;background:var(--sunk,rgba(0,0,0,.03))}.stdisc-l label.gen{opacity:.75}.stdisc-l em{font-size:.74rem;color:#B86A06;font-style:normal}
+.stdisc-l small{color:var(--muted);margin-left:auto;font-family:var(--mono,ui-monospace,monospace);font-size:.74rem}
+@media (max-width:640px){.rl-row,.rl-consL{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div class="app">
@@ -2450,7 +2475,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.13-f";
+const EGIDE_VERSION = "2026.11.14-b";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -2463,7 +2488,7 @@ const BASES = [
   {k:"interet_legitime", l:"Intérêt légitime", a:"Art. 6.1.f", d:"Intérêt de l'entreprise, sans atteinte excessive aux droits."}
 ];
 const PERSONNES = ["Salariés","Candidats","Stagiaires et alternants","Intérimaires et prestataires","Clients","Prospects","Fournisseurs","Partenaires","Visiteurs des locaux","Utilisateurs du site ou de l'application"];
-const DONNEES = ["État civil, identité, identifiants","Coordonnées","Vie personnelle (habitudes, situation familiale…)","Vie professionnelle (CV, formation, carrière…)","Informations économiques et financières","Données de connexion (adresse IP, logs…)","Données de localisation","Images, photos, vidéos, voix","Numéro de sécurité sociale (NIR)","Infractions et condamnations"];
+const DONNEES = ["État civil, identité, identifiants","Coordonnées","Vie personnelle (habitudes, situation familiale…)","Vie professionnelle (CV, formation, carrière…)","Informations économiques et financières","Données de connexion (adresse IP, logs…)","Données de localisation","Images, photos, vidéos, voix","Numéro de sécurité sociale (NIR)","Infractions et condamnations","Pièces d'identité et titres de séjour","Coordonnées bancaires et moyens de paiement","Évaluations, tests et appréciations","Temps de travail, congés et absences","Contenus des communications","Commandes, contrats et transactions","Navigation internet et traceurs","Accès aux locaux","Véhicule et permis de conduire","Matériel et usage des outils numériques","Proches et ayants droit","Opinions et avis exprimés"];
 const SENSIBLES = ["Origine raciale ou ethnique","Opinions politiques","Convictions religieuses ou philosophiques","Appartenance syndicale","Données génétiques","Données biométriques","Données de santé","Vie ou orientation sexuelle"];
 /* ================= Directions : uniquement celles de l'organisation ================= */
 const DIR_HORS = "Direction à rattacher";
@@ -2547,7 +2572,11 @@ const DUREES_REF = [
     ["Bulletins de paie (double remis au salarié)","Durée du contrat de travail","5 ans après leur émission","Art. L3243-4 C. trav."],
     ["Éléments de calcul de la paie et des cotisations","Année en cours","6 ans (contrôle fiscal), 3 ans (créances salariales)","Art. L102 B LPF, art. L3245-1 C. trav."],
     ["Registre unique du personnel","Durée du contrat de travail","5 ans après le départ du salarié","Art. R1221-26 C. trav."],
-    ["Candidatures non retenues","Durée du processus de recrutement","2 ans après le dernier contact, avec l'accord du candidat","Référentiel CNIL recrutement"],
+    ["Candidature : processus de recrutement","Durée du processus de recrutement","Aucun archivage","CNIL, les durées de conservation des données"],
+    ["Candidature non retenue : suites du recrutement","Durée strictement nécessaire après la clôture du recrutement (politique interne)","Aucun archivage (éléments probatoires : ligne dédiée)","CNIL, cycle de vie des données"],
+    ["Vivier de candidats","2 ans maximum après le dernier contact, sauf effacement ou retrait du consentement","Aucun archivage","CNIL, durées de conservation (candidats non retenus)"],
+    ["Recrutement : éléments probatoires","Aucune utilisation opérationnelle","Jusqu'à 5 ans, éléments strictement nécessaires à la défense des droits, accès restreint et base séparée","Prescription (art. 2224 C. civ. ; action en discrimination, art. L1134-5 C. trav.)"],
+    ["Candidat recruté","Jusqu'à la décision définitive d'embauche","Transfert des seules données nécessaires au dossier du personnel","CNIL, gestion du personnel"],
     ["Décompte de la durée du travail","1 an","3 ans (créances salariales)","Art. D3171-16 C. trav."],
     ["Sanctions disciplinaires","3 ans maximum","Aucun archivage","Art. L1332-5 C. trav."],
     ["Entretiens annuels et évaluations","Durée du contrat de travail","5 ans après le départ du salarié","Pratique recommandée"],
@@ -2599,7 +2628,6 @@ const DUREES_REF = [
   ]]
 ];
 const durRefOpts = () => DUREES_REF.map(([g,l],gi)=>`<optgroup label="${esc(g)}">${l.map(([n,a,ar],i)=>`<option value="${gi}.${i}">${esc(n)} : ${esc(a)}${ar&&ar!=="Aucun archivage"?" puis "+esc(ar):""}</option>`).join("")}</optgroup>`).join("");
-function durRefPicker(){ return `<div class="f full durref"><label for="e-durref">Partir d'une durée de référence</label><select id="e-durref" data-durref><option value="">Choisir un type de données (${DUREES_REF.reduce((s,g)=>s+g[1].length,0)} références)…</option>${durRefOpts()}</select><span class="hint">Remplit la base active et l'archivage. Vérifiez qu'ils correspondent à votre usage.</span><div id="durref-src" class="durref-src"></div></div>`; }
 
 /* ================= Mesures de sécurité ================= */
 const SECURITE_G = [
@@ -2612,11 +2640,6 @@ const SECURITE_G = [
   ["Organisation et locaux", ["Sensibilisation des utilisateurs","Charte informatique","Engagement de confidentialité","Sécurité physique des locaux","Contrôle d'accès aux locaux","Destruction sécurisée des documents papier","Impressions sécurisées et bureau propre"]]
 ];
 const SECURITE = SECURITE_G.flatMap(g=>g[1]);
-function secChecks(d){
-  const sel = arr(d.securite);
-  return `<div class="secg">${SECURITE_G.map(([g,l])=>{ const n=l.filter(x=>sel.includes(x)).length; return `<fieldset class="secg-b"><legend>${esc(g)} <span>${n}/${l.length}</span></legend><div class="checks">${l.map(o=>`<label><input type="checkbox" data-arr="securite" value="${esc(o)}" ${sel.includes(o)?"checked":""}>${esc(o)}</label>`).join("")}</div></fieldset>`; }).join("")}</div>
-  ${sel.filter(x=>!SECURITE.includes(x)).length?`<p class="hint">Autres mesures déjà cochées : ${esc(sel.filter(x=>!SECURITE.includes(x)).join(", "))}</p>`:""}`;
-}
 
 /* ================= Données sensibles : indices et explications ================= */
 const SENS_INFO = {
@@ -2630,7 +2653,7 @@ const SENS_INFO = {
   "Vie ou orientation sexuelle":"Orientation sexuelle, vie sexuelle."
 };
 const SENS_RULES = [
-  ["Données de santé", /arr[eê]ts? (de travail|maladie)|maladie|m[eé]dic|sant[eé]|handicap|rqth|invalidit|inaptitud|aptitud|accident(s)? du travail|maternit[eé]|grossesse|mutuelle|pr[eé]voyance|th[eé]rap|soins?\b|hospital|allergi|pathologi|mi-temps th[eé]rapeutique|visite m[eé]dicale|certificat m[eé]dical/],
+  ["Données de santé", /arr[eê]ts? (de travail|maladie)|maladie|m[eé]dic|sant[eé]|handicap|rqth|invalidit|inaptitud|aptitude m[eé]dicale|avis d'aptitude|visite d'aptitude|accident(s)? du travail|maternit[eé]|grossesse|mutuelle|pr[eé]voyance|th[eé]rap|soins?\b|hospital|allergi|pathologi|mi-temps th[eé]rapeutique|visite m[eé]dicale|certificat m[eé]dical/],
   ["Appartenance syndicale", /syndic|d[eé]l[eé]gu[eé] syndical|heures de d[eé]l[eé]gation|gr[eè]ve/],
   ["Données biométriques", /biom[eé]tri|empreinte|reconnaissance faciale|gabarit|iris|contour de la main/],
   ["Convictions religieuses ou philosophiques", /relig|confession|culte|cultuel|halal|casher|aum[oô]n|philosophique/],
@@ -2645,7 +2668,7 @@ const RISK_RULES = [
   ["Données de localisation", /g[eé]oloc|gps|localisation|trajet|t[eé]l[eé]matique/, "Données hautement personnelles : elles révèlent les déplacements et les habitudes ; durée courte et information renforcée."],
   ["Données financières", /iban|rib\b|carte bancaire|coordonn[eé]es bancaires|salaire|r[eé]mun[eé]ration|revenus?/, "Données hautement personnelles : risque de fraude en cas de fuite ; accès restreint et chiffrement."],
   ["Mineurs ou personnes vulnérables", /mineur|enfant|[eé]l[eè]ve|stagiaire de 3e|patient|personne [aâ]g[eé]e|vuln[eé]rable/, "Personnes vulnérables : critère du CEPD qui renforce le besoin d'une analyse d'impact."],
-  ["Surveillance des salariés", /vid[eé]o|cam[eé]ra|keylogger|enregistrement des appels|[eé]coute|surveillance|contr[oô]le de l'activit[eé]/, "Surveillance systématique : critère du CEPD ; information préalable des salariés et consultation du CSE."]
+  ["Surveillance des salariés", /vid[eé]osurveillance|vid[eé]oprotection|cam[eé]ras?\b|keylogger|enregistrement des appels|[eé]coute des appels|surveillance des salari|contr[oô]le de l'activit[eé]|g[eé]olocalisation des salari/, "Surveillance systématique : critère du CEPD ; information préalable des salariés et consultation du CSE."]
 ];
 function trtText(t){ return String([t.nom,t.finalites,arr(t.finalitesL).map(x=>x.f).join(" "),arr(t.donnees).join(" "),t.donneesAutres,arr(t.personnes).join(" "),t.personnesAutres,t.source,t.destinatairesExternes].filter(Boolean).join(" \n ")).toLowerCase(); }
 function sensHints(t){
@@ -3700,6 +3723,9 @@ MODS.traitements.alerts = t => {
   if (t.aipd==="requise"){ const l=linkedTo("aipd",t._id); if(!l.length) a.push({sev:"warn", t:"AIPD requise mais non lancée", s:"Lancez l'analyse d'impact depuis la fiche du traitement."}); else if(!l.some(x=>x.statut==="validee")) a.push({sev:"info", t:"AIPD en cours", s:"L'analyse d'impact n'est pas encore validée."}); }
   if (t.prochaineRevue && t.prochaineRevue < today()) a.push({sev:"warn", t:"Revue annuelle dépassée", s:"Prévue le "+fmtD(t.prochaineRevue)+". Relisez la fiche puis marquez-la comme revue."});
   if (finL(t).some(x=>x.f.trim() && !x.b) && basesOf(t).length) a.push({sev:"warn", t:"Finalité sans base légale", s:"Chaque finalité doit avoir sa propre base légale : complétez la liste des finalités."});
+  { const nc = arr(t.stL).filter(r=>r.nom && ["non","inconnu",""].includes(r.contrat)); if (nc.length) a.push({sev:nc.some(r=>r.contrat==="non")?"crit":"warn", t:"Contrat de sous-traitance à vérifier", s:nc.map(r=>r.nom).join(", ")+" : clauses de l'article 28 requises."}); }
+  { const nc = arr(t.dexL).filter(r=>r.nom && ["aucun","verif",""].includes(r.cadre)); if (nc.length) a.push({sev:"warn", t:"Cadre du partage à documenter", s:nc.map(r=>r.nom).join(", ")+" : indiquez ce qui autorise la transmission (loi, accord, contrat…)."}); }
+  if (arr(t.stL).some(r=>r.heb==="hors_ue") && !t.transfertHorsUE) a.push({sev:"warn", t:"Hébergement hors UE non déclaré en transfert", s:"Un sous-traitant héberge les données hors de l'UE : déclarez le transfert et sa garantie."});
   if (basesOf(t).includes("interet_legitime") && !t.baseLegaleDetail?.trim()) a.push({sev:"warn", t:"Intérêt légitime à documenter", s:"Décrivez l'intérêt poursuivi et la mise en balance avec les droits des personnes."});
   if (!t.prochaineRevue && t.statut==="actif") a.push({sev:"info", t:"Aucune date de revue planifiée", s:"Fixez une prochaine revue pour garder le registre à jour."});
   const risky = arr(t.sensibles).length || arr(t.donnees).some(x=>/sécurité sociale|Infractions|localisation/.test(x)) || t.decisionAuto;
@@ -4408,6 +4434,7 @@ function vList(){
   ${S.mod==="actions"?summaryStrip([["fait","var(--ok)"],["en_cours","var(--primary)"],["a_faire","var(--line-2)"]].map(([k,c])=>({l:optL(MODS.actions.opts.statut,k), n:items("actions").filter(t=>t.statut===k).length, c})), "Avancement"):""}
   ${S.mod==="violations"?`<div class="notice">${I.info}<div>Toute violation, même sans conséquence, doit être consignée ici (art. 33.5). En cas de risque pour les personnes, la CNIL doit être notifiée dans les 72 heures suivant la prise de connaissance.</div></div>`:""}
   ${S.mod==="conservation"?consListTop():""}
+  ${S.mod==="soustraitants"&&S.loaded.traitements?stDiscoverPanel():""}
   ${S.mod==="demandes"?`<div class="notice">${I.info}<div>Vous devez répondre dans un délai d'un mois à compter de la réception, prolongeable de deux mois si la demande est complexe. L'échéance est calculée automatiquement.</div></div>`:""}
   ${S.confirmEx?confirmBox(`Supprimer définitivement les ${exN} exemple(s) ?`,"confirm-ex","cancel-ex"):""}
   ${filterBar(S.mod,{ph:"Rechercher dans "+M.long.toLowerCase()+"…"})}
@@ -4592,7 +4619,9 @@ function vEdit(){
   </div>`;
 }
 function refreshEdit(){
-  if (S.mod==="traitements"){ const sp=$("#sens-panel"); if (sp && S.draft) sp.innerHTML=sensPanel(S.draft); TRT_SECTIONS.forEach((s,i)=>{ const el=$("#ck-"+s.id); if(!el) return; const ok=trtSectionDone(S.draft,s); el.classList.toggle("done",ok); el.textContent=ok?"✓":i+1; }); const c=$("#draft-cmp"); if(c) c.textContent="Complétude "+completeness(S.draft)+" %"; return; }
+  if (S.mod==="traitements"){ const sp=$("#sens-panel"); if (sp && S.draft) sp.innerHTML=sensPanel(S.draft);
+    const rh=$("#rl-hints"); if (rh && S.draft) rh.innerHTML=rlHints(S.draft);
+    const wb=$("#wrap-blj"); if (wb && S.draft && bljNeeded(S.draft)){ wb.hidden=false; $("#blj-add")?.setAttribute("hidden",""); const lab=bljField(S.draft).match(/id="blj-l">([^<]*)</)?.[1]; const hn=bljField(S.draft).match(/id="blj-h">([^<]*)</)?.[1]; if (lab) $("#blj-l").innerHTML=lab; if (hn) $("#blj-h").innerHTML=hn; } TRT_SECTIONS.forEach((s,i)=>{ const el=$("#ck-"+s.id); if(!el) return; const ok=trtSectionDone(S.draft,s); el.classList.toggle("done",ok); el.textContent=ok?"✓":i+1; }); const c=$("#draft-cmp"); if(c) c.textContent="Complétude "+completeness(S.draft)+" %"; return; }
   MODS[S.mod].sections.forEach((s,i)=>{ const el=$("#ck-"+s.id); if(el){ const ok=secDone(s,S.draft); el.classList.toggle("done",ok); el.textContent=ok?"✓":i+1; } s.fields.forEach(f=>{ if(f.showIf){ const w=$("#w-"+f.k); if(w) w.hidden=!f.showIf(S.draft); } }); });
 }
 
@@ -4650,8 +4679,8 @@ function vTrtDetail(){
     <div class="sect"><h3>Identification</h3><dl class="kv"><dt>Rôle de l'entreprise</dt><dd>${esc(ROLES[t.role||"responsable"])}${t.roleClient?` · ${esc(t.roleClient)}`:""}</dd><dt>Direction concernée</dt><dd>${val(t.service)}</dd><dt>Pilote opérationnel</dt><dd>${val(t.pilote)}</dd><dt>Source des données</dt><dd>${val(t.source)}</dd></dl></div>
     <div class="sect"><h3>Finalité et base légale<small>Art. 30.1.b · art. 6</small></h3><dl class="kv"><dt>Finalités et bases légales</dt><dd>${finDetail(t)}</dd><dt>Justification</dt><dd>${val(t.baseLegaleDetail)}</dd><dt>Information des personnes</dt><dd>${arr(t.infoModes).length||t.informationPersonnes?chips(t.infoModes,t.informationPersonnes):val("")}</dd></dl></div>
     <div class="sect"><h3>Personnes et données<small>Art. 30.1.c · art. 9</small></h3><dl class="kv"><dt>Personnes concernées</dt><dd>${chips(t.personnes,t.personnesAutres)}</dd><dt>Catégories de données</dt><dd>${chips(t.donnees,t.donneesAutres)}</dd><dt>Données sensibles</dt><dd>${arr(t.sensibles).length?`${chips(t.sensibles,"","sens")}<ul class="senswhy">${sensWhy(t)}</ul>`:"Aucune"}</dd>${arr(t.sensibles).length?`<dt>Exception art. 9.2</dt><dd>${val(t.sensiblesJustif)}</dd>`:""}${riskHints(t).length?`<dt>Données à risque élevé</dt><dd><ul class="senswhy">${riskHints(t).map(r=>`<li><b>${esc(r.cat)}</b><span>${esc(r.why)}</span></li>`).join("")}</ul></dd>`:""}</dl></div>
-    <div class="sect"><h3>Destinataires et transferts<small>Art. 30.1.d · 30.1.e</small></h3><dl class="kv"><dt>Destinataires internes</dt><dd>${val(t.destinatairesInternes)}</dd><dt>Destinataires externes</dt><dd>${val(t.destinatairesExternes)}</dd><dt>Sous-traitants (texte libre)</dt><dd>${val(t.sousTraitants)}</dd><dt>Transfert hors UE</dt><dd>${t.transfertHorsUE?`Oui · ${val(t.transfertPays)}`:"Non"}</dd>${t.transfertHorsUE?`<dt>Garanties</dt><dd>${val(t.transfertGaranties)}</dd>`:""}</dl></div>
-    <div class="sect"><h3>Conservation et sécurité<small>Art. 30.1.f · 30.1.g</small></h3><dl class="kv"><dt>Durée en base active</dt><dd>${val(t.conservation)}</dd><dt>Archivage intermédiaire</dt><dd>${val(t.conservationArchivage)}</dd>${consTrtBlock(t)}<dt>Mesures de sécurité</dt><dd>${chips(t.securite,t.securiteAutres)}</dd></dl></div>
+    <div class="sect"><h3>Destinataires et transferts<small>Art. 30.1.d · 30.1.e</small></h3><dl class="kv"><dt>Destinataires internes</dt><dd>${val(t.destinatairesInternes)}</dd><dt>Destinataires externes</dt><dd>${arr(t.dexL).length?`<ul class="rlv">${t.dexL.map(r=>`<li><b>${esc(r.nom)}</b><span>${esc([DEX_TYPES.find(x=>x[0]===r.type)?.[1], DEX_CADRES.find(x=>x[0]===r.cadre)?.[1]||"cadre à préciser", r.prec].filter(Boolean).join(" · "))}</span></li>`).join("")}</ul>`:val(t.destinatairesExternes)}</dd><dt>Sous-traitants</dt><dd>${arr(t.stL).length?`<ul class="rlv">${t.stL.map(r=>`<li><b>${r.stId&&S.data.soustraitants.get(r.stId)?`<button class="lnk" data-action="open" data-mod="soustraitants" data-id="${esc(r.stId)}">${esc(r.nom)}</button>`:esc(r.nom)}</b><span>${esc([r.role, [HEB_OPTS.find(x=>x[0]===r.heb)?.[1],r.lieu].filter(Boolean).join(", ")||"hébergement à préciser", "contrat : "+(CTR_OPTS.find(x=>x[0]===r.contrat)?.[1]||"à préciser")].filter(Boolean).join(" · "))}</span></li>`).join("")}</ul>`:val(t.sousTraitants)}</dd><dt>Transfert hors UE</dt><dd>${t.transfertHorsUE?`Oui · ${val(t.transfertPays)}`:"Non"}</dd>${t.transfertHorsUE?`<dt>Garanties</dt><dd>${val(t.transfertGaranties)}</dd>`:""}</dl></div>
+    <div class="sect"><h3>Conservation et sécurité<small>Art. 30.1.f · 30.1.g</small></h3><dl class="kv">${arr(t.consL).length>1?`<dt>Durées par phase</dt><dd><div class="tbl-wrap"><table class="tbl consv"><thead><tr><th>Données ou phase</th><th>Base active</th><th>Archivage intermédiaire</th></tr></thead><tbody>${t.consL.map(r=>`<tr><td>${esc(r.objet||"—")}</td><td>${esc(r.active||"—")}</td><td>${esc(r.archive||"—")}</td></tr>`).join("")}</tbody></table></div></dd>`:`<dt>Durée en base active</dt><dd>${val(t.conservation)}</dd><dt>Archivage intermédiaire</dt><dd>${val(t.conservationArchivage)}</dd>`}${consTrtBlock(t)}<dt>Mesures de sécurité</dt><dd>${chips(t.securite,t.securiteAutres)}</dd></dl></div>
     <div class="sect"><h3>Suivi et conformité</h3><dl class="kv"><dt>Décision automatisée</dt><dd>${t.decisionAuto?"Oui":"Non"}</dd><dt>AIPD</dt><dd>${esc(AIPD_FLAG[t.aipd]||"—")}</dd><dt>Dernière revue</dt><dd>${fmtD(t.derniereRevue)}</dd><dt>Prochaine revue</dt><dd>${fmtD(t.prochaineRevue)}</dd><dt>Notes</dt><dd>${val(t.notes)}</dd></dl></div>
     ${historyBlock(t)}
   </div>
@@ -4663,7 +4692,7 @@ function vTrtEdit(){
   const d = S.draft; const isNew = !d._id;
   const T = (id,lbl,hint,ph="",type="text") => `<div class="f"><label for="e-${id}">${lbl}</label><input type="${type}" id="e-${id}" data-field="${id}" value="${esc(d[id])}" placeholder="${esc(ph)}">${hint?`<span class="hint">${hint}</span>`:""}</div>`;
   const A = (id,lbl,hint,ph="",full=true) => `<div class="f ${full?"full":""}"><label for="e-${id}">${lbl}</label><textarea id="e-${id}" data-field="${id}" placeholder="${esc(ph)}">${esc(d[id])}</textarea>${hint?`<span class="hint">${hint}</span>`:""}</div>`;
-  const C = (id,opts,cls="") => `<div class="checks ${cls}">${opts.map(o=>`<label><input type="checkbox" data-arr="${id}" value="${esc(o)}" ${arr(d[id]).includes(o)?"checked":""}>${esc(o)}</label>`).join("")}</div>`;
+  const C = (id,opts,cls="") => `<div class="checks ${cls} ${id==="donnees"?"checks-desc":""}">${opts.map(o=>`<label><input type="checkbox" data-arr="${id}" value="${esc(o)}" ${arr(d[id]).includes(o)?"checked":""}><span>${esc(o)}${id==="donnees"&&DONNEES_DESC[o]?`<small class="cdesc">${esc(DONNEES_DESC[o])}</small>`:""}</span></label>`).join("")}</div>`;
   const svcList = [...new Set([...(S.org.services||"").split(/[,;\n]/).map(s=>s.trim()), ...items("traitements").map(t=>t.service?.trim())].filter(Boolean))];
   const sec = (id,title,sub,body) => `<section class="panel fs" id="${id}"><div class="panel-h"><h2>${title}${sub?` <small>${sub}</small>`:""}</h2></div><div class="panel-b fields">${body}</div></section>`;
   return `
@@ -4683,7 +4712,7 @@ function vTrtEdit(){
         ${A("source","Source des données","Collecte directe, fichier transmis, tiers… Étirez la case par son coin inférieur droit.","Ex. : formulaire de candidature",false)}`)}
       ${sec("s-fin","Finalité et base légale","Art. 6 · 30.1.b",`
         ${finBasesEditor(d)}
-        ${A("baseLegaleDetail","Justification des bases légales","Indispensable pour l'intérêt légitime (mise en balance) et le consentement (modalités de recueil).","Ex. : article L.3243-2 du Code du travail")}
+        ${bljField(d)}
         <div class="f full"><span class="lbl">Information des personnes</span><span class="hint">Article 13 en collecte directe, article 14 si les données viennent d'un tiers. Cochez toutes les modalités utilisées.</span>${C("infoModes",INFO_MODES)}</div>
         ${A("informationPersonnes","Autres modalités et précisions","Ce qui n'est pas dans la liste, ou les détails utiles : où trouver la mention, à quel moment elle est donnée…","Ex. : mention en bas du formulaire de candidature en ligne, rappel dans l'accusé de réception")}`)}
       ${sec("s-pers","Personnes et données","Art. 9 · 30.1.c",`
@@ -4695,15 +4724,12 @@ function vTrtEdit(){
         <div class="f full" id="wrap-sens" ${arr(d.sensibles).length?"":"hidden"}><label for="e-sensiblesJustif">Exception de l'article 9.2 applicable</label><textarea id="e-sensiblesJustif" data-field="sensiblesJustif" placeholder="Ex. : 9.2.b, obligations en matière de droit du travail">${esc(d.sensiblesJustif)}</textarea><div class="sugg">${SENS_EXC.map(([k,l])=>`<button type="button" class="sg" data-action="sens-exc" data-v="${esc(`Art. ${k} : ${l}`)}" title="${esc(l)}">${k} · ${esc(l.length>46?l.slice(0,44)+"…":l)}</button>`).join("")}</div></div>`)}
       ${sec("s-dest","Destinataires et transferts","Art. 30.1.d · 30.1.e",`
         ${A("destinatairesInternes","Destinataires internes","Services ou fonctions qui ont accès aux données.","Ex. : service RH, direction financière",false)}
-        ${A("destinatairesExternes","Destinataires externes","Organismes et partenaires qui reçoivent les données.","Ex. : URSSAF, caisses de retraite",false)}
-        ${A("sousTraitants","Sous-traitants","Vous pouvez aussi les gérer en détail dans le module Sous-traitants.","Ex. : éditeur du logiciel de paie")}
+        ${destSection(d)}
         <div class="f full"><label class="switch"><input type="checkbox" id="e-transfert" data-field="transfertHorsUE" ${d.transfertHorsUE?"checked":""}>Des données sont transférées hors de l'Union européenne</label></div>
         <div class="f" data-tr ${d.transfertHorsUE?"":"hidden"}><label for="e-transfertPays">Pays de destination</label><input type="text" id="e-transfertPays" data-field="transfertPays" value="${esc(d.transfertPays)}" placeholder="Ex. : États-Unis"></div>
         <div class="f" data-tr ${d.transfertHorsUE?"":"hidden"}><label for="e-transfertGaranties">Garanties encadrant le transfert</label><input type="text" id="e-transfertGaranties" data-field="transfertGaranties" value="${esc(d.transfertGaranties)}" placeholder="Ex. : clauses contractuelles types"></div>`)}
       ${sec("s-cons","Conservation et sécurité","Art. 30.1.f · 30.1.g",`
-        ${durRefPicker()}
-        <div class="f"><label for="e-conservation">Durée de conservation en base active</label><input type="text" id="e-conservation" data-field="conservation" value="${esc(d.conservation)}" placeholder="Ex. : durée du contrat de travail"><div class="sugg">${DUREES.map(x=>`<button type="button" class="sg" data-action="sugg" data-k="conservation" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>
-        <div class="f"><label for="e-conservationArchivage">Archivage intermédiaire</label><input type="text" id="e-conservationArchivage" data-field="conservationArchivage" value="${esc(d.conservationArchivage)}" placeholder="Ex. : 5 ans après le départ"><div class="sugg">${ARCHIVES.map(x=>`<button type="button" class="sg" data-action="sugg" data-k="conservationArchivage" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>
+        ${consSection(d)}
         <div class="f full"><span class="lbl">Mesures de sécurité</span><span class="hint">Classées selon le guide de la sécurité des données personnelles de la CNIL.</span>${secChecks(d)}</div>
         ${T("securiteAutres","Autres mesures","","Ex. : habilitations revues chaque semestre")}`)}
       ${sec("s-suivi","Suivi et conformité","",`
@@ -7567,7 +7593,7 @@ MODS.violations.extra = t => {
 /* ================= Évaluation sécurité des sous-traitants ================= */
 const STQ = [["certif","Le prestataire dispose-t-il d'une certification de sécurité (ISO 27001, HDS, SecNumCloud…) ?",2],["ue","Les données sont-elles hébergées dans l'Union européenne ?",2],["chiffr","Les données sont-elles chiffrées au repos et en transit ?",2],["mfa","L'accès à la solution exige-t-il une double authentification ?",2],["habil","Les accès de son personnel aux données sont-ils limités et tracés ?",1],["sauv","Des sauvegardes régulières et testées sont-elles réalisées ?",1],["sst","La liste de ses propres sous-traitants est-elle communiquée et encadrée ?",1],["notif","S'engage-t-il à notifier les violations sous 48 heures ?",1],["fin","Les données sont-elles supprimées ou restituées en fin de contrat ?",1],["audit","Accepte-t-il les audits ou fournit-il des rapports d'audit ?",1]];
 function stScore(a){ let tot=0, got=0; STQ.forEach(([k,,w])=>{ const v=a[k]; if (!v || v==="na") return; tot+=w; got += v==="oui"?w:v==="partiel"?w/2:0; }); return tot ? Math.round(100*got/tot) : null; }
-MODS.soustraitants.extra = t => stEvalExtra(t) + stContratPanel(t);
+MODS.soustraitants.extra = t => stFichesPanel(t) + stEvalExtra(t) + stContratPanel(t);
 const stEvalExtra = t => {
   const a = S.stEval?.id===t._id ? S.stEval.a : (t.evalSec || {});
   const sc = stScore(a); const lvl = sc==null?null:sc>=80?["Risque faible","ok"]:sc>=50?["Risque modéré","warn"]:["Risque élevé","crit"];
@@ -8337,6 +8363,257 @@ const recoActions = {
   "tour-end"(){ S.tour = null; tourRender(); try{ localStorage.setItem("egide-tour-vu","1"); }catch{} }
 };
 
+/* =====================================================================
+   Fiche de traitement v3 : catégories de données décrites, sous-traitants
+   et destinataires structurés, durées par phase, sécurité en listes
+   ===================================================================== */
+
+/* ---------- Catégories de données : descriptions ---------- */
+const DONNEES_DESC = {
+  "État civil, identité, identifiants":"Nom, prénom, date de naissance, matricule, identifiant de compte",
+  "Coordonnées":"Adresse postale, e-mail, téléphone",
+  "Vie personnelle (habitudes, situation familiale…)":"Situation familiale, enfants, loisirs, habitudes de vie",
+  "Vie professionnelle (CV, formation, carrière…)":"CV, diplômes, poste, expérience, carrière, formations suivies",
+  "Informations économiques et financières":"Salaire, prétentions salariales, revenus, situation fiscale, crédits",
+  "Données de connexion (adresse IP, logs…)":"Adresse IP, journaux, identifiants de terminal, horodatage des connexions",
+  "Données de localisation":"Position GPS, géolocalisation d'un véhicule ou d'un téléphone, déplacements",
+  "Images, photos, vidéos, voix":"Photo, image de vidéoprotection, enregistrement vidéo ou vocal",
+  "Numéro de sécurité sociale (NIR)":"Usage encadré : paie, déclarations sociales, santé",
+  "Infractions et condamnations":"Casier judiciaire, condamnations, infractions (art. 10 : cas prévus par la loi uniquement)",
+  "Pièces d'identité et titres de séjour":"Numéro ou copie de carte d'identité, passeport, titre de séjour, autorisation de travail",
+  "Coordonnées bancaires et moyens de paiement":"IBAN, RIB, numéro de carte bancaire, mandat de prélèvement",
+  "Évaluations, tests et appréciations":"Entretiens annuels, objectifs, notes d'entretien de recrutement, résultats de tests",
+  "Temps de travail, congés et absences":"Horaires, planning, congés, absences (le motif médical relève des données de santé)",
+  "Contenus des communications":"E-mails, messages, appels enregistrés, échanges avec le support",
+  "Commandes, contrats et transactions":"Historique d'achats, devis, factures, contrats, réclamations",
+  "Navigation internet et traceurs":"Cookies, pages consultées, identifiants publicitaires, mesure d'audience",
+  "Accès aux locaux":"Numéro de badge, heures d'entrée et de sortie, registre des visiteurs",
+  "Véhicule et permis de conduire":"Immatriculation, numéro de permis, points, sinistres",
+  "Matériel et usage des outils numériques":"Ordinateur et téléphone attribués, comptes, utilisation des applications",
+  "Proches et ayants droit":"Personne à prévenir, conjoint, enfants bénéficiaires, ayants droit",
+  "Opinions et avis exprimés":"Enquêtes de satisfaction, avis, commentaires libres (attention aux données sensibles)"
+};
+
+/* ---------- Listes structurées dans la fiche ---------- */
+const HEB_OPTS = [["france","France"],["ue","Union européenne"],["hors_ue","Hors Union européenne"],["inconnu","À vérifier"]];
+const CTR_OPTS = [["oui","Oui, signé"],["en_cours","En cours de signature"],["non","Non"],["inconnu","Je ne sais pas"]];
+const DEX_TYPES = [["public","Organisme public ou autorité"],["partenaire","Partenaire (responsable distinct)"],["conjoint","Responsable conjoint"],["autre","Autre"]];
+const DEX_CADRES = [["legal","Obligation légale ou réglementaire"],["contrat","Contrat ou convention avec clauses de protection des données"],["accord","Accord de partage de données"],["art26","Accord de responsabilité conjointe (art. 26)"],["politique","Politique de confidentialité du destinataire"],["dpo","DPO ou contact RGPD du destinataire identifié"],["aucun","Aucun cadre formalisé"],["verif","À vérifier"]];
+const splitNames = s => String(s||"").split(/\n|;|,(?![^()]*\))/).map(x=>x.replace(/^\s*[-•*]\s*/,"").trim()).filter(x=>x.length>1);
+const RL = {
+  stL:{text:"sousTraitants", add:"+ Ajouter un sous-traitant", empty:{nom:"",role:"",heb:"",lieu:"",contrat:""},
+    fields:[{k:"nom",lab:"Prestataire",ph:"Nom du prestataire",list:"dl-st"},{k:"role",lab:"Prestation",ph:"Ex. : logiciel de paie"},{k:"heb",lab:"Hébergement des données",sel:HEB_OPTS,ph:"Choisir…"},{k:"lieu",lab:"Lieu précis",ph:"Pays, ville ou centre de données"},{k:"contrat",lab:"Contrat (art. 28) signé ?",sel:CTR_OPTS,ph:"Choisir…"}],
+    sync:d=>{ d.sousTraitants = d.stL.map(r=>r.nom.trim()).filter(Boolean).join(", "); },
+    from:d=>splitNames(d.sousTraitants).map(nom=>({nom,role:"",heb:"",lieu:"",contrat:""}))},
+  dexL:{text:"destinatairesExternes", add:"+ Ajouter un destinataire", empty:{nom:"",type:"",cadre:"",prec:""},
+    fields:[{k:"nom",lab:"Destinataire",ph:"Ex. : URSSAF"},{k:"type",lab:"Type",sel:DEX_TYPES,ph:"Choisir…"},{k:"cadre",lab:"Cadre qui autorise le partage",sel:DEX_CADRES,ph:"Choisir…"},{k:"prec",lab:"Précision",ph:"Référence du texte, de l'accord, lien vers la politique…"}],
+    sync:d=>{ d.destinatairesExternes = d.dexL.map(r=>r.nom.trim()).filter(Boolean).join(", "); },
+    from:d=>splitNames(d.destinatairesExternes).map(nom=>({nom,type:"",cadre:"",prec:""}))},
+  consL:{add:"+ Ajouter une durée", empty:{objet:"",active:"",archive:""},
+    fields:[{k:"objet",lab:"Données ou phase",ph:"Ex. : vivier de candidats"},{k:"active",lab:"Base active",ph:"Ex. : 2 ans après le dernier contact",list:"dl-durees"},{k:"archive",lab:"Archivage intermédiaire",ph:"Ex. : aucun archivage",list:"dl-archives"}],
+    sync:d=>{ const L=d.consL.filter(r=>r.active.trim()||r.archive.trim()); const lab=r=>L.length>1&&r.objet.trim()?r.objet.trim()+" : ":"";
+      d.conservation = L.filter(r=>r.active.trim()).map(r=>lab(r)+r.active.trim()).join(" ; ");
+      const ar = L.filter(r=>r.archive.trim() && !/^aucun/i.test(r.archive.trim()));
+      d.conservationArchivage = ar.length ? ar.map(r=>lab(r)+r.archive.trim()).join(" ; ") : (L.some(r=>r.archive.trim()) ? "Aucun archivage" : ""); },
+    from:d=>[{objet:"", active:d.conservation||"", archive:d.conservationArchivage||""}]}
+};
+function rlGet(d, key){
+  const R = RL[key]; const cur = Array.isArray(d[key]) && d[key].length ? d[key].map(r=>({...R.empty, ...r})) : null;
+  if (cur){ const tmp = {...d, [key]:cur}; R.sync(tmp);
+    const same = key==="consL" ? (String(tmp.conservation)===String(d.conservation||"") && String(tmp.conservationArchivage)===String(d.conservationArchivage||"")) : String(tmp[R.text]||"")===String(d[R.text]||"");
+    if (same || (key!=="consL" && !String(d[R.text]||"").trim())) return cur;
+    if (key!=="consL"){ const old = new Map(cur.map(r=>[norm2(r.nom),r])); return R.from(d).map(r=>old.get(norm2(r.nom))||r); }
+  }
+  const f = R.from(d); return f.length ? f : [{...R.empty}];
+}
+function rlRow(key, r, i, n){
+  const R = RL[key];
+  return `<div class="rl-row rl-${key}">${R.fields.map(f=>`<label class="rlf rlf-${f.k}"><span>${esc(f.lab||f.ph)}</span>${f.sel
+    ? `<select data-rl="${key}" data-ri="${i}" data-rk="${f.k}"><option value="">${esc(f.ph)}</option>${f.sel.map(([v,l])=>`<option value="${v}" ${r[f.k]===v?"selected":""}>${esc(l)}</option>`).join("")}</select>`
+    : `<input type="text" data-rl="${key}" data-ri="${i}" data-rk="${f.k}" value="${esc(r[f.k])}" placeholder="${esc(f.ph)}" ${f.list?`list="${f.list}"`:""}>`}</label>`).join("")}
+    <button type="button" class="btn ghost sm rl-x" data-action="rl-del" data-k="${key}" data-i="${i}" aria-label="Supprimer la ligne ${i+1}" ${n>1?"":"disabled"}>${I.close}</button></div>`;
+}
+function rlEditor(d, key){
+  const L = d[key] = rlGet(d, key); RL[key].sync(d);
+  return `<div class="rl" id="rl-${key}">${L.map((r,i)=>rlRow(key,r,i,L.length)).join("")}</div><div><button type="button" class="lnk" data-action="rl-add" data-k="${key}">${RL[key].add}</button></div>`;
+}
+function rlRedraw(key, focusLast){
+  const d = S.draft; if (!d) return; RL[key].sync(d);
+  const el = $("#rl-"+key); if (el) el.innerHTML = d[key].map((r,i)=>rlRow(key,r,i,d[key].length)).join("");
+  S.dirty = true; refreshEdit(); if (focusLast) document.querySelector(`#rl-${key} .rl-row:last-child input`)?.focus();
+}
+function rlHints(d){
+  const st = arr(d.stL), dx = arr(d.dexL), out = [];
+  const noCtr = st.filter(r=>r.nom.trim() && ["non","inconnu",""].includes(r.contrat)); if (noCtr.length) out.push(`Contrat de sous-traitance à vérifier : ${noCtr.map(r=>r.nom).join(", ")}.`);
+  const hors = st.filter(r=>r.nom.trim() && r.heb==="hors_ue"); if (hors.length && !d.transfertHorsUE) out.push(`Hébergement hors UE déclaré pour ${hors.map(r=>r.nom).join(", ")} : cochez « Des données sont transférées hors de l'Union européenne » et indiquez la garantie.`);
+  const noCad = dx.filter(r=>r.nom.trim() && ["aucun","verif",""].includes(r.cadre)); if (noCad.length) out.push(`Cadre du partage à documenter : ${noCad.map(r=>r.nom).join(", ")}.`);
+  return out.length ? `<div class="rl-hint">${out.map(x=>`<p>${I.alert}<span>${esc(x)}</span></p>`).join("")}</div>` : "";
+}
+function destSection(d){
+  const names = items("soustraitants").map(s=>s.nom).filter(Boolean);
+  return `<datalist id="dl-st">${names.map(n=>`<option value="${esc(n)}">`).join("")}</datalist>
+    <div class="f full"><span class="lbl">Destinataires externes</span><span class="hint">Organismes qui reçoivent les données pour leur propre compte (administrations, partenaires, assureurs…). Pour chacun, indiquez le cadre qui autorise ce partage.</span>${rlEditor(d,"dexL")}</div>
+    <div class="f full"><span class="lbl">Sous-traitants</span><span class="hint">Prestataires qui traitent les données pour votre compte. Ils sont ajoutés automatiquement au module Sous-traitants à l'enregistrement, avec les informations saisies ici.</span>${rlEditor(d,"stL")}</div>
+    <div class="f full" id="rl-hints">${rlHints(d)}</div>`;
+}
+function consSection(d){
+  return `<datalist id="dl-durees">${DUREES.map(x=>`<option value="${esc(x)}">`).join("")}</datalist><datalist id="dl-archives">${ARCHIVES.map(x=>`<option value="${esc(x)}">`).join("")}</datalist>
+    ${durRefPicker()}
+    <div class="f full"><span class="lbl">Durées de conservation, phase par phase</span><span class="hint">Une ligne par catégorie de données ou par phase du cycle de vie (base active, puis archivage intermédiaire séparé et à accès restreint). La CNIL demande de raisonner ainsi plutôt qu'avec une durée unique.</span>${rlEditor(d,"consL")}</div>`;
+}
+
+/* ---------- Durées de référence : ensembles ---------- */
+const DUREES_SETS = [
+  ["Recrutement : parcours complet (4 phases)", ["Ressources humaines",["Candidature : processus de recrutement","Candidature non retenue : suites du recrutement","Vivier de candidats","Recrutement : éléments probatoires"]]],
+  ["Gestion du personnel (4 phases)", ["Ressources humaines",["Dossier du personnel","Bulletins de paie (double remis au salarié)","Éléments de calcul de la paie et des cotisations","Registre unique du personnel"]]],
+  ["Clients et prospects (3 phases)", ["Clients, prospects et marketing",["Clients (gestion de la relation)","Prospects","Liste d'opposition à la prospection"]]]
+];
+function durRefRows(name){ for (const [,l] of DUREES_REF){ const r = l.find(x=>x[0]===name); if (r) return r; } return null; }
+function durRefPicker(){ return `<div class="f full durref"><label for="e-durref">Ajouter une durée de référence</label><select id="e-durref" data-durref><option value="">Choisir un type de données (${DUREES_REF.reduce((s,g)=>s+g[1].length,0)} références)…</option><optgroup label="Parcours complets">${DUREES_SETS.map(([l],i)=>`<option value="set.${i}">${esc(l)}</option>`).join("")}</optgroup>${durRefOpts()}</select><span class="hint">Ajoute une ligne (ou plusieurs pour un parcours complet) dans le tableau ci-dessous. Adaptez-la ensuite à votre usage.</span><div id="durref-src" class="durref-src"></div></div>`; }
+function durRefApply(val){
+  const d = S.draft; if (!d) return;
+  let rows = [];
+  if (String(val).startsWith("set.")){ const s = DUREES_SETS[+val.slice(4)]; if (s) rows = s[1][1].map(durRefRows).filter(Boolean); }
+  else { const [g,i] = String(val).split(".").map(Number); const r = DUREES_REF[g]?.[1]?.[i]; if (r) rows = [r]; }
+  if (!rows.length) return;
+  d.consL = rlGet(d,"consL").filter(r=>r.objet.trim()||r.active.trim()||r.archive.trim());
+  rows.forEach(r=>d.consL.push({objet:r[0], active:r[1], archive:r[2]}));
+  rlRedraw("consL");
+  const src = $("#durref-src"); if (src) src.innerHTML = rows.map(r=>`<b>${esc(r[0])}</b> · ${esc(r[3])}`).join("<br>");
+  const sel = $("#e-durref"); if (sel) sel.value = "";
+}
+
+/* ---------- Sécurité : une liste déroulante par rubrique ---------- */
+S.secOpen = S.secOpen || new Set();
+function secChecks(d){
+  const sel = arr(d.securite);
+  return `<div class="secg">${SECURITE_G.map(([g,l],gi)=>{ const n=l.filter(x=>sel.includes(x)).length; return `<details class="secg-b ${n?"has":""}" data-secg="${gi}" ${S.secOpen.has(gi)?"open":""}><summary><span>${esc(g)}</span><span class="secg-n">${n}/${l.length}</span></summary><div class="checks">${l.map(o=>`<label><input type="checkbox" data-arr="securite" value="${esc(o)}" ${sel.includes(o)?"checked":""}>${esc(o)}</label>`).join("")}<button type="button" class="lnk secg-all" data-action="sec-all" data-g="${gi}">${n===l.length?"Tout décocher":"Tout cocher"}</button></div></details>`; }).join("")}</div>
+  ${sel.filter(x=>!SECURITE.includes(x)).length?`<p class="hint">Autres mesures déjà cochées : ${esc(sel.filter(x=>!SECURITE.includes(x)).join(", "))}</p>`:""}`;
+}
+document.addEventListener("toggle", e => { const g = e.target?.dataset?.secg; if (g==null) return; e.target.open ? S.secOpen.add(+g) : S.secOpen.delete(+g); }, true);
+
+/* ---------- Justification des bases légales : seulement quand elle est utile ---------- */
+const bljNeeded = d => basesOf(d).some(b=>["interet_legitime","consentement"].includes(b));
+function bljField(d){
+  const need = bljNeeded(d), has = String(d.baseLegaleDetail||"").trim();
+  const lab = basesOf(d).includes("interet_legitime") ? "Mise en balance de l'intérêt légitime" : basesOf(d).includes("consentement") ? "Modalités de recueil du consentement" : "Précisions sur les bases légales (facultatif)";
+  const hint = basesOf(d).includes("interet_legitime") ? "Obligatoire en cas de contrôle : l'intérêt poursuivi, pourquoi le traitement est nécessaire, pourquoi il ne porte pas une atteinte excessive aux personnes (attentes raisonnables, information, droit d'opposition)." : basesOf(d).includes("consentement") ? "Comment l'accord est recueilli (case non pré-cochée, formulaire…), comment il est prouvé et comment le retirer." : "Facultatif : utile seulement pour préciser un texte de loi ou une clause du contrat.";
+  return `<div class="f full" id="wrap-blj" ${need||has||S.bljOpen?"":"hidden"}><label for="e-baseLegaleDetail" id="blj-l">${lab}</label><span class="hint" id="blj-h">${hint}</span><textarea id="e-baseLegaleDetail" data-field="baseLegaleDetail" placeholder="${need?"":"Ex. : article L3243-2 du Code du travail"}">${esc(d.baseLegaleDetail)}</textarea></div>
+    <div class="f full" id="blj-add" ${need||has||S.bljOpen?"hidden":""}><button type="button" class="lnk" data-action="blj-open">+ Ajouter une précision sur les bases légales (facultatif)</button><span class="hint">Pas nécessaire pour un contrat ou une obligation légale. La justification devient utile pour l'intérêt légitime et le consentement.</span></div>`;
+}
+
+/* ---------- Sous-traitants : alimentation automatique du module ---------- */
+const ctrToModule = v => ({oui:"signe", en_cours:"en_cours", non:"absent"})[v] || "";
+const hebToPays = r => r.lieu?.trim() || (r.heb==="france"?"France":r.heb==="ue"?"Union européenne":"");
+const stFind = nom => { const k = norm2(nom); return k ? items("soustraitants").find(s=>norm2(s.nom)===k) : null; };
+async function stSyncFromTrt(tid, d){
+  const rows = arr(d.stL).filter(r=>r.nom?.trim()); let created = 0;
+  for (const r of rows){
+    let st = (r.stId && S.data.soustraitants.get(r.stId)) || stFind(r.nom);
+    if (!st){
+      const id = S.db.collection("soustraitants").doc().id;
+      const doc = {nom:r.nom.trim(), prestation:r.role||"", pays:hebToPays(r), horsUE:r.heb==="hors_ue", contrat:ctrToModule(r.contrat), statut:"actif", traitementIds:[tid], ref:nextRef("soustraitants"), dateCreation:new Date().toISOString(), source:`Créé depuis la fiche ${d.ref||""}`.trim()};
+      await persist("soustraitants", id, doc, `Créé automatiquement depuis la fiche ${d.ref||d.nom||""}`); r.stId = id; created++; continue;
+    }
+    r.stId = st._id;
+    const upd = {...st}; let ch = false;
+    if (!arr(upd.traitementIds).includes(tid)){ upd.traitementIds = [...arr(upd.traitementIds), tid]; ch = true; }
+    if (!upd.prestation?.trim() && r.role){ upd.prestation = r.role; ch = true; }
+    if (!upd.pays?.trim() && hebToPays(r)){ upd.pays = hebToPays(r); ch = true; }
+    if (r.heb==="hors_ue" && !upd.horsUE){ upd.horsUE = true; ch = true; }
+    if (!upd.contrat && ctrToModule(r.contrat)){ upd.contrat = ctrToModule(r.contrat); ch = true; }
+    if (ch) await persist("soustraitants", st._id, upd, `Mis à jour depuis la fiche ${d.ref||d.nom||""}`);
+  }
+  return created;
+}
+/* Ce que disent les fiches sur un sous-traitant */
+function stFromFiches(st){
+  const k = norm2(st.nom), out = [];
+  items("traitements").forEach(t=>{
+    const row = arr(t.stL).find(r=>r.stId===st._id || (k && norm2(r.nom)===k));
+    const txt = !row && k && k.length>2 && norm2(t.sousTraitants||"").includes(k);
+    const lnk = arr(st.traitementIds).includes(t._id);
+    if (row || txt || lnk) out.push({t, row:row||null});
+  });
+  const rows = out.map(o=>o.row).filter(Boolean);
+  const conflicts = [];
+  if (rows.some(r=>r.contrat==="non") && st.contrat==="signe") conflicts.push("Une fiche indique qu'aucun contrat n'est signé, alors que ce module indique « Signé ».");
+  if (rows.some(r=>r.contrat==="oui") && st.contrat==="absent") conflicts.push("Une fiche indique un contrat signé, alors que ce module indique « Absent ».");
+  if (rows.some(r=>r.heb==="hors_ue") && !st.horsUE) conflicts.push("Une fiche déclare un hébergement hors UE, ce module non.");
+  if (st.horsUE && rows.length && rows.every(r=>["france","ue"].includes(r.heb))) conflicts.push("Les fiches déclarent un hébergement en France ou dans l'UE, ce module indique « hors UE ».");
+  return {list:out, rows, conflicts};
+}
+function stEvalPrefill(st){
+  const F = stFromFiches(st).rows, A = st.analyseContrat, a = {};
+  if (F.length && F.every(r=>["france","ue"].includes(r.heb))) a.ue = "oui"; else if (F.some(r=>r.heb==="hors_ue") || st.horsUE) a.ue = "non";
+  if (st.certifications?.trim()) a.certif = "oui";
+  if (A){ const ok = new Set(A.ok); a.notif = ok.has("violation") ? (A.delaiViolation && A.delaiViolation>48 ? "partiel" : "oui") : "non"; a.fin = ok.has("fin")?"oui":"non"; a.audit = ok.has("audit")?"oui":"non"; a.sst = ok.has("sst")?"oui":"non"; }
+  return a;
+}
+function stFichesPanel(st){
+  const F = stFromFiches(st); if (!F.list.length) return "";
+  const pre = stEvalPrefill(st); const nPre = Object.keys(pre).filter(k=>!(st.evalSec||{})[k]).length;
+  return `<section class="panel stfi"><div class="panel-h"><h2>D'après vos fiches de traitement</h2><span class="pill t-neutral">${F.list.length} fiche${F.list.length>1?"s":""}</span></div><div class="panel-b">
+    <ul class="rlv">${F.list.map(({t,row})=>`<li><b><button class="lnk" data-action="open" data-mod="traitements" data-id="${esc(t._id)}">${esc(t.ref)}</button> · ${esc(t.nom||"")}</b><span>${row?esc([row.role||"prestation non précisée", "hébergement : "+([HEB_OPTS.find(x=>x[0]===row.heb)?.[1],row.lieu].filter(Boolean).join(", ")||"à préciser"), "contrat : "+(CTR_OPTS.find(x=>x[0]===row.contrat)?.[1]||"à préciser")].join(" · ")):"Cité dans la fiche, sans détail : complétez la rubrique Sous-traitants de la fiche."}</span></li>`).join("")}</ul>
+    ${F.conflicts.length?`<div class="notice warn" style="margin-top:10px">${I.alert}<div>${F.conflicts.map(esc).join("<br>")}</div></div>`:""}
+    ${W() && (nPre || (!st.pays && F.rows.some(hebToPays)) || (!st.contrat && F.rows.some(r=>ctrToModule(r.contrat))))?`<div class="actions" style="margin:12px 0 8px"><button class="btn sm primary" data-action="st-from-fiches" data-id="${esc(st._id)}">${I.check}Reprendre ces informations${nPre?` (dont ${nPre} réponse${nPre>1?"s":""} à l'évaluation)`:""}</button></div>`:""}
+    <p class="hint">L'évaluation tient compte de ces informations et de l'analyse du contrat : hébergement, notification des violations, fin de contrat, audits, sous-traitance ultérieure.</p>
+  </div></section>`;
+}
+/* Découverte des sous-traitants cités en texte libre dans les fiches */
+function stDiscover(){
+  const map = new Map();
+  items("traitements").forEach(t=>{
+    const names = arr(t.stL).length ? arr(t.stL).map(r=>r.nom) : splitNames(t.sousTraitants);
+    names.forEach(n=>{ const nm = String(n||"").trim(); if (nm.length<2) return; const k = norm2(nm); if (!k) return;
+      const st = stFind(nm); const g = map.get(k) || {nom:nm, st, fiches:[]}; if (!g.fiches.includes(t)) g.fiches.push(t); map.set(k,g); });
+  });
+  const all = [...map.values()];
+  return {missing:all.filter(g=>!g.st), unlinked:all.filter(g=>g.st && g.fiches.some(t=>!arr(g.st.traitementIds).includes(t._id)))};
+}
+const stGeneric = n => /^(l'|le |la |les |un |une )?(é|e)diteur|^(l'|un )?h[ée]bergeur|^(le |un )?prestataire|^(l'|un )?outil|^(la |une )?plateforme|^(la |une )?soci[ée]t[ée] de|^(l'|un )?infog[ée]rant|^(le |un )?logiciel|^(le |un )?fournisseur|^(le |un )?cabinet|le cas [ée]ch[ée]ant/i.test(String(n).trim()) || String(n).trim()===String(n).trim().toLowerCase();
+function stDiscoverPanel(){
+  const D = stDiscover(); if (!D.missing.length && !D.unlinked.length) return "";
+  return `<section class="panel stdisc"><div class="panel-h"><h2>Sous-traitants cités dans vos fiches</h2></div><div class="panel-b">
+    ${D.missing.length?`<p class="muted" style="margin:0 0 8px">${D.missing.length} prestataire${D.missing.length>1?"s":""} cité${D.missing.length>1?"s":""} dans les fiches de traitement ne figure${D.missing.length>1?"nt":""} pas encore ici. Décochez ce qui n'est pas un prestataire.</p>
+      <div class="stdisc-l">${D.missing.map((g,i)=>{ const gen = stGeneric(g.nom); return `<label class="${gen?"gen":""}"><input type="checkbox" data-stdisc="${esc(norm2(g.nom))}" ${gen?"":"checked"}><b>${esc(g.nom)}</b>${gen?`<em>description générique : indiquez le nom du prestataire dans la fiche</em>`:""}<small>${g.fiches.map(t=>t.ref).join(", ")}</small></label>`; }).join("")}</div>`:""}
+    ${D.unlinked.length?`<p class="muted" style="margin:10px 0 0">${D.unlinked.length} sous-traitant${D.unlinked.length>1?"s":""} déjà présent${D.unlinked.length>1?"s":""} ser${D.unlinked.length>1?"ont":"a"} relié${D.unlinked.length>1?"s":""} aux fiches qui le${D.unlinked.length>1?"s":""} citent.</p>`:""}
+    <div class="actions" style="margin-top:10px"><button class="btn primary" data-action="st-discover" ${W()?"":"disabled"}>${I.check}Ajouter et relier</button></div>
+  </div></section>`;
+}
+async function stDiscoverApply(){
+  const D = stDiscover(); let n = 0, l = 0;
+  try{
+    for (const [i,g] of D.missing.entries()){
+      const cb = [...document.querySelectorAll("[data-stdisc]")].find(c=>c.dataset.stdisc===norm2(g.nom)); if (!cb?.checked) continue;
+      const row = g.fiches.flatMap(t=>arr(t.stL)).find(r=>norm2(r.nom)===norm2(g.nom)) || {};
+      const id = S.db.collection("soustraitants").doc().id;
+      await persist("soustraitants", id, {nom:g.nom, prestation:row.role||"", pays:hebToPays(row), horsUE:row.heb==="hors_ue", contrat:ctrToModule(row.contrat), statut:"actif", traitementIds:g.fiches.map(t=>t._id), ref:nextRef("soustraitants"), dateCreation:new Date().toISOString(), source:"Repris des fiches de traitement"}, "Repris des fiches de traitement"); n++;
+    }
+    for (const g of D.unlinked){ const st = S.data.soustraitants.get(g.st._id); await persist("soustraitants", st._id, {...st, traitementIds:[...new Set([...arr(st.traitementIds), ...g.fiches.map(t=>t._id)])]}, "Relié aux fiches qui le citent"); l++; }
+  }catch(e){ writeError(e); return; }
+  toast(`${n} sous-traitant${n>1?"s":""} ajouté${n>1?"s":""}${l?`, ${l} relié${l>1?"s":""}`:""}`); render();
+}
+
+/* ---------- Actions ---------- */
+const trt3Actions = {
+  "rl-add"(el){ const d=S.draft, k=el.dataset.k; if (!d) return; d[k] = rlGet(d,k); d[k].push({...RL[k].empty}); rlRedraw(k, true); },
+  "rl-del"(el){ const d=S.draft, k=el.dataset.k; if (!d) return; d[k] = rlGet(d,k); d[k].splice(+el.dataset.i,1); if (!d[k].length) d[k].push({...RL[k].empty}); rlRedraw(k); },
+  "blj-open"(){ S.bljOpen = true; $("#wrap-blj")?.removeAttribute("hidden"); $("#blj-add")?.setAttribute("hidden",""); $("#e-baseLegaleDetail")?.focus(); },
+  "sec-all"(el){ const d=S.draft; if (!d) return; const l = SECURITE_G[+el.dataset.g][1]; const sel = arr(d.securite); const all = l.every(x=>sel.includes(x)); d.securite = all ? sel.filter(x=>!l.includes(x)) : [...new Set([...sel, ...l])]; S.secOpen.add(+el.dataset.g); S.dirty=true; render(); },
+  async "st-from-fiches"(el){
+    const st = S.data.soustraitants.get(el.dataset.id); if (!st) return; const F = stFromFiches(st).rows; const pre = stEvalPrefill(st);
+    const upd = {...st};
+    if (!upd.pays?.trim()){ const p = F.map(hebToPays).find(Boolean); if (p) upd.pays = p; }
+    if (F.some(r=>r.heb==="hors_ue")) upd.horsUE = true;
+    if (!upd.contrat){ const c = F.map(r=>ctrToModule(r.contrat)).find(Boolean); if (c) upd.contrat = c; }
+    const ev = {...(st.evalSec||{})}; Object.entries(pre).forEach(([k,v])=>{ if (!ev[k]) ev[k]=v; });
+    if (Object.keys(pre).length) upd.evalSec = {...ev, date:today()};
+    try{ await persist("soustraitants", st._id, upd, "Informations reprises des fiches de traitement"); toast("Informations reprises"); S.stEval=null; render(); }catch(e){ writeError(e); }
+  },
+  async "st-discover"(){ if (W()) await stDiscoverApply(); }
+};
+
 /* ================= Exports ================= */
 const slugOrg = () => (norm(S.org.raisonSociale||"registre").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")) || "registre";
 const clean = t => { const {_id, ...rest} = t; return {id:_id, ...rest}; };
@@ -8806,6 +9083,10 @@ async function saveDraft(){
     const isNew = !d._id;
     const id = d._id || S.db.collection(mod).doc().id;
     if (isNew && !d.ref) d.ref = nextRef(mod);
+    if (mod==="traitements"){
+      ["stL","dexL","consL"].forEach(k=>{ if (Array.isArray(d[k])){ d[k] = d[k].filter(r=>Object.values(r).some(v=>String(v||"").trim())); RL[k].sync(d); if (!d[k].length) delete d[k]; } });
+      if (arr(d.stL).length){ const n = await stSyncFromTrt(id, d); if (n) setTimeout(()=>toast(`${n} sous-traitant${n>1?"s":""} ajouté${n>1?"s":""} au module Sous-traitants`), 1600); }
+    }
     await persist(mod, id, d, isNew ? "Création" : "Modification");
     S.draft = null; S.dirty=false; S.selId = id; S.view = "detail"; S.confirmDel=false;
     if (S.pending){ const p=S.pending; S.pending=null; S.busy=false; p(); return; }
@@ -9060,7 +9341,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
@@ -9095,6 +9376,7 @@ document.addEventListener("input", e => {
   if (el.id==="doc-md" && S.docv?.draft){ S.docv.draft.md=el.value; const p=$("#doc-prev"); if (p) p.innerHTML=docHTML(mdToBlocks(el.value)); return; }
   if (el.id==="doc-titre" && S.docv?.draft){ S.docv.draft.titre=el.value; return; }
   if (el.dataset?.fin!=null && S.draft){ const L=S.draft.finalitesL||(S.draft.finalitesL=finL(S.draft)); const r=L[+el.dataset.fin]; if (r){ r[el.dataset.fk]=el.value; finSync(S.draft); S.dirty=true; refreshEdit(); } return; }
+  if (el.dataset?.rl!=null && S.draft){ const k=el.dataset.rl; const L=S.draft[k]||(S.draft[k]=rlGet(S.draft,k)); const r=L[+el.dataset.ri]; if (r){ r[el.dataset.rk]=el.value; RL[k].sync(S.draft); S.dirty=true; refreshEdit(); } return; }
   if (el.dataset.field && S.draft && el.type!=="checkbox" && el.type!=="radio" && el.tagName!=="SELECT"){ S.draft[el.dataset.field] = el.value; S.dirty=true; refreshEdit(); }
   if (el.id==="gq"){ S.gq = el.value;
     if (S.view==="edit" && S.dirty){ if (!S.pending){ S.pending = () => { S.view="search"; render(); }; render(); } return; }
@@ -9113,6 +9395,7 @@ document.addEventListener("change", e => {
   if (el.dataset?.gen!=null){ const g=genInit(); g[el.dataset.gen] = el.type==="checkbox" ? el.checked : el.value; if (el.type==="checkbox") render(); return; }
   if (el.dataset?.stctr!=null && el.files?.[0]){ const f=el.files[0], st=S.data.soustraitants.get(el.dataset.stctr); el.value=""; if (!st) return; (async()=>{ try{ S.stCtr="busy"; render(); const txt = /\.pdf$/i.test(f.name) || f.type==="application/pdf" ? await pdfText(f) : await f.text(); S.stCtr=null; await stAnalyse(st, txt, f.name); }catch(e){ S.stCtr=null; render(); toast("Lecture impossible : vérifiez votre connexion ou collez le texte du contrat."); } })(); return; }
   if (el.dataset?.fin!=null && S.draft){ const L=S.draft.finalitesL||(S.draft.finalitesL=finL(S.draft)); const r=L[+el.dataset.fin]; if (r){ r[el.dataset.fk]=el.value; finSync(S.draft); S.dirty=true; refreshEdit(); } return; }
+  if (el.dataset?.rl!=null && S.draft){ const k=el.dataset.rl; const L=S.draft[k]||(S.draft[k]=rlGet(S.draft,k)); const r=L[+el.dataset.ri]; if (r){ r[el.dataset.rk]=el.value; RL[k].sync(S.draft); S.dirty=true; refreshEdit(); } return; }
   if (el.dataset.trnC!=null || el.id==="trn-dpo" || el.id==="trn-up"){ trnSaveCfg(); return; }
   if (el.dataset.trnFiles!=null){ const fs=[...(el.files||[])]; el.value=""; (async()=>{ let all=[]; for (const f of fs){ try{ all=all.concat(parseResults(await f.text())); }catch{} } await importResults(all); })(); return; }
   if (el.id==="sec-auto" && LS){ LS.setLockMinutes(el.value); toast(Number(el.value)?"Verrouillage automatique réglé":"Verrouillage automatique désactivé"); return; }
@@ -9125,7 +9408,7 @@ document.addEventListener("change", e => {
   if (el.id==="pj-cat"){ S.pjFilter={...(S.pjFilter||{q:"",mod:"*"}), cat:el.value}; render(); return; }
   if (el.dataset.cg!=null){ const n=document.querySelectorAll("[data-cg]:checked").length; const c=$("#cg-n"); if(c) c.textContent=`${n} traitement(s) sélectionné(s)`; return; }
   if (el.dataset.dirsel!=null && S.draft){ const inp=$("#e-service"); if (inp) inp.value=el.value; S.draft.service=el.value; S.dirty=true; refreshEdit(); return; }
-  if (el.dataset.durref!=null && S.draft){ const [g,i]=String(el.value).split(".").map(Number); const r=DUREES_REF[g]?.[1]?.[i]; if (!r) return; S.draft.conservation=r[1]; S.draft.conservationArchivage=r[2]; const a=$("#e-conservation"), b=$("#e-conservationArchivage"); if(a) a.value=r[1]; if(b) b.value=r[2]; const src=$("#durref-src"); if (src) src.innerHTML=`<b>${esc(r[0])}</b> · référence : ${esc(r[3])}`; S.dirty=true; refreshEdit(); return; }
+  if (el.dataset.durref!=null && S.draft){ if (el.value) durRefApply(el.value); return; }
   if (el.id==="w-skip"){ savePrefs({skipWelcome:!el.checked}); return; }
   if (S.draft && (el.dataset.arr || el.dataset.field)) S.dirty = true;
   if (el.id==="e-role" && $("#w-roleClient")){ $("#w-roleClient").hidden = !["soustraitant","conjoint"].includes(el.value); const lb=$("#w-roleClient label"); if(lb) lb.textContent = el.value==="conjoint"?"Responsable(s) conjoint(s)":"Pour le compte de"; }
