@@ -2961,7 +2961,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.16-e";
+const EGIDE_VERSION = "2026.11.17-a";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -4634,6 +4634,7 @@ function render(){
   else if (S.view==="pilotage") html = vPilotage();
   else if (S.view==="lettre") html = vLettre();
   else if (S.view==="agenda") html = vAgenda();
+  else if (S.view==="corbeille") html = vCorbeille();
   else if (S.view==="majimp") html = vMajImp();
   else if (S.mod==="traitements") html = {list:vTrtList, detail:vTrtDetail, edit:vTrtEdit}[S.view]();
   else if (S.mod==="formations" && S.view==="list") html = vFormList();
@@ -5003,7 +5004,7 @@ function linkedActions(mod,t){
 }
 function deleteBlock(t){
   if (!W()) return "";
-  return S.confirmDel ? confirmBox(`Supprimer définitivement « ${esc(titleOf(S.mod,t))} » ?${S.mod==="traitements"?" Préférez l'archivage pour garder une trace.":""}`,"confirm-del","cancel-del")
+  return S.confirmDel ? confirmBox(`Mettre « ${esc(titleOf(S.mod,t))} » à la corbeille ?${S.mod==="traitements"?" Vous pourrez la restaurer. Pour un traitement qui n'existe plus, préférez l'archivage.":" Vous pourrez la restaurer."}`,"confirm-del","cancel-del")
     : `<div class="actions">${S.mod==="traitements"?`<button class="btn" data-action="toggle-archive">${t.statut==="archive"?"Réactiver":"Archiver"}</button>`:""}<button class="btn danger" data-action="ask-del">Supprimer</button></div>`;
 }
 function riskMapSvg(t){
@@ -6406,7 +6407,7 @@ function pjCard(p, withLink){
       ${pjCanUp()?`<button class="btn sm ghost" data-action="pj-edit" data-id="${esc(p._id)}" aria-label="Modifier ${esc(p.nom)}" title="Classer ou décrire">${I.edit}</button><button class="btn sm ghost pjdel" data-action="pj-ask-del" data-id="${esc(p._id)}" aria-label="Supprimer ${esc(p.nom)}" title="Supprimer">${I.close}</button>`:""}
     </span>
     ${S.pjEdit===p._id ? `<div class="pjc-edit"><div class="f"><label for="pje-cat">Nature de la pièce</label><select id="pje-cat">${Object.entries(PJ_CATS).map(([k,v])=>`<option value="${k}" ${p.categorie===k?"selected":""}>${esc(v)}</option>`).join("")}</select></div><div class="f"><label for="pje-desc">Description</label><input type="text" id="pje-desc" value="${esc(p.description||"")}" placeholder="Ex. : contrat signé le 12 mars 2025, annexe 3 RGPD"></div><div class="actions"><button class="btn sm" data-action="pj-edit-cancel">Annuler</button><button class="btn sm mod" data-action="pj-edit-save" data-id="${esc(p._id)}">${I.check}Enregistrer</button></div></div>` : ""}
-    ${S.pjDel===p._id ? `<div class="confirm pjc-conf"><span>Supprimer définitivement « ${esc(p.nom)} » ?</span><span class="actions"><button class="btn sm" data-action="pj-cancel-del">Annuler</button><button class="btn sm danger solid" data-action="pj-confirm-del" data-id="${esc(p._id)}">Supprimer</button></span></div>` : ""}
+    ${S.pjDel===p._id ? `<div class="confirm pjc-conf"><span>Mettre « ${esc(p.nom)} » à la corbeille ?</span><span class="actions"><button class="btn sm" data-action="pj-cancel-del">Annuler</button><button class="btn sm danger solid" data-action="pj-confirm-del" data-id="${esc(p._id)}">Supprimer</button></span></div>` : ""}
   </li>`;
 }
 function pjDrop(mod, rid, big){
@@ -9402,7 +9403,7 @@ function navLabel(e){
     if (e.view==="detail"){ const t = S.data[e.mod]?.get(e.selId); return t ? `${t.ref?t.ref+" · ":""}${titleOf(e.mod,t)||M.single}` : M.long; }
     return M.long; }
   const b = document.querySelector(`#nav [data-view="${e.view}"]`); if (b){ const c = b.cloneNode(true); c.querySelectorAll(".cnt,.ic").forEach(x=>x.remove()); const l = c.textContent.trim(); if (l) return l; }
-  return {dashboard:"Accueil", alertes:"Points à traiter", search:"Recherche", org:"Organisation", backup:"Sauvegarde", rapport:"Rapport", copilot:"Copilot", lettre:"Article de la semaine", agenda:"Calendrier Outlook", majimp:"Réponse de vérification"}[e.view] || "page précédente";
+  return {dashboard:"Accueil", alertes:"Points à traiter", search:"Recherche", org:"Organisation", backup:"Sauvegarde", rapport:"Rapport", copilot:"Copilot", lettre:"Article de la semaine", agenda:"Calendrier Outlook", majimp:"Réponse de vérification", corbeille:"Corbeille"}[e.view] || "page précédente";
 }
 function backBar(){
   const e = S.navHist[S.navHist.length-1]; if (!e) return "";
@@ -10836,6 +10837,7 @@ const SR_PAGES = [
   ["backup",null,"Sauvegarde","save","sauvegarde export restauration"],
   ["agenda",null,"Calendrier Outlook","cal","calendrier outlook ics echeances dates agenda rappel"],
   ["copilot",null,"Copilot","spark","copilot microsoft 365 agent"],
+  ["corbeille",null,"Corbeille","trash","corbeille suppression supprime restaurer poubelle"],
   ["list","aipd","AIPD","shield","aipd analyse impact pia dpia"],
   ["list","soustraitants","Sous-traitants","truck","sous traitants prestataires contrats article 28"],
   ["list","demandes","Demandes de droits","user","demandes droits acces effacement opposition rectification portabilite"],
@@ -11017,6 +11019,194 @@ document.addEventListener("keydown", e => {
 .lr-best{display:block;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--primary);margin-bottom:3px}
 .lr-full + .lr-best,.row-i>.lr-best{grid-column:1/-1;order:-1}
 .row-i.lr-top{background:var(--primary-soft);box-shadow:inset 3px 0 0 var(--primary)}
+`; document.head.appendChild(st); })();
+
+/* ================= Projets liés aux fiches + Corbeille (ext17) ================= */
+/* ---------- 1. Ce que le projet dit et que la fiche ne dit pas ---------- */
+const ptProjets = t => items("projets").filter(p=>p.statut!=="abandonne" && (arr(p.traitementIds).includes(t._id) || t.projetId===p._id));
+const PT_PERS = {"Données de salariés":"Salariés", "Données de candidats":"Candidats", "Données de clients ou prospects":"Clients", "Données de fournisseurs":"Fournisseurs"};
+function ptGaps(t, p){
+  const G = []; if (p.donneesPerso==="no" || p.donneesPerso==="non") return G;
+  const ign = new Set(arr(t.prjIgnore)); const key = k => p._id+":"+k;
+  const add = g => { if (!ign.has(key(g.k))) G.push({...g, key:key(g.k), p}); };
+  const ia = prjIA(p), cats = arr(p.iaCategories);
+  if ((p.q_sensibles==="oui" || cats.some(c=>/sensibles/i.test(c))) && !arr(t.sensibles).length)
+    add({k:"sensibles", t:"Le projet utilise des données sensibles, la fiche n'en mentionne aucune.", fix:"Cochez les catégories concernées et l'exception de l'article 9.", to:"s-pers"});
+  const pers = [...new Set(cats.map(c=>PT_PERS[c]).filter(Boolean))].filter(x=>!arr(t.personnes).includes(x));
+  if (pers.length) add({k:"personnes", t:`Le projet concerne aussi : ${pers.join(", ")}.`, fix:"Ajouter ces personnes concernées.", patch:d=>{ d.personnes = [...new Set([...arr(d.personnes), ...pers])]; }});
+  if (p.q_horsUE==="oui" && !t.transfertHorsUE)
+    add({k:"horsUE", t:"Le projet héberge ou consulte des données hors de l'Union européenne, la fiche indique qu'il n'y a pas de transfert.", fix:"Déclarer le transfert hors UE"+(p.hebergement?` (${p.hebergement})`:"")+".", patch:d=>{ d.transfertHorsUE = true; if (!String(d.transfertPays||"").trim() && p.hebergement) d.transfertPays = p.hebergement; }});
+  const fn = String(p.fournisseur||"").trim();
+  if (fn){ const rows = arr(t.stL).length ? arr(t.stL) : splitNames(t.sousTraitants||"").map(nom=>({nom}));
+    if (!rows.some(r=>norm2(r.nom||"")===norm2(fn) || norm2(r.nom||"").includes(norm2(fn)) || norm2(fn).includes(norm2(r.nom||"x"))))
+      add({k:"fournisseur", t:`Le fournisseur du projet, ${fn}, n'apparaît pas dans les sous-traitants de la fiche.`, fix:`Ajouter ${fn} aux sous-traitants.`, patch:d=>{ const L = rlGet(d,"stL").filter(r=>Object.values(r).some(v=>String(v||"").trim())); L.push({...RL.stL.empty, nom:fn, role: ia ? "Outil d'intelligence artificielle" : "Prestataire du projet "+(p.nom||""), heb: p.q_horsUE==="oui" ? "hors_ue" : "", lieu: p.hebergement||""}); d.stL = L; RL.stL.sync(d); }}); }
+  else if (p.q_prestataire==="oui" && !String(t.sousTraitants||"").trim() && !arr(t.stL).some(r=>String(r.nom||"").trim()))
+    add({k:"prestataire", t:"Le projet fait appel à un prestataire qui accède aux données, la fiche ne mentionne aucun sous-traitant.", fix:"Renseignez le prestataire dans les destinataires.", to:"s-dest"});
+  if (p.q_decision==="oui" && !t.decisionAuto)
+    add({k:"decision", t:"Le projet prévoit une décision automatisée, la fiche ne l'indique pas.", fix:"Déclarer la décision automatisée ou le profilage.", patch:d=>{ d.decisionAuto = true; }});
+  const crit = prjCrit(p), aip = prjAipds(p);
+  if (crit.length>=2 && (!t.aipd || t.aipd==="non_requise"))
+    add({k:"aipd", t:`Le projet remplit ${crit.length} critères CNIL : une AIPD est obligatoire, la fiche indique « non requise ».`, fix: aip.some(a=>a.statut==="validee") ? "Indiquer l'AIPD comme réalisée." : "Indiquer l'AIPD comme requise.", patch:d=>{ d.aipd = aip.some(a=>a.statut==="validee") ? "realisee" : "requise"; }});
+  if (crit.length && !String(t.notes||"").includes(p.ref+" : critères"))
+    add({k:"criteres", t:`Critères de risque relevés dans le projet : ${crit.map(c=>String(c).split(/[(:—–-]/)[0].trim().toLowerCase()).join(", ")}.`, fix:"Garder la trace de ces critères dans les notes de la fiche.", patch:d=>{ d.notes = [String(d.notes||"").trim(), `Projet ${p.ref} : critères de risque relevés (${today().split("-").reverse().join("/")}) : ${crit.join(" ; ")}.`].filter(Boolean).join("\n"); }});
+  if (["production","service"].includes(p.statut) && t.statut==="brouillon")
+    add({k:"statut", t:"Le projet est en production, la fiche du registre est encore en brouillon.", fix:"Complétez et validez la fiche.", to:"s-id"});
+  return G;
+}
+const ptAllGaps = t => ptProjets(t).flatMap(p=>ptGaps(t,p));
+function ptCard(t){
+  const P = ptProjets(t); if (!P.length) return "";
+  const gaps = ptAllGaps(t); const auto = gaps.filter(g=>g.patch);
+  return `<section class="pt-card m-prj" id="pt-card"><div class="pt-h"><span class="pt-ic">${I.rocket}</span><div><span class="pt-k">Projet${P.length>1?"s":""} lié${P.length>1?"s":""}</span><h2>${P.length>1?`${P.length} projets utilisent ce traitement`:esc(P[0].nom||"Projet")}</h2></div>${gaps.length?`<span class="pill t-warn">${gaps.length} écart${gaps.length>1?"s":""}</span>`:`<span class="pill t-ok">Fiche cohérente avec le projet</span>`}</div>
+    <div class="pt-ps">${P.map(p=>{ const e = prjEnjeu(p);
+      return `<button class="pt-p" data-action="open" data-mod="projets" data-id="${esc(p._id)}"><span class="mono">${esc(p.ref||"")}</span><b>${esc(p.nom||"")}</b>
+        <span class="pt-facts">${pill(MODS.projets.opts.statut, p.statut)}<span class="pill t-${e.tone}">${esc(e.l)}</span>${p.dateMep?`<span>Mise en service ${fmtD(p.dateMep)}</span>`:""}${prjIA(p)?`<span>IA${p.fournisseur?" · "+esc(p.fournisseur):""}</span>`:p.fournisseur?`<span>${esc(p.fournisseur)}</span>`:""}${p.chefProjet?`<span>Chef de projet : ${esc(p.chefProjet)}</span>`:""}</span></button>`; }).join("")}</div>
+    ${gaps.length?`<div class="pt-gaps"><div class="pt-gh"><b>Ce que le projet indique et que la fiche ne reprend pas</b>${auto.length>1&&W()?`<button class="btn sm primary" data-action="pt-all">${I.check}Tout reporter (${auto.length})</button>`:""}</div>
+      <ul>${gaps.map(g=>`<li><span class="pt-dot"></span><div><span>${esc(g.t)}</span><small>${esc(g.fix)}${P.length>1?` · projet ${esc(g.p.ref||"")}`:""}</small></div><div class="pt-act">${g.patch?`<button class="btn sm" data-action="pt-fix" data-k="${esc(g.key)}" ${W()?"":"disabled"}>Reporter dans la fiche</button>`:`<button class="btn sm" data-action="edit-at" data-to="${g.to}" ${W()?"":"disabled"}>Compléter</button>`}<button class="lnk muted-l" data-action="pt-ign" data-k="${esc(g.key)}" ${W()?"":"disabled"} title="Ne plus signaler cet écart">Ignorer</button></div></li>`).join("")}</ul></div>`:""}
+  </section>`;
+}
+async function ptApply(keys, label){
+  const t = S.data.traitements.get(S.selId); if (!t || !W()) return;
+  const gaps = ptAllGaps(t).filter(g=>g.patch && keys.includes(g.key)); if (!gaps.length) return;
+  const d = structuredClone(t); gaps.forEach(g=>g.patch(d));
+  try{ await persist("traitements", t._id, d, label || `Repris du projet : ${gaps.map(g=>g.k).join(", ")}`); toast(gaps.length>1 ? `${gaps.length} informations reportées dans la fiche` : "Information reportée dans la fiche"); }catch(e){ writeError(e); }
+  render();
+}
+const _ptDetail = vTrtDetail;
+vTrtDetail = function(){
+  let h = _ptDetail(); const t = S.data.traitements.get(S.selId); if (!t) return h;
+  const c = ptCard(t); if (!c) return h;
+  const i = h.indexOf("</header>"); return i>0 ? h.slice(0,i+9) + c + h.slice(i+9) : c + h;
+};
+const _ptAlerts = MODS.traitements.alerts;
+MODS.traitements.alerts = t => { const a = _ptAlerts(t); if (t.statut==="archive") return a; const g = ptAllGaps(t);
+  if (g.length) a.push({sev:"warn", t:`Écart avec le projet ${[...new Set(g.map(x=>x.p.ref))].join(", ")}`, s:`${g.length} information${g.length>1?"s":""} du projet à reporter dans la fiche : ${g.slice(0,2).map(x=>x.t.replace(/\.$/,"")).join(" ; ")}${g.length>2?"…":""}.`}); return a; };
+const _ptPrio = prioAction;
+prioAction = function(a){ return a.mod==="traitements" && /^Écart avec le projet/.test(a.t||"") ? ["Voir les écarts","open"] : _ptPrio(a); };
+const _ptCoh = coherence;
+coherence = function(){ const R = _ptCoh(); const L = liveTrt().filter(t=>ptAllGaps(t).length).map(t=>({mod:"traitements", id:t._id, l:`${t.ref} · ${t.nom} (${ptAllGaps(t).length} écart${ptAllGaps(t).length>1?"s":""} avec ${[...new Set(ptAllGaps(t).map(g=>g.p.ref))].join(", ")})`}));
+  if (L.length) R.push({sev:"warn", titre:"Fiches en écart avec leur projet", desc:"Le projet rattaché indique des informations que la fiche ne reprend pas (données sensibles, transfert hors UE, prestataire, AIPD…).", list:L}); return R; };
+
+/* ---------- 2. Corbeille ---------- */
+I.trash = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13a1.5 1.5 0 0 1-1.5 1.4h-7A1.5 1.5 0 0 1 7 20z" fill="currentColor" fill-opacity=".28"/><path d="M4 7h16M9.5 7V4.5h5V7M10 11v6M14 11v6"/></svg>`;
+const TR_DAYS = 365;
+S.trash = new Map(); S.trashLoaded = false; S.trashF = ""; S.trashDel = null;
+const trSrc = x => x.kind==="fiche" ? (MODS[x.mod] ? {l:MODS[x.mod].single, L:MODS[x.mod].label, cls:MODS[x.mod].cls, ic:MODS[x.mod].icon} : {l:"Fiche", L:"Fiches", cls:"m-gen", ic:"list"})
+  : x.kind==="piece" ? {l:"Pièce justificative", L:"Pièces justificatives", cls:"m-gen", ic:"clip"}
+  : x.kind==="document" ? {l:"Document", L:"Documents", cls:"m-gen", ic:"report"}
+  : x.kind==="resultat" ? {l:"Résultat de formation", L:"Résultats de formation", cls:"m-for", ic:"learn"} : {l:"Élément", L:"Autres", cls:"m-gen", ic:"info"};
+const trKey = x => x.kind==="fiche" ? x.mod : x.kind;
+async function trPut(kind, col, id, data, titre, ref, extra){
+  if (!S.db) return; const {_id, ...body} = data||{};
+  const tid = `${col}--${id}--${Date.now().toString(36)}`;
+  const doc = {kind, col, mod: kind==="fiche" ? col : "", origId:id, titre:String(titre||"").slice(0,300), ref:String(ref||"").slice(0,60), data:body, supprimeLe:new Date().toISOString(), supprimePar:S.meName||S.org?.dpoNom||"", ...(extra||{})};
+  await S.db.collection("corbeille").doc(tid).set(doc); S.trash.set(tid, {...doc, _id:tid});
+}
+/* Les suppressions passent par la corbeille */
+deleteMany = async function(pairs){
+  for (const [m,id] of pairs){ const t = S.data[m]?.get(id);
+    if (t){ try{ await trPut("fiche", m, id, t, titleOf(m,t), t.ref); }catch(e){ console.warn(e); } }
+    await S.db.collection(m).doc(id).delete(); S.data[m].delete(id); }
+};
+setTimeout(function(){
+  const _pj = actions["pj-confirm-del"], _doc = actions["doc-del"], _trn = actions["trn-del"];
+  actions["pj-confirm-del"] = async function(el){ const p = S.pieces.get(el.dataset.id); if (!p) return;
+    try{ await trPut("piece", "pieces", p._id, p, p.nom, "", {asset:p.asset||""}); await S.db.collection("pieces").doc(p._id).delete(); S.pieces.delete(p._id);
+      const rec = p.mod&&MODS[p.mod] ? S.data[p.mod].get(p.recId) : null; if (rec) await persist(p.mod, p.recId, rec, "Pièce mise à la corbeille : "+p.nom); toast("Pièce placée dans la corbeille"); }catch(e){ writeError(e); }
+    S.pjDel = null; render(); };
+  if (_doc) actions["doc-del"] = async function(el){ const v = S.docv; const d = v?.id && S.docs?.get(v.id); if (d && W() && CONF2["doc-del"] && Date.now()-CONF2["doc-del"]<4000){ try{ await trPut("document","documents",d._id,d,d.titre||d.nom||"Document",""); }catch(e){} } return _doc.call(this, el); };
+  if (_trn) actions["trn-del"] = async function(el){ const r = S.results?.get(el.dataset.id); if (r){ try{ await trPut("resultat","resultats",r._id,r,[r.prenom,r.nom].filter(Boolean).join(" ")||r.collaborateur||r.email||"Résultat",""); }catch(e){} } return _trn.call(this, el); };
+}, 0);
+async function trRestore(x){
+  if (!W()) return;
+  try{
+    const col = x.col; let id = x.origId; const exists = x.kind==="fiche" ? S.data[col]?.has(id) : x.kind==="piece" ? S.pieces.has(id) : false;
+    if (exists) id = S.db.collection(col).doc().id;
+    if (x.kind==="fiche"){ const d = {...x.data}; if (d.ref && items(col).some(o=>o.ref===d.ref)) d.ref = nextRef(col); await persist(col, id, d, "Restaurée depuis la corbeille"); }
+    else { await S.db.collection(col).doc(id).set(x.data); if (x.kind==="piece") S.pieces.set(id, {...x.data, _id:id}); if (x.kind==="document") S.docs?.set(id, {...x.data, _id:id}); }
+    await S.db.collection("corbeille").doc(x._id).delete(); S.trash.delete(x._id);
+    toast(`Restauré : ${x.titre||trSrc(x).l}`);
+    if (x.kind==="fiche"){ S.mod = col; S.selId = id; go("detail"); return; }
+  }catch(e){ writeError(e); }
+  render();
+}
+async function trPurge(list){
+  for (const x of list){ try{ await S.db.collection("corbeille").doc(x._id).delete(); S.trash.delete(x._id); if (x.kind==="piece" && x.asset && !LOCAL) try{ await S.assets?.delete(x.asset); }catch(e){} }catch(e){ writeError(e); return; } }
+}
+function vCorbeille(){
+  const all = [...S.trash.values()].sort((a,b)=>String(b.supprimeLe).localeCompare(String(a.supprimeLe)));
+  const keys = [...new Set(all.map(trKey))];
+  const f = keys.includes(S.trashF) ? S.trashF : "";
+  const L = f ? all.filter(x=>trKey(x)===f) : all;
+  const groups = []; L.forEach(x=>{ const d = String(x.supprimeLe).slice(0,10); const T = today(); const lab = d===T ? "Aujourd'hui" : d===addDays(-1) ? "Hier" : d>=addDays(-7) ? "Cette semaine" : new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{month:"long", year:"numeric"}); let g = groups[groups.length-1]; if (!g || g.l!==lab){ g = {l:lab, it:[]}; groups.push(g); } g.it.push(x); });
+  const age = x => Math.floor((Date.now() - new Date(x.supprimeLe).getTime())/864e5);
+  return `<div class="tr-page">
+  <div class="head"><div class="phead"><span class="pico" style="--c:#5C6B7A">${I.trash}</span><div><h1>Corbeille</h1><p class="psub">Tout ce qui a été supprimé dans Égide, prêt à être restauré.</p></div></div>
+    <div class="actions">${all.length&&W()?(S.trashDel==="all"?`<span class="tr-conf">Supprimer définitivement les ${all.length} éléments ?</span><button class="btn" data-action="tr-cancel">Annuler</button><button class="btn danger solid" data-action="tr-empty-ok">Vider la corbeille</button>`:`<button class="btn danger" data-action="tr-empty">${I.trash}Vider la corbeille</button>`):""}</div></div>
+  <div class="notice">${I.info}<div>Une fiche restaurée retrouve sa référence, son historique et ses liens avec les autres fiches. Les éléments sont gardés ${TR_DAYS/365===1?"un an":TR_DAYS+" jours"} dans la corbeille, puis supprimés définitivement : la corbeille contient des données personnelles et ne doit pas les conserver indéfiniment.</div></div>
+  ${keys.length>1?`<div class="sr-f" role="group" aria-label="Filtrer"><button class="fchip" data-action="tr-f" data-k="" aria-pressed="${!f}">Tout <span class="n">${all.length}</span></button>${keys.map(k=>{ const s = trSrc(all.find(x=>trKey(x)===k)); return `<button class="fchip" data-action="tr-f" data-k="${k}" aria-pressed="${f===k}">${esc(s.L)} <span class="n">${all.filter(x=>trKey(x)===k).length}</span></button>`; }).join("")}</div>`:""}
+  ${!S.trashLoaded ? `<div class="skel"></div>` : !all.length ? `<div class="empty"><span class="big">${I.trash}</span><p><b>La corbeille est vide.</b><br>Quand vous supprimez une fiche, une pièce justificative ou un document, il arrive ici et vous pouvez le restaurer.</p></div>`
+  : groups.map(g=>`<section class="tr-g"><h3>${esc(g.l)}<span>${g.it.length}</span></h3><ul>${g.it.map(x=>{ const s = trSrc(x), left = TR_DAYS-age(x);
+      return `<li class="tr-it ${s.cls}"><span class="tr-ic">${I[s.ic]||""}</span>
+        <div class="tr-x"><span class="tr-m">${esc(s.l.charAt(0).toUpperCase()+s.l.slice(1))}${x.ref?` · <span class="mono">${esc(x.ref)}</span>`:""}</span><b>${esc(x.titre||"Sans titre")}</b><small>Supprimé le ${new Date(x.supprimeLe).toLocaleString("fr-FR",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}${x.supprimePar?` par ${esc(x.supprimePar)}`:""} · ${left>30?`gardé encore ${Math.round(left/30)} mois`:`supprimé définitivement dans ${Math.max(left,0)} j`}</small></div>
+        <div class="tr-a">${S.trashDel===x._id?`<span class="tr-conf">Supprimer définitivement ?</span><button class="btn sm" data-action="tr-cancel">Annuler</button><button class="btn sm danger solid" data-action="tr-purge" data-id="${esc(x._id)}">Supprimer</button>`
+          :`<button class="btn sm primary" data-action="tr-restore" data-id="${esc(x._id)}" ${W()?"":"disabled"}>${I.back}Restaurer</button><button class="btn sm ghost" data-action="tr-del" data-id="${esc(x._id)}" ${W()?"":"disabled"} title="Supprimer définitivement" aria-label="Supprimer définitivement">${I.close}</button>`}</div></li>`; }).join("")}</ul></section>`).join("")}
+  </div>`;
+}
+const _trNav = renderNav;
+renderNav = function(){ _trNav(); const nav = document.getElementById("nav"); if (!nav || CORR() || nav.querySelector('[data-view="corbeille"]')) return;
+  const anchor = nav.querySelector('[data-view="backup"]'); const n = S.trash.size;
+  const html = `<button data-action="nav" data-view="corbeille" ${S.view==="corbeille"?'aria-current="page"':""}><span class="ic" style="--navc:#5C6B7A">${I.trash}</span>Corbeille${n?`<span class="cnt">${n}</span>`:""}</button>`;
+  if (anchor) anchor.insertAdjacentHTML("afterend", html); else nav.insertAdjacentHTML("beforeend", html); };
+const trActions = {
+  "pt-fix"(el){ ptApply([el.dataset.k]); },
+  "pt-all"(){ const t = S.data.traitements.get(S.selId); if (t) ptApply(ptAllGaps(t).filter(g=>g.patch).map(g=>g.key), "Informations reprises du projet"); },
+  async "pt-ign"(el){ const t = S.data.traitements.get(S.selId); if (!t || !W()) return; try{ await persist("traitements", t._id, {...t, prjIgnore:[...new Set([...arr(t.prjIgnore), el.dataset.k])]}, "Écart avec le projet ignoré"); }catch(e){ writeError(e); } render(); },
+  "tr-f"(el){ S.trashF = el.dataset.k; render(); },
+  "tr-restore"(el){ const x = S.trash.get(el.dataset.id); if (x) trRestore(x); },
+  "tr-del"(el){ S.trashDel = el.dataset.id; render(); },
+  "tr-cancel"(){ S.trashDel = null; render(); },
+  async "tr-purge"(el){ const x = S.trash.get(el.dataset.id); S.trashDel = null; if (x){ await trPurge([x]); toast("Supprimé définitivement"); } render(); },
+  "tr-empty"(){ S.trashDel = "all"; render(); },
+  async "tr-empty-ok"(){ S.trashDel = null; const n = S.trash.size; await trPurge([...S.trash.values()]); toast(`Corbeille vidée (${n} élément${n>1?"s":""})`); render(); }
+};
+/* Abonnement à la corbeille et purge des éléments de plus d'un an */
+function trWatch(){
+  if (!S.db || trWatch.on) return; trWatch.on = true;
+  S.db.collection("corbeille").onSnapshot(snap => { S.trash = new Map(snap.docs.map(d=>[d.id, {...d.data(), _id:d.id}])); S.trashLoaded = true;
+    const old = [...S.trash.values()].filter(x=>x.supprimeLe && Date.now()-new Date(x.supprimeLe).getTime() > TR_DAYS*864e5);
+    if (old.length && W() && !trWatch.purged){ trWatch.purged = true; trPurge(old); }
+    if (S.view==="corbeille" && !S.trashDel) render(); else renderNav(); }, () => { S.trashLoaded = true; });
+}
+(function trWait(){ if (S.db) trWatch(); else setTimeout(trWait, 400); })();
+(function(){ const st = document.createElement("style"); st.textContent = `
+.pt-card{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.pt-h{display:flex;align-items:center;gap:14px;padding:16px 20px;background:linear-gradient(180deg,color-mix(in srgb,var(--cs) 70%,var(--surface)),var(--surface));flex-wrap:wrap}
+.pt-h>div{flex:1;min-width:0}.pt-h h2{font-size:1.08rem;overflow-wrap:anywhere}
+.pt-k{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--c)}
+.pt-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--cs);color:var(--c);flex:none}.pt-ic svg{width:21px;height:21px}
+.pt-ps{display:flex;flex-direction:column;gap:8px;padding:4px 20px 16px}
+.pt-p{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2)}
+.pt-p:hover{border-color:var(--c)}.pt-p:focus-visible{outline:2px solid var(--primary);outline-offset:2px}.pt-p .mono{color:var(--muted)}.pt-p b{color:var(--heading)}
+.pt-facts{flex-basis:100%;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:.8rem;color:var(--muted)}
+.pt-gaps{border-top:1px solid var(--line);padding:14px 20px 18px}
+.pt-gh{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}.pt-gh b{color:var(--heading);font-size:.92rem}
+.pt-gaps ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.pt-gaps li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--warn-soft)}
+.pt-gaps li>div:first-of-type{display:flex;flex-direction:column;gap:2px;min-width:0}.pt-gaps li span{font-size:.88rem;color:var(--ink);overflow-wrap:anywhere}.pt-gaps li small{font-size:.78rem;color:var(--muted)}
+.pt-dot{width:8px;height:8px;border-radius:50%;background:var(--warn)}
+.pt-act{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:640px){.pt-gaps li{grid-template-columns:auto minmax(0,1fr)}.pt-act{grid-column:2;justify-content:flex-start}}
+.tr-page{display:flex;flex-direction:column;gap:18px}.tr-page .head{align-items:center}
+.tr-g h3{font-family:var(--f-display);font-size:.98rem;color:var(--heading);display:flex;align-items:center;gap:8px;margin:0 0 8px;text-transform:capitalize}
+.tr-g h3 span{font:600 .74rem var(--f-body);color:var(--muted);background:var(--sunk);border-radius:99px;padding:1px 8px}
+.tr-g ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.tr-it{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:10px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.tr-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--cs);color:var(--c)}.tr-ic svg{width:18px;height:18px}
+.tr-x{display:flex;flex-direction:column;gap:2px;min-width:0}.tr-x b{color:var(--heading);overflow-wrap:anywhere}.tr-x small{color:var(--muted);font-size:.8rem}
+.tr-m{font-size:.74rem;font-weight:700;color:var(--c)}.tr-m .mono{color:var(--muted);font-weight:500}
+.tr-a{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.tr-conf{font-size:.84rem;font-weight:600;color:var(--crit)}
+@media (max-width:640px){.tr-it{grid-template-columns:auto minmax(0,1fr)}.tr-a{grid-column:2;justify-content:flex-start}}
 `; document.head.appendChild(st); })();
 
 /* ================= Exports ================= */
@@ -11641,7 +11831,7 @@ const actions = {
     try{ await persist("conservation", S.selId, upd, consVerb(t)+" effectuée le "+fmtD(date)); toast(next?"Suppression consignée. Prochaine échéance le "+fmtD(next):"Suppression consignée"); }catch(e){writeError(e)}
     S.consDone=false; render(); if (pf.length) pjUpload(pf, "conservation", S.selId, "suppression"); },
   "cancel-del"(){ S.confirmDel=false; render(); },
-  async "confirm-del"(){ try{ await deleteMany([[S.mod,S.selId]]); S.view="list"; toast("Fiche supprimée"); }catch(e){writeError(e)} S.confirmDel=false; render(); },
+  async "confirm-del"(){ try{ await deleteMany([[S.mod,S.selId]]); S.view="list"; toast("Fiche placée dans la corbeille"); }catch(e){writeError(e)} S.confirmDel=false; render(); },
   "del-examples"(){ S.confirmEx=true; render(); },
   "cancel-ex"(){ S.confirmEx=false; render(); },
   async "confirm-ex"(){ try{ await deleteMany(items(S.mod).filter(t=>t.exemple).map(t=>[S.mod,t._id])); toast("Exemples retirés"); }catch(e){writeError(e)} S.confirmEx=false; render(); },
@@ -11751,7 +11941,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions, srActions, lrActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions, srActions, lrActions, trActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
