@@ -2961,7 +2961,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.16-c";
+const EGIDE_VERSION = "2026.11.16-d";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -10754,6 +10754,210 @@ readExcel = function(f){ if (mjIsJson(f)) return mjRead(f); return _mj14ReadExce
 body.mj-drop #main::after{content:"Déposez le fichier de réponse pour l'importer";position:fixed;inset:16px;border:3px dashed var(--primary);border-radius:var(--r);background:color-mix(in srgb,var(--primary-soft) 85%,transparent);display:grid;place-items:center;font:700 1.2rem var(--f-display);color:var(--primary);z-index:60;pointer-events:none}
 `; document.head.appendChild(st); })();
 
+/* ================= Recherche intelligente (ext15) ================= */
+const SR_STOP = new Set("le la les l de des du d un une et ou a au aux en pour par sur dans avec sans ce ces cet cette son sa ses leur leurs qui que quoi est sont mon ma mes notre nos votre vos il elle on y se s".split(" "));
+const srStem = w => { if (/^\d+$/.test(w)) return w; let s = w; if (s.length>3) s = s.replace(/(aux)$/,"al").replace(/[sx]$/,""); if (s.length>4) s = s.replace(/e$/,""); return s; };
+const srToks = txt => norm(txt).split(/[^a-z0-9]+/).filter(Boolean);
+const srQuery = q => { const all = srToks(q); const w = all.filter(x=>!SR_STOP.has(x) && (x.length>1 || /\d/.test(x))); return (w.length ? w : all).slice(0,8); };
+function srLev(a, b, max){ if (Math.abs(a.length-b.length)>max) return max+1; let prev = Array.from({length:b.length+1},(_,i)=>i);
+  for (let i=1;i<=a.length;i++){ const cur=[i]; let best=i; for (let j=1;j<=b.length;j++){ cur[j]=Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+(a[i-1]===b[j-1]?0:1)); if (cur[j]<best) best=cur[j]; } if (best>max) return max+1; prev=cur; } return prev[b.length]; }
+/* Valeur lisible d'un champ (libellés au lieu des codes) */
+const SR_RLLAB = {finalitesL:"Finalités et bases légales", dexL:"Destinataires externes", stL:"Sous-traitants", consL:"Durées de conservation", jrnL:"Journal d'accompagnement"};
+function srRows(k, rows){
+  const R = RL[k]; const sel = Object.fromEntries((R?.fields||[]).filter(f=>f.sel).map(f=>[f.k, Object.fromEntries(f.sel)]));
+  return rows.filter(r=>r && typeof r==="object").map(r=>Object.entries(r).map(([fk,v])=>{ if (v==null || v==="" || typeof v==="boolean") return "";
+    if (k==="finalitesL" && fk==="b") return baseOf(v)?.l || ""; if (sel[fk]?.[v]) return sel[fk][v]; return typeof v==="string" ? v : ""; }).filter(Boolean).join(" · ")).filter(Boolean).join(" ; ");
+}
+function srVal(f, v){
+  if (v==null || v==="") return "";
+  if (Array.isArray(v)) return v.every(x=>typeof x!=="object") ? (f?.t==="links" ? linkNames(v) : v.join(", ")) : "";
+  if (typeof v==="boolean") return v && f ? "Oui" : "";
+  if (typeof v!=="string" && typeof v!=="number") return "";
+  v = String(v);
+  if (f?.t==="base") return baseOf(v)?.l || v;
+  if (f?.opts && optL(f.opts, v)) return optL(f.opts, v);
+  if (f?.t==="date" && /^\d{4}-\d{2}-\d{2}$/.test(v)) return fmtD(v);
+  return v;
+}
+const SR_SKIP = new Set(["_id","history","statut","exemple","majDemandes","dateMaj","bljAuto","creeLe","creePar","majPar","maj"]);
+function srDoc(m, t){
+  const F = new Map(importFields(m).map(f=>[f.k,f])); const out = [];
+  const title = titleOf(m,t);
+  out.push({k:"_title", l:"Nom", txt:title, w:4});
+  if (t.ref) out.push({k:"ref", l:"Référence", txt:t.ref, w:3});
+  const st = statusPill(m,t).replace(/<[^>]+>/g,"").trim(); if (st) out.push({k:"statut", l:"Statut", txt:st, w:.6});
+  Object.entries(t).forEach(([k,v])=>{ if (SR_SKIP.has(k) || k==="ref") return; const f = F.get(k);
+    let txt = Array.isArray(v) && v.some(x=>x && typeof x==="object") ? srRows(k, v) : srVal(f, v);
+    if (!txt || txt===title) return; if (typeof v==="string" && /^[a-z0-9_]+$/.test(v) && !f) return;
+    out.push({k, l:f?.l || SR_RLLAB[k] || MJ_LAB?.[k] || "", txt, w: ["service","pilote","responsable","demandeur","nom","prestataire","titre"].includes(k) ? 1.6 : 1}); });
+  if (m!=="traitements" && arr(t.traitementIds).length) out.push({k:"traitementIds", l:"Traitements liés", txt:linkNames(t.traitementIds), w:.8});
+  return out.map(x=>({...x, n:norm(x.txt), toks:srToks(x.txt)}));
+}
+/* Score d'un mot de la requête dans un champ */
+let SR_LOOSE = null; /* mots autorisés à l'approximation (fautes de frappe) */
+const SR_SYN = {videosurveillance:["videoprotection","camera"], videoprotection:["videosurveillance","camera"], camera:["videoprotection"], salaire:["paie","remuneration"], paie:["salaire","remuneration"], cv:["candidat","candidature"], candidat:["recrutement","candidature"], candidatur:["recrutement","candidat"], recrutement:["candidat"], conge:["absence"], absence:["conge"], formation:["sensibilisation"], sensibilisation:["formation"], embauche:["recrutement"], mail:["messagerie","email"], email:["messagerie","courriel"], courriel:["messagerie","email"], cookie:["traceur","audience"], prestataire:["sous","traitant","fournisseur"], fournisseur:["prestataire"], client:["prospect"], badge:["acces"], geolocalisation:["gps","vehicule"], gps:["geolocalisation"], rh:["ressources","humaines","personnel"], it:["informatique","dsi"], dsi:["informatique"], nir:["securite","sociale"], fuite:["violation"], incident:["violation"], amende:["sanction"], purge:["suppression","conservation"], archive:["archivage"]};
+function srWord(q, fld){
+  const qs = srStem(q); let best = 0; const loose = !SR_LOOSE || SR_LOOSE.has(q);
+  for (const tok of fld.toks){ let s = 0; const ts = srStem(tok);
+    if (tok===q || ts===qs) s = 1;
+    else if (q.length>=3 && tok.startsWith(q)) s = .85;
+    else if (qs.length>=4 && ts.startsWith(qs)) s = .8;
+    else if (ts.length>=6 && qs.startsWith(ts)) s = .7;
+    else if (q.length>=5 && tok.length>q.length+1 && tok.includes(q)) s = .35;
+    else if (loose && q.length>=6 && srLev(ts, qs, q.length>=9?2:1) <= (q.length>=9?2:1)) s = .5;
+    if (s>best){ best = s; if (s===1) break; } }
+  const syn = SR_SYN[q] || SR_SYN[qs]; if (best<.8 && syn && !fld.syn){ const f2 = {...fld, syn:1}; for (const y of syn){ const x = srWord(y, f2)*.9; if (x>best) best = x; } }
+  return best;
+}
+function srScore(m, t, words, phrase, doc){
+  doc = doc || srDoc(m,t); let total = 0, hit = 0; const why = new Map();
+  words.forEach(q=>{ let b = 0, bf = null; doc.forEach(fld=>{ const s = srWord(q, fld)*fld.w; if (s>b){ b=s; bf=fld; } }); if (b>0){ hit++; total += b; why.set(bf.k, bf); } });
+  if (!hit) return null;
+  if (phrase && words.length>1) doc.forEach(fld=>{ if (fld.n.includes(phrase)){ total += 2*fld.w; why.set(fld.k, fld); } });
+  if (t.ref && norm(t.ref)===phrase) total += 20;
+  if (!isLive(m,t)) total -= .4;
+  return {m, t, score: total, hit, all: hit===words.length, why:[...why.values()].sort((a,b)=>b.w-a.w)};
+}
+/* Pages et fonctionnalités */
+const SR_PAGES = [
+  ["dashboard",null,"Accueil","home","tableau de bord score conformite accueil points a traiter"],
+  ["news",null,"Actualités","news","actualites veille cnil sanctions jurisprudence europe"],
+  ["lettre",null,"Article de la semaine","news","lettre hebdomadaire article newsletter semaine pdf word"],
+  ["list","traitements","Registre des traitements","list","registre traitements article 30 fiche"],
+  ["finaliser",null,"À valider","check","finaliser brouillons valider fiches"],
+  ["flux",null,"Carte des flux","flow","carte flux schema cartographie"],
+  ["pilotage",null,"Pilotage","gauge","pilotage directions coherence tableau"],
+  ["revue",null,"Revue annuelle","cal","revue annuelle campagne correspondants"],
+  ["pieces",null,"Pièces justificatives","clip","pieces justificatives preuves documents fichiers"],
+  ["docs",null,"Modèles de documents","report","modeles documents mention information clause courrier politique charte"],
+  ["jeu",null,"Académie RGPD","game","academie jeu quiz formation"],
+  ["rapport",null,"Rapport annuel","report","rapport annuel bilan direction generale"],
+  ["org",null,"Organisation","org","organisation entreprise dpo directions correspondants raison sociale"],
+  ["backup",null,"Sauvegarde","save","sauvegarde export restauration"],
+  ["agenda",null,"Calendrier Outlook","cal","calendrier outlook ics echeances dates agenda rappel"],
+  ["copilot",null,"Copilot","spark","copilot microsoft 365 agent"],
+  ["list","aipd","AIPD","shield","aipd analyse impact pia dpia"],
+  ["list","soustraitants","Sous-traitants","truck","sous traitants prestataires contrats article 28"],
+  ["list","demandes","Demandes de droits","user","demandes droits acces effacement opposition rectification portabilite"],
+  ["list","violations","Violations","bolt","violations incident fuite notification cnil 72 heures"],
+  ["list","actions","Plan d'actions","todo","plan actions taches"],
+  ["list","conservation","Durées de conservation","hourglass","conservation durees purge suppression archivage"],
+  ["list","formations","Formation","learn","formation sensibilisation sessions"],
+  ["list","projets","Projets","rocket","projets privacy by design ia intelligence artificielle"]
+];
+function srPages(words){
+  return SR_PAGES.filter(([v,m])=>!(v==="copilot" && !LOCAL) && !(m && !MODS[m])).map(p=>{ const fld = {toks:srToks(p[2]+" "+p[4])}; let s = 0;
+    for (const q of words){ const x = srWord(q, fld); if (!x) return null; s += x; } return {p, s}; }).filter(Boolean).sort((a,b)=>b.s-a.s).slice(0,4).map(x=>x.p);
+}
+/* Moteur */
+function srRun(q){
+  const words = srQuery(q); if (!words.length) return null;
+  const phrase = srToks(q).join(" ");
+  /* un mot trouvé tel quel quelque part n'est pas cherché « à peu près » ailleurs */
+  SR_LOOSE = null; const docs = []; MOD_KEYS.forEach(m=>items(m).forEach(t=>docs.push(srDoc(m,t))));
+  const sure = new Set(); SR_LOOSE = new Set(["\u0000"]);
+  words.forEach(w=>{ if (docs.some(d=>d.some(f=>srWord(w,f)>=.8))) sure.add(w); });
+  SR_LOOSE = new Set(words.filter(w=>!sure.has(w)));
+  const all = [];
+  MOD_KEYS.forEach(m=>items(m).forEach(t=>{ if (CORR() && ["traitements","conservation"].includes(m) && dirLabel(t)!==CORR()) return; const r = srScore(m,t,words,phrase); if (r) all.push(r); }));
+  all.sort((a,b)=>b.score-a.score);
+  let res = all.filter(r=>r.all), approx = false;
+  if (!res.length && words.length>1){ const need = Math.ceil(words.length/2); res = all.filter(r=>r.hit>=need); approx = !!res.length; }
+  const news = (S.news ? newsItems() : []).map(n=>{ const fld={toks:srToks([n.titre,n.resume,n.source].join(" "))}; let s=0; for (const w of words){ const x=srWord(w,fld); if(!x) return null; s+=x; } return {n,s}; }).filter(Boolean).sort((a,b)=>b.s-a.s).slice(0,4).map(x=>x.n);
+  const pieces = [...(S.pieces?.values()||[])].map(p=>{ const fld={toks:srToks([p.nom,p.description,(x=>typeof x==="string"?x:x?.l||"")(PJ_CATS?.[p.categorie])].join(" "))}; let s=0; for (const w of words){ const x=srWord(w,fld); if(!x) return null; s+=x; } return {p,s}; }).filter(Boolean).sort((a,b)=>b.s-a.s).slice(0,4).map(x=>x.p);
+  /* suggestion d'orthographe pour les mots introuvables */
+  let sugg = null;
+  const missing = words.filter(w=>!all.some(r=>r.why.some(f=>srWord(w,f)>0)));
+  if (missing.length){ const vocab = new Map(); MOD_KEYS.forEach(m=>items(m).forEach(t=>srDoc(m,t).forEach(f=>f.toks.forEach(tok=>{ if (tok.length>2 && !/^\d+$/.test(tok)) vocab.set(tok,(vocab.get(tok)||0)+1); }))));
+    const fix = {}; missing.forEach(w=>{ let best=null, bd=9; vocab.forEach((n,tok)=>{ const d = srLev(tok, w, 2); if (d<=2 && (d<bd || (d===bd && n>(vocab.get(best)||0)))){ bd=d; best=tok; } }); if (best) fix[w]=best; });
+    if (Object.keys(fix).length){ const raw = srToks(q); sugg = raw.map(x=>fix[x]||x).join(" "); if (sugg===raw.join(" ")) sugg = null; } }
+  return {words, phrase, res, approx, pages: srPages(words), news, pieces, sugg};
+}
+/* Extrait avec les mots trouvés surlignés */
+function srSnip(fld, words, len=150){
+  const txt = fld.txt, n = fld.n.length===txt.length ? fld.n : null;
+  const hits = []; fld.toks && words.forEach(q=>{ const qs = srStem(q); const re = /[a-z0-9]+/g; let mm; const src = n || norm(txt);
+    while ((mm = re.exec(src))){ const tok = mm[0]; if (srWord(q,{toks:[tok]})>0) hits.push([mm.index, mm.index+tok.length]); } });
+  if (!n || !hits.length) return esc(txt.length>len ? txt.slice(0,len)+"…" : txt);
+  hits.sort((a,b)=>a[0]-b[0]);
+  let a = Math.max(0, hits[0][0]-50); let b = Math.min(txt.length, a+len); if (a>0){ const sp = txt.lastIndexOf(" ", a+8); if (sp>a-15 && sp>0) a = sp+1; }
+  let out = "", pos = a;
+  hits.filter(h=>h[0]>=a && h[1]<=b).forEach(([s,e])=>{ if (s<pos) return; out += esc(txt.slice(pos,s)) + "<mark>" + esc(txt.slice(s,e)) + "</mark>"; pos = e; });
+  out += esc(txt.slice(pos,b));
+  return (a>0?"…":"") + out + (b<txt.length?"…":"");
+}
+const srWhy = (r, words, max=2) => r.why.filter(f=>f.k!=="_title").slice(0,max).map(f=>`<span class="sr-why"><b>${esc(f.l||"Contenu")}</b> ${srSnip(f, words)}</span>`).join("");
+vSearch = function(){
+  const q = (S.gq||"").trim(); const R = srRun(q);
+  const ex = ["paie","vidéoprotection","candidats","prestataire hors UE","santé","TRT-2026-004"];
+  if (!R) return `<div class="home sr"><div class="welcome"><h1>Recherche</h1><p>Tapez un ou plusieurs mots : nom de traitement, référence, direction, prestataire, catégorie de donnée, base légale…</p></div>
+    <div class="sr-ex"><span class="muted">Exemples :</span>${ex.map(x=>`<button class="chip" data-action="sr-q" data-q="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>`;
+  const {words, res, approx, pages, news, pieces, sugg} = R;
+  const f = S.gmod && res.some(r=>r.m===S.gmod) ? S.gmod : "";
+  const shown = f ? res.filter(r=>r.m===f) : res;
+  const top = !f && shown[0] && (shown.length===1 || shown[0].score >= shown[1].score*1.25 || norm(shown[0].t.ref||"")===R.phrase) ? shown[0] : null;
+  const mods = [...new Set(res.map(r=>r.m))];
+  const row = r => `<li><button class="sr-row ${MODS[r.m].cls}" data-action="open" data-mod="${r.m}" data-id="${esc(r.t._id)}">
+      <span class="sr-ic">${I[MODS[r.m].icon]}</span>
+      <span class="sr-x"><span class="sr-t">${r.t.ref?`<span class="mono">${esc(r.t.ref)}</span>`:""}<b>${srSnip({txt:titleOf(r.m,r.t), n:norm(titleOf(r.m,r.t)), toks:[1]}, words, 120)}</b></span>${srWhy(r, words)}</span>
+      <span class="sr-st">${statusPill(r.m,r.t)}</span></button></li>`;
+  const groups = mods.filter(m=>!f || m===f).map(m=>{ const L = shown.filter(r=>r.m===m && r!==top); if (!L.length) return "";
+    return `<section class="sr-g ${MODS[m].cls}"><div class="sec-t"><h2><span class="mtag ${MODS[m].cls}">${esc(MODS[m].label)}</span> <span class="muted num" style="font-size:.9rem;font-weight:500">${L.length}</span></h2>${L.length>6&&!f?`<button class="lnk" data-action="sr-mod" data-m="${m}">Voir les ${L.length}</button>`:""}</div><ul class="sr-list">${L.slice(0, f?100:6).map(row).join("")}</ul></section>`; }).join("");
+  const total = res.length;
+  return `<div class="home sr">
+    <div class="welcome"><h1>Recherche</h1><p>${total ? `${total} fiche${total>1?"s":""} ${approx?"approchante"+(total>1?"s":""):"trouvée"+(total>1?"s":"")} pour « ${esc(q)} »` : `Aucune fiche ne contient « ${esc(q)} »`}${approx?` <span class="pill t-warn">tous les mots ne sont pas présents</span>`:""}</p></div>
+    ${sugg?`<div class="notice">${I.search}<div>Vouliez-vous dire <button class="lnk" data-action="sr-q" data-q="${esc(sugg)}">« ${esc(sugg)} »</button> ?</div></div>`:""}
+    ${pages.length?`<div class="sr-pages"><span class="muted">Aller à :</span>${pages.map(([v,m,l,ic])=>`<button class="sr-page" ${m?`data-action="list" data-mod="${m}"`:`data-action="nav" data-view="${v}"`}>${I[ic]||""}${esc(l)}</button>`).join("")}</div>`:""}
+    ${mods.length>1?`<div class="sr-f" role="group" aria-label="Filtrer les résultats"><button class="fchip" data-action="sr-mod" data-m="" aria-pressed="${!f}">Tout <span class="n">${total}</span></button>${mods.map(m=>`<button class="fchip" data-action="sr-mod" data-m="${m}" aria-pressed="${f===m}">${esc(MODS[m].label)} <span class="n">${res.filter(r=>r.m===m).length}</span></button>`).join("")}</div>`:""}
+    ${top?`<section class="sr-top ${MODS[top.m].cls}"><span class="sr-top-k">Meilleur résultat · ${esc(MODS[top.m].single)}</span>
+      <div class="sr-top-h"><span class="pico">${I[MODS[top.m].icon]}</span><div><h2>${srSnip({txt:titleOf(top.m,top.t), n:norm(titleOf(top.m,top.t)), toks:[1]}, words, 140)}</h2><p>${top.t.ref?`<span class="mono">${esc(top.t.ref)}</span> · `:""}${statusPill(top.m,top.t)}${top.m==="traitements"&&dirLabel(top.t)?` · ${esc(dirLabel(top.t))}`:""}</p></div></div>
+      ${top.why.some(x=>x.k!=="_title")?`<div class="sr-top-w">${srWhy(top, words, 3)}</div>`:""}
+      <div class="actions"><button class="btn primary" data-action="open" data-mod="${top.m}" data-id="${esc(top.t._id)}">${I.eye}Ouvrir la fiche</button>${W()?`<button class="btn" data-action="open-edit" data-mod="${top.m}" data-id="${esc(top.t._id)}">${I.edit}Modifier</button>`:""}<span class="muted sr-enter">ou appuyez sur Entrée</span></div></section>`:""}
+    ${groups}
+    ${!f && pieces.length?`<section class="sr-g"><div class="sec-t"><h2><span class="mtag m-gen">Pièces justificatives</span> <span class="muted num" style="font-size:.9rem;font-weight:500">${pieces.length}</span></h2></div><ul class="sr-list">${pieces.map(p=>`<li><button class="sr-row m-gen" data-action="pj-open" data-id="${esc(p._id)}"><span class="sr-ic">${I.clip}</span><span class="sr-x"><span class="sr-t"><b>${srSnip({txt:p.nom||"", n:norm(p.nom||""), toks:[1]}, words, 120)}</b></span>${p.description?`<span class="sr-why">${esc(p.description.slice(0,140))}</span>`:""}</span></button></li>`).join("")}</ul></section>`:""}
+    ${!f && news.length?`<section class="sr-g"><div class="sec-t"><h2><span class="mtag m-news">Actualités</span> <span class="muted num" style="font-size:.9rem;font-weight:500">${news.length}</span></h2></div><ul class="sr-list">${news.map(n=>`<li><a class="sr-row m-news" href="${esc(n.url)}" target="_blank" rel="noopener noreferrer"><span class="sr-ic">${I.news}</span><span class="sr-x"><span class="sr-t"><b>${srSnip({txt:n.titre||"", n:norm(n.titre||""), toks:[1]}, words, 140)}</b></span><span class="sr-why">${esc([fmtD(n.date), n.source].filter(Boolean).join(" · "))}</span></span></a></li>`).join("")}</ul></section>`:""}
+    ${!total && !pages.length && !news.length && !pieces.length?`<div class="empty"><span class="big">${I.search}</span><p>Rien de trouvé. Essayez un mot plus court (« candidat » au lieu de « candidatures »), un nom de direction, de prestataire ou une référence.</p></div>`:""}
+  </div>`;
+};
+/* Le filtre des listes utilise le même moteur (pluriels, accents, libellés, fautes légères) */
+const _srMatches = matches;
+matches = function(mod, t){
+  if (!S.filters.q) return _srMatches(mod, t);
+  const q = S.filters.q; S.filters.q = ""; const ok = _srMatches(mod, t); S.filters.q = q; if (!ok) return false;
+  const words = srQuery(q); if (!words.length) return true; const r = srScore(mod, t, words, srToks(q).join(" ")); return !!(r && r.all);
+};
+const srActions = {
+  "sr-q"(el){ S.gq = el.dataset.q; S.gmod = ""; const g = $("#gq"); if (g) g.value = S.gq; if (S.view!=="search"){ S.prevView = {view:S.view, mod:S.mod, selId:S.selId}; S.view="search"; } render(); },
+  "sr-mod"(el){ S.gmod = el.dataset.m || ""; render(); window.scrollTo(0,0); }
+};
+document.addEventListener("keydown", e => {
+  if (e.key!=="Enter" || e.target?.id!=="gq" || S.view!=="search") return;
+  const b = document.querySelector(".sr-top [data-action=open]") || document.querySelector(".sr-list [data-action=open]"); if (b){ e.preventDefault(); b.click(); }
+});
+document.addEventListener("input", e => { if (e.target?.id==="gq") S.gmod = ""; }, true);
+(function(){ const st = document.createElement("style"); st.textContent = `
+.sr mark{background:color-mix(in srgb,var(--warn) 26%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.sr-ex,.sr-pages,.sr-f{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sr-ex button.chip{color:var(--primary);background:var(--primary-soft)}
+.sr-page{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);background:var(--surface);color:var(--heading);border-radius:99px;padding:6px 13px 6px 9px;font:600 .84rem var(--f-body);cursor:pointer}
+.sr-page svg{width:16px;height:16px;color:var(--primary)}.sr-page:hover{border-color:var(--primary);color:var(--primary)}
+.sr-top{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:var(--r);padding:18px 22px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.sr-top-k{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.sr-top-h{display:flex;gap:14px;align-items:center;min-width:0}.sr-top-h>div{min-width:0}
+.sr-top-h .pico{width:46px;height:46px;border-radius:14px}.sr-top-h .pico svg{width:22px;height:22px}
+.sr-top-h h2{font-size:1.25rem;overflow-wrap:anywhere}.sr-top-h p{color:var(--muted);font-size:.86rem;margin-top:4px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sr-top-w{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:var(--r-sm);background:var(--surface-2)}
+.sr-enter{font-size:.8rem}
+.sr-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.sr-row{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.sr-row:hover{border-color:var(--c);background:var(--cs)}.sr-row:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.sr-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--cs);color:var(--c)}.sr-ic svg{width:18px;height:18px}
+.sr-x{display:flex;flex-direction:column;gap:3px;min-width:0}
+.sr-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}.sr-t .mono{color:var(--muted)}.sr-t b{color:var(--heading);font-size:.95rem;overflow-wrap:anywhere}
+.sr-why{font-size:.83rem;color:var(--muted);overflow-wrap:anywhere;line-height:1.45}.sr-why b{color:var(--ink);font-weight:600;margin-right:4px}.sr-why b::after{content:" :"}
+@media (max-width:600px){.sr-row{grid-template-columns:auto minmax(0,1fr)}.sr-st{grid-column:2}}
+`; document.head.appendChild(st); })();
+
 /* ================= Exports ================= */
 const slugOrg = () => (norm(S.org.raisonSociale||"registre").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")) || "registre";
 const clean = t => { const {_id, ...rest} = t; return {id:_id, ...rest}; };
@@ -11486,7 +11690,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions, srActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
