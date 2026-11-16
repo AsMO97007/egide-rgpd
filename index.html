@@ -2961,7 +2961,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.15-c";
+const EGIDE_VERSION = "2026.11.16-a";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -4451,7 +4451,7 @@ function upcomingBlock(){
   }).join("");
   const rest = shownList.length - shown;
   return `<section>
-    <div class="sec-t"><h2>À venir</h2><span class="muted" style="font-size:.85rem">${list.length} échéance${list.length>1?"s":""} sur les 3 prochains mois${LOCAL?` · <button class="lnk" data-action="ics-export">Ajouter à Outlook</button>`:""}</span></div>
+    <div class="sec-t"><h2>À venir</h2><span class="muted" style="font-size:.85rem">${list.length} échéance${list.length>1?"s":""} sur les 3 prochains mois · <button class="lnk" data-action="ag-open">Exporter vers Outlook</button></span></div>
     <div class="upc">
       ${mods.length>1 ? `<div class="upc-top" role="group" aria-label="Filtrer par module"><button class="upc-f" data-action="up-mod" data-m="" aria-pressed="${!f}">Tout <span class="n">${all.length}</span></button>${mods.map(m=>`<button class="upc-f ${MODS[m].cls}" data-action="up-mod" data-m="${m}" aria-pressed="${f===m}"><i></i>${esc(MODS[m].label)} <span class="n">${all.filter(x=>x.mod===m).length}</span></button>`).join("")}</div>` : ""}
       <div class="upc-tl">
@@ -4633,6 +4633,7 @@ function render(){
   else if (S.view==="backup") html = vBackup();
   else if (S.view==="pilotage") html = vPilotage();
   else if (S.view==="lettre") html = vLettre();
+  else if (S.view==="agenda") html = vAgenda();
   else if (S.mod==="traitements") html = {list:vTrtList, detail:vTrtDetail, edit:vTrtEdit}[S.view]();
   else if (S.mod==="formations" && S.view==="list") html = vFormList();
   else html = {list:vList, detail:vDetail, edit:vEdit}[S.view]();
@@ -7306,19 +7307,6 @@ Règles :
 - Pour une question juridique générale, appuie-toi sur des sources officielles (CNIL, EDPB, Légifrance) et indique-les.
 - Ne communique jamais de données personnelles au-delà de ce qui est nécessaire à la question.
 - Pour toute violation de données, rappelle le délai de 72 heures et oriente vers le DPO.`;
-/* --- Calendrier Outlook (.ics) --- */
-function icsExport(){
-  const dues=[]; MOD_KEYS.forEach(m=>items(m).forEach(t=>(MODS[m].dates?.(t)||[]).forEach(x=>{ if (x.d>=addDays(-7) && x.d<=addDays(400)) dues.push({...x, m, t}); })));
-  if (!dues.length) return toast("Aucune échéance à exporter.");
-  const z = s => String(s||"").replace(/[\\;,]/g,c=>"\\"+c).replace(/\r?\n/g,"\\n");
-  const d8 = iso => iso.replace(/-/g,""); const stamp = new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z";
-  const fold = l => l.length<=74 ? l : l.match(/.{1,74}/g).join("\r\n ");
-  const ev = dues.map(({d,l,m,t})=>{ const pre = m==="conservation" ? consPre(t) : m==="demandes" ? 7 : m==="actions" ? 3 : 1; const nx=new Date(d+"T12:00:00"); nx.setDate(nx.getDate()+1);
-    return ["BEGIN:VEVENT",`UID:egide-${m}-${t._id}-${d}@egide`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${d8(d)}`,`DTEND;VALUE=DATE:${d8(isoLocal(nx))}`,`SUMMARY:${z("[RGPD] "+l+" · "+titleOf(m,t))}`,`DESCRIPTION:${z(MODS[m].single+" "+(t.ref||"")+" — "+titleOf(m,t)+". À traiter dans Égide.")}`,"TRANSP:TRANSPARENT","BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${z(l)}`,`TRIGGER:-P${pre}D`,"END:VALARM","END:VEVENT"].map(fold).join("\r\n"); });
-  const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Egide//RGPD//FR","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Échéances RGPD (Égide)",...ev,"END:VCALENDAR"].join("\r\n");
-  save(`${slugOrg()}-echeances-rgpd-${today()}.ics`, ics);
-  toast(`${dues.length} échéance${dues.length>1?"s":""} exportée${dues.length>1?"s":""} : ouvrez le fichier pour l'ajouter à Outlook`);
-}
 function vCopilot(){
   return `${roBanner()}
   <div class="head"><div class="phead"><span class="pico" style="--c:#2B5BB8">✦</span><div><h1>Microsoft 365 Copilot</h1><p class="psub">Égide et Copilot, main dans la main</p></div></div><div class="actions"><button class="btn primary" data-action="copilot-side">${I.spark}Ouvrir Copilot à côté d'Égide</button></div></div>
@@ -7327,7 +7315,7 @@ function vCopilot(){
     <article class="copcard"><span class="e">📰</span><h3>Mettre à jour les actualités</h3><p>Copilot recherche sur le web les nouveautés CNIL, CEPD, jurisprudence et cybersécurité depuis votre dernière mise à jour.</p><button class="btn primary" data-action="cop-news" ${W()?"":"disabled"}>Lancer avec Copilot</button></article>
     <article class="copcard"><span class="e">✨</span><h3>Plan d'action depuis l'actualité</h3><p>Copilot propose des actions concrètes, datées et attribuées, adaptées à votre registre. Vous les ajoutez au plan d'actions en un clic.</p><button class="btn primary" data-action="cop-plan" ${newsItems().length?"":"disabled"}>Lancer avec Copilot</button></article>
     <article class="copcard"><span class="e">🤖</span><h3>Agent « Assistant RGPD »</h3><p>Exportez votre base de connaissances (Word), déposez-la sur SharePoint et créez un agent Copilot qui répond aux questions sur votre conformité.</p><div class="actions"><button class="btn primary" data-action="cop-kb" ${S.dl?"":"disabled"}>${I.dl}Exporter la base (Word)</button><button class="btn sm" data-action="copy" data-src="cop-agent">Copier les instructions de l'agent</button></div><textarea id="cop-agent" readonly rows="6">${esc(COP_AGENT)}</textarea></article>
-    <article class="copcard"><span class="e">📅</span><h3>Échéances dans Outlook</h3><p>Exportez toutes les échéances (suppressions, réponses aux demandes, actions, revues) avec un rappel avant chaque date, puis ouvrez le fichier pour l'ajouter à votre calendrier.</p><button class="btn primary" data-action="ics-export" ${S.dl?"":"disabled"}>${I.dl}Exporter vers Outlook</button></article>
+    <article class="copcard"><span class="e">📅</span><h3>Échéances dans Outlook</h3><p>Exportez toutes les échéances (suppressions, réponses aux demandes, actions, revues) avec un rappel avant chaque date, puis ouvrez le fichier pour l'ajouter à votre calendrier.</p><button class="btn primary" data-action="ag-open">${I.cal}Choisir et exporter vers Outlook</button></article>
   </div>
   <section class="panel"><div class="panel-h"><h2>Bonnes pratiques</h2></div><div class="panel-b"><ul class="cop-tips">
     <li>Utilisez Copilot avec votre <b>compte professionnel</b> (protection des données d'entreprise), jamais une version grand public.</li>
@@ -9413,7 +9401,7 @@ function navLabel(e){
     if (e.view==="detail"){ const t = S.data[e.mod]?.get(e.selId); return t ? `${t.ref?t.ref+" · ":""}${titleOf(e.mod,t)||M.single}` : M.long; }
     return M.long; }
   const b = document.querySelector(`#nav [data-view="${e.view}"]`); if (b){ const c = b.cloneNode(true); c.querySelectorAll(".cnt,.ic").forEach(x=>x.remove()); const l = c.textContent.trim(); if (l) return l; }
-  return {dashboard:"Accueil", alertes:"Points à traiter", search:"Recherche", org:"Organisation", backup:"Sauvegarde", rapport:"Rapport", copilot:"Copilot", lettre:"Article de la semaine"}[e.view] || "page précédente";
+  return {dashboard:"Accueil", alertes:"Points à traiter", search:"Recherche", org:"Organisation", backup:"Sauvegarde", rapport:"Rapport", copilot:"Copilot", lettre:"Article de la semaine", agenda:"Calendrier Outlook"}[e.view] || "page précédente";
 }
 function backBar(){
   const e = S.navHist[S.navHist.length-1]; if (!e) return "";
@@ -10331,6 +10319,156 @@ function arMorePages(k, h){
     ${foot(nextP())}</section>`);
   return pages;
 }
+/* ================= Calendrier Outlook (ext12) ================= */
+const AG_KEY = "egide-agenda";
+const AG = (() => { let p = {}; try { p = JSON.parse(localStorage.getItem(AG_KEY) || "{}") || {}; } catch(e){}
+  return { per: ["3m","12m","all"].includes(p.per) ? p.per : "12m", rem: ["auto","0","1","3","7"].includes(p.rem) ? p.rem : "auto", off: new Set(Array.isArray(p.off) ? p.off : []), late: p.late !== false }; })();
+function agSave(){ try { localStorage.setItem(AG_KEY, JSON.stringify({per:AG.per, rem:AG.rem, off:[...AG.off], late:AG.late})); } catch(e){} }
+const AG_SRC_EGIDE = {label:"Pilotage RGPD", cls:"m-gen", icon:"report"};
+const agSrc = m => MODS[m] ? {label:MODS[m].label, cls:MODS[m].cls, icon:MODS[m].icon} : AG_SRC_EGIDE;
+const agAutoPre = (m, t) => m==="conservation" ? consPre(t) : m==="demandes" ? 7 : m==="actions" ? 3 : m==="violations" ? 0 : m==="egide" ? 7 : m==="projets" ? 3 : m==="formations" ? 7 : 1;
+/* Toutes les dates connues d'Égide, passées et à venir */
+function agAll(){
+  const out = [];
+  MOD_KEYS.forEach(m => items(m).forEach(t => (MODS[m].dates?.(t) || []).forEach((x, i) => { if (x.d) out.push({d:x.d, l:x.l, m, id:t._id, ref:t.ref||"", name:titleOf(m,t)||"", pre:agAutoPre(m,t), k:`${m}-${t._id}-${i}`}); })));
+  /* compléments propres au calendrier */
+  items("projets").forEach(t => { if (t.dateMep && !["service","abandonne"].includes(t.statut)) out.push({d:t.dateMep, l:"Mise en production prévue", m:"projets", id:t._id, ref:t.ref||"", name:titleOf("projets",t)||"", pre:7, k:`projets-${t._id}-mep`}); });
+  try { const c = typeof revActive==="function" ? revActive() : null; if (c && c.echeance) out.push({d:c.echeance, l:"Date limite de la revue annuelle du registre", m:"egide", id:"", ref:"", name:c.titre||"Revue annuelle", pre:7, k:`revue-${c._id||c.echeance}`, go:"revue"}); } catch(e){}
+  const y = new Date().getFullYear(); const dec = `${y}-12-01` >= today() ? `${y}-12-01` : `${y+1}-12-01`;
+  out.push({d:dec, l:"Rapport annuel RGPD à présenter à la direction", m:"egide", id:"", ref:"", name:"Bilan du 1er décembre au 30 novembre", pre:7, k:`rapport-${dec.slice(0,4)}`, go:"rapport"});
+  return out.sort((a,b) => a.d.localeCompare(b.d) || a.l.localeCompare(b.l));
+}
+function agSel(all){
+  const T = today(), end = AG.per==="3m" ? addDays(92) : AG.per==="12m" ? addDays(366) : "9999-12-31";
+  return (all || agAll()).filter(x => !AG.off.has(x.m) && x.d <= end && (x.d >= T || AG.per==="all" || AG.late));
+}
+const agPre = x => AG.rem==="auto" ? x.pre : +AG.rem;
+const AG_REM = [["auto","Adapté à chaque échéance"],["0","Aucun rappel"],["1","La veille"],["3","3 jours avant"],["7","1 semaine avant"]];
+const AG_PER = [["3m","3 prochains mois"],["12m","12 prochains mois"],["all","Tout, y compris le passé"]];
+function agIcs(list){
+  const z = s => String(s||"").replace(/[\\;,]/g, c => "\\"+c).replace(/\r?\n/g, "\\n");
+  const d8 = iso => iso.replace(/-/g, "");
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").slice(0,15) + "Z";
+  const seq = Math.floor(Date.now()/60000) % 2000000000;
+  const fold = l => { const out = []; let cur = ""; for (const ch of l){ if ((cur+ch).length > 73){ out.push(cur); cur = " "+ch; } else cur += ch; } out.push(cur); return out.join("\r\n"); };
+  const org = S.org?.raisonSociale ? " · " + S.org.raisonSociale : "";
+  const ev = list.map(x => { const nx = new Date(x.d+"T12:00:00"); nx.setDate(nx.getDate()+1); const pre = agPre(x); const src = agSrc(x.m);
+    const desc = [`${src.label}${x.ref?" — "+x.ref:""}`, x.name, x.l, "", "À traiter dans Égide."].filter((v,i)=>v||i>=3).join("\n");
+    return ["BEGIN:VEVENT", `UID:egide-${x.k}@egide`, `SEQUENCE:${seq}`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${d8(x.d)}`, `DTEND;VALUE=DATE:${d8(isoLocal(nx))}`,
+      `SUMMARY:${z("[RGPD] "+x.l+(x.name?" · "+x.name:""))}`, `DESCRIPTION:${z(desc)}`, `CATEGORIES:RGPD,${z(src.label)}`, "TRANSP:TRANSPARENT", "X-MICROSOFT-CDO-BUSYSTATUS:FREE", "X-MICROSOFT-CDO-ALLDAYEVENT:TRUE",
+      ...(pre>0 ? ["BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${z(x.l)}`,`TRIGGER:-P${pre}D`,"END:VALARM"] : []), "END:VEVENT"].map(fold).join("\r\n"); });
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Egide//RGPD//FR","CALSCALE:GREGORIAN","METHOD:PUBLISH", fold("X-WR-CALNAME:"+z("Échéances RGPD"+org)), "X-WR-TIMEZONE:Europe/Paris", ...ev, "END:VCALENDAR"].join("\r\n") + "\r\n";
+}
+async function agDownload(){
+  const list = agSel();
+  if (!list.length) return toast("Aucune échéance ne correspond à vos choix.");
+  await save(`${slugOrg()}-echeances-rgpd-${today()}.ics`, agIcs(list));
+  AG.lastN = list.length; AG.lastAt = Date.now();
+  if (S.view==="agenda") render();
+}
+/* compatibilité : l'ancienne action exporte directement avec les réglages mémorisés */
+function icsExport(){ agDownload(); }
+function vAgenda(){
+  const all = agAll(), sel = agSel(all), T = today();
+  const srcs = [...new Set(all.map(x=>x.m))].sort((a,b) => (a==="egide") - (b==="egide") || agSrc(a).label.localeCompare(agSrc(b).label));
+  const nLate = sel.filter(x=>x.d<T).length, n30 = sel.filter(x=>x.d>=T && x.d<=addDays(30)).length;
+  const groups = []; sel.forEach(x => { const k = x.d.slice(0,7); let g = groups[groups.length-1]; if (!g || g.k!==k){ g = {k, l:new Date(x.d+"T12:00:00").toLocaleDateString("fr-FR",{month:"long", year:"numeric"}), it:[]}; groups.push(g); } g.it.push(x); });
+  const when = x => { const n = daysBetween(T, x.d); return n<0 ? [`crit`, `${-n} j de retard`] : n===0 ? ["warn","Aujourd'hui"] : n<=7 ? ["warn",`Dans ${n} j`] : ["", `Dans ${n} j`]; };
+  const remTxt = x => { const p = agPre(x); return p<=0 ? "Sans rappel" : p===1 ? "Rappel la veille" : `Rappel ${p} j avant`; };
+  const seg = (name, opts, cur) => `<div class="ag-seg" role="radiogroup" aria-label="${name}">${opts.map(([v,l])=>`<button type="button" role="radio" data-action="ag-set" data-f="${name==="Période"?"per":"rem"}" data-v="${v}" aria-checked="${cur===v}">${esc(l)}</button>`).join("")}</div>`;
+  return `<div class="ag-page">
+  <div class="head"><div class="phead"><span class="pico" style="--c:#0F6CBD">${I.cal}</span><div><h1>Calendrier Outlook</h1><p class="psub">Toutes les dates et échéances d'Égide, prêtes à ajouter à votre agenda.</p></div></div>
+    <div class="actions"><button class="btn primary" data-action="ag-dl" ${S.dl&&sel.length?"":"disabled"}>${I.dl}Exporter vers Outlook (.ics)</button></div></div>
+  ${S.dl?"":`<div class="notice warn">${I.alert}<div>Le téléchargement n'est pas disponible dans cette vue. Ouvrez Égide dans son onglet pour exporter le calendrier.</div></div>`}
+  ${AG.lastAt && Date.now()-AG.lastAt < 600000 ? `<div class="ag-ok">${I.check}<div><b>${AG.lastN} échéance${AG.lastN>1?"s":""} exportée${AG.lastN>1?"s":""}.</b> Ouvrez le fichier téléchargé : Outlook propose de l'ajouter à votre calendrier. La marche à suivre est détaillée plus bas.</div></div>`:""}
+  <section class="ag-hero">
+    <div class="ag-kpi"><b>${sel.length}</b><span>date${sel.length>1?"s":""} dans l'export</span></div>
+    <div class="ag-kpi ${n30?"w":""}"><b>${n30}</b><span>dans les 30 jours</span></div>
+    <div class="ag-kpi ${nLate?"c":""}"><b>${nLate}</b><span>déjà dépassée${nLate>1?"s":""}</span></div>
+    <div class="ag-kpi"><b>${srcs.filter(m=>!AG.off.has(m)).length}</b><span>fonctionnalité${srcs.filter(m=>!AG.off.has(m)).length>1?"s":""} incluse${srcs.filter(m=>!AG.off.has(m)).length>1?"s":""}</span></div>
+  </section>
+  <div class="ag-grid">
+    <section class="panel ag-opts"><div class="panel-h"><h2>Ce que vous exportez</h2></div><div class="panel-b">
+      <div class="ag-f"><span class="ag-lab">Période</span>${seg("Période", AG_PER, AG.per)}
+        ${AG.per!=="all"?`<label class="ag-chk"><input type="checkbox" id="ag-late" data-action="ag-late" ${AG.late?"checked":""}> Inclure les échéances en retard</label>`:""}</div>
+      <div class="ag-f"><span class="ag-lab">Rappel Outlook</span>${seg("Rappel", AG_REM, AG.rem)}
+        ${AG.rem==="auto"?`<p class="ag-hint">Notification CNIL : le jour même. Demandes d'exercice des droits et rapport annuel : 1 semaine avant. Actions et projets : 3 jours avant. Durées de conservation : selon le préavis de la règle. Autres : la veille.</p>`:""}</div>
+      <div class="ag-f"><span class="ag-lab">Fonctionnalités</span><div class="ag-srcs">${srcs.map(m=>{ const s=agSrc(m), n=all.filter(x=>x.m===m).length, on=!AG.off.has(m);
+        return `<button type="button" class="ag-src ${s.cls}" data-action="ag-src" data-m="${m}" aria-pressed="${on}"><span class="ic">${I[s.icon]||""}</span><span>${esc(s.label)}</span><span class="n">${n}</span></button>`; }).join("")}</div>
+        <div class="ag-all"><button class="lnk" data-action="ag-srcall" data-v="1">Tout cocher</button> · <button class="lnk" data-action="ag-srcall" data-v="0">Tout décocher</button></div></div>
+    </div></section>
+    <section class="panel ag-how"><div class="panel-h"><h2>Ajouter à Outlook</h2></div><div class="panel-b"><ol>
+      <li><b>Outlook classique (Windows)</b> : double-cliquez sur le fichier .ics, puis choisissez <i>Ouvrir en tant que nouveau calendrier</i> ou <i>Importer</i>. Vous pouvez aussi passer par <i>Fichier › Ouvrir et exporter › Importer/Exporter</i>.</li>
+      <li><b>Nouvel Outlook et Outlook sur le web</b> : dans le Calendrier, cliquez sur <i>Ajouter un calendrier › Charger à partir d'un fichier</i>, sélectionnez le fichier puis le calendrier de destination.</li>
+      <li><b>Conseil</b> : créez un calendrier dédié « Échéances RGPD ». Chaque mois, ou après de gros changements, supprimez-le et importez le nouvel export : vous évitez ainsi les doublons.</li>
+    </ol><p class="ag-hint">Les événements durent toute la journée et sont marqués « disponible » : ils n'occupent pas votre agenda. Ils sont classés dans la catégorie « RGPD ».</p></div></section>
+  </div>
+  <section class="panel"><div class="panel-h"><h2>Aperçu de l'export</h2><span class="muted" style="font-size:.85rem">${sel.length} date${sel.length>1?"s":""}</span></div><div class="panel-b">
+    ${groups.length ? groups.map(g=>`<div class="ag-mo"><h3>${esc(g.l)}<span>${g.it.length}</span></h3><ul>${g.it.map(x=>{ const s=agSrc(x.m), [c,t]=when(x), dt=new Date(x.d+"T12:00:00");
+      const act = x.id ? `data-action="open" data-mod="${x.m}" data-id="${esc(x.id)}"` : `data-action="nav" data-view="${x.go||"dashboard"}"`;
+      return `<li><button type="button" class="ag-it ${s.cls} ${x.d<T?"late":""}" ${act}>
+        <span class="dtile"><b>${dt.getDate()}</b><small>${dt.toLocaleDateString("fr-FR",{weekday:"short"}).replace(".","")}</small></span>
+        <span class="ag-x"><span class="ag-m">${I[s.icon]||""}${esc(s.label)}${x.ref?` · ${esc(x.ref)}`:""}</span><b>${esc(x.l)}</b>${x.name?`<small>${esc(x.name)}</small>`:""}</span>
+        <span class="ag-r"><span class="ag-w ${c}">${t}</span><small>${remTxt(x)}</small></span></button></li>`; }).join("")}</ul></div>`).join("")
+    : `<div class="empty-s"><b>Aucune date pour ces réglages</b><p>Élargissez la période ou cochez d'autres fonctionnalités. Les dates viennent des échéances saisies dans les fiches : revues, réponses aux demandes, actions, contrats, sessions, projets…</p></div>`}
+  </div></section></div>`;
+}
+const agActions = {
+  "ag-open"(){ go("agenda"); },
+  "ag-dl"(){ agDownload(); },
+  "ag-set"(el){ AG[el.dataset.f] = el.dataset.v; agSave(); render(); },
+  "ag-late"(el){ AG.late = !!el.checked; agSave(); render(); },
+  "ag-src"(el){ const m = el.dataset.m; AG.off.has(m) ? AG.off.delete(m) : AG.off.add(m); agSave(); render(); },
+  "ag-srcall"(el){ if (el.dataset.v==="1") AG.off.clear(); else agAll().forEach(x=>AG.off.add(x.m)); agSave(); render(); }
+};
+(function agCss(){ const st = document.createElement("style"); st.textContent = `
+.ag-page .pico{--c:#0F6CBD}
+.ag-ok{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:var(--r);background:var(--ok-soft);color:var(--ink);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);margin-bottom:16px}.ag-ok svg{color:var(--ok);flex:none;margin-top:2px;width:20px;height:20px}
+.ag-ok>div{min-width:0}
+.ag-hero{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+.topright .tr-cal{margin-left:auto}
+.ag-kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
+.ag-kpi b{font-family:var(--f-display);font-size:1.7rem;color:var(--heading);font-variant-numeric:tabular-nums;line-height:1.1}.ag-kpi span{color:var(--muted);font-size:.84rem}
+.ag-kpi.w b{color:var(--warn)}.ag-kpi.c b{color:var(--crit)}
+.ag-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start;margin-bottom:16px}.ag-grid .panel{margin:0}
+.ag-f{display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--line)}.ag-f:first-child{border-top:0;padding-top:0}
+.ag-lab{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ag-seg{display:flex;flex-wrap:wrap;gap:6px}
+.ag-seg button{border:1px solid var(--line-2);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 13px;font:600 .84rem var(--f-body);cursor:pointer}
+.ag-seg button[aria-checked="true"]{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.ag-seg button:focus-visible,.ag-src:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.ag-chk{display:flex;gap:8px;align-items:center;font-size:.88rem}.ag-hint{color:var(--muted);font-size:.83rem;line-height:1.5;margin:0}
+.ag-srcs{display:flex;flex-wrap:wrap;gap:8px}
+.ag-src{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--surface);color:var(--muted);border-radius:12px;padding:5px 10px 5px 5px;font:600 .84rem var(--f-body);cursor:pointer;transition:all .15s}
+.ag-src .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--sunk);color:var(--muted)}.ag-src .ic svg{width:14px;height:14px}
+.ag-src .n{font-variant-numeric:tabular-nums;font-size:.75rem;background:var(--sunk);border-radius:999px;padding:1px 7px}
+.ag-src[aria-pressed="true"]{border-color:color-mix(in srgb,var(--c) 45%,transparent);background:var(--cs);color:var(--ink)}
+.ag-src[aria-pressed="true"] .ic{background:var(--c);color:#fff}
+.ag-src[aria-pressed="false"] span:nth-child(2){text-decoration:line-through;text-decoration-color:var(--line-2)}
+.ag-all{font-size:.82rem;color:var(--muted)}
+.ag-how ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px;line-height:1.5;font-size:.9rem}.ag-how .ag-hint{margin-top:12px}
+.ag-mo{margin-bottom:18px}.ag-mo:last-child{margin-bottom:0}
+.ag-mo h3{font-family:var(--f-display);font-size:.98rem;color:var(--heading);text-transform:capitalize;display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.ag-mo h3 span{font:600 .74rem var(--f-body);color:var(--muted);background:var(--sunk);border-radius:999px;padding:1px 8px}
+.ag-mo ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.ag-it{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;text-align:left;background:var(--surface-2);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:12px;padding:9px 14px 9px 10px;cursor:pointer;color:var(--ink);font:inherit}
+.ag-it:hover{background:var(--cs)}.ag-it.late{border-left-color:var(--crit)}
+.ag-it .dtile{width:44px;height:46px;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ag-it .dtile b{font-family:var(--f-display);font-size:1.15rem;line-height:1;color:var(--heading)}.ag-it .dtile small{font-size:.7rem;color:var(--muted);text-transform:capitalize}
+.ag-x{display:flex;flex-direction:column;gap:2px;min-width:0}.ag-x b{font-size:.93rem;overflow-wrap:anywhere}.ag-x small{color:var(--muted);font-size:.82rem;overflow-wrap:anywhere}
+.ag-m{display:flex;align-items:center;gap:5px;font-size:.74rem;font-weight:700;color:var(--c)}.ag-m svg{width:13px;height:13px}
+.ag-r{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}.ag-r small{font-size:.75rem;color:var(--muted)}
+.ag-w{font-size:.8rem;font-weight:700;color:var(--muted);white-space:nowrap}.ag-w.warn{color:var(--warn)}.ag-w.crit{color:var(--crit)}
+.empty-s{text-align:center;padding:24px;color:var(--muted)}.empty-s b{color:var(--heading);display:block;margin-bottom:6px}
+.tr-cal{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;margin-right:8px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--heading);font:600 .78rem var(--f-body);cursor:pointer}
+.tr-cal svg{width:15px;height:15px;color:#0F6CBD}.tr-cal:hover{background:var(--primary-soft)}
+.topright{align-items:center}
+@media (max-width:900px){.ag-grid{grid-template-columns:1fr}.ag-hero{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.ag-it{grid-template-columns:auto minmax(0,1fr)}.ag-r{grid-column:2;align-items:flex-start;flex-direction:row;gap:10px}}
+`; document.head.appendChild(st); })();
+/* bouton en haut à droite, à côté du choix d'apparence */
+(function agTopBtn(){ const tr = document.querySelector("main .topright"); if (tr && !tr.querySelector(".tr-cal")) tr.insertAdjacentHTML("afterbegin", `<button type="button" class="tr-cal" data-action="ag-open" title="Exporter toutes les dates vers Outlook">${I.cal}<span>Calendrier Outlook</span></button>`); })();
+
 /* ================= Exports ================= */
 const slugOrg = () => (norm(S.org.raisonSociale||"registre").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")) || "registre";
 const clean = t => { const {_id, ...rest} = t; return {id:_id, ...rest}; };
@@ -10902,7 +11040,7 @@ const actions = {
   "cop-plan"(){ const news=npScopeNews("recent"); if(!news.length) return toast("Aucune actualité à analyser."); copOpen("plan","Plan d'action depuis l'actualité", npPrompt(news), "", async d=>{ const r=npClean(d,news); if(!r.actions.length) throw new Error("Aucune action trouvée dans la réponse."); const plan={...r, source:"copilot", genereLe:new Date().toISOString(), newsIds:news.map(n=>n._id), scope:"recent"}; S.np={...(S.np||{}), plan, open:true}; if (W()) { try{ await S.db.doc("config/veille").set(plan); }catch{} } toast(r.actions.length+" actions proposées par Copilot"); go("news"); setTimeout(()=>document.getElementById("np-plan")?.scrollIntoView({block:"start"}),60); }); },
   "cop-one"(el){ const n=S.news.get(el.dataset.id); if(!n) return; copOpen("one","Que faire ? · "+String(n.titre).slice(0,60), npPrompt([n]), "", async d=>{ const r=npClean(d,[n]); S.np={...(S.np||{})}; S.np.single={...(S.np.single||{}), [n._id]:{...r, source:"copilot", genereLe:new Date().toISOString(), newsIds:[n._id]}}; render(); }); },
   "cop-kb"(){ copExportKnowledge(); },
-  "ics-export"(){ icsExport(); },
+  "ics-export"(){ go("agenda"); },
   "np-gen"(){ npGenerate($("#np-scope")?.value||"recent"); },
   "np-regen"(){ const sc=S.np?.plan?.scope; npGenerate(sc && sc!=="selection" ? sc : "recent", true); },
   "np-toggle"(){ S.np.open = S.np.open!==true; render(); },
@@ -11063,7 +11201,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
