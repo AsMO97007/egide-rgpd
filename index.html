@@ -2961,7 +2961,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.16-d";
+const EGIDE_VERSION = "2026.11.16-e";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -10806,7 +10806,7 @@ function srWord(q, fld){
     else if (q.length>=5 && tok.length>q.length+1 && tok.includes(q)) s = .35;
     else if (loose && q.length>=6 && srLev(ts, qs, q.length>=9?2:1) <= (q.length>=9?2:1)) s = .5;
     if (s>best){ best = s; if (s===1) break; } }
-  const syn = SR_SYN[q] || SR_SYN[qs]; if (best<.8 && syn && !fld.syn){ const f2 = {...fld, syn:1}; for (const y of syn){ const x = srWord(y, f2)*.9; if (x>best) best = x; } }
+  let syn = SR_SYN[q] || SR_SYN[qs]; if (!syn && loose && q.length>=6 && best<.8){ const lim = q.length>=9?2:1; const k = Object.keys(SR_SYN).find(x=>srLev(x,q,lim)<=lim); if (k) syn = [k, ...SR_SYN[k]]; } if (best<.8 && syn && !fld.syn){ const f2 = {...fld, syn:1}; for (const y of syn){ const x = srWord(y, f2)*.9; if (x>best) best = x; } }
   return best;
 }
 function srScore(m, t, words, phrase, doc){
@@ -10956,6 +10956,67 @@ document.addEventListener("input", e => { if (e.target?.id==="gq") S.gmod = ""; 
 .sr-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}.sr-t .mono{color:var(--muted)}.sr-t b{color:var(--heading);font-size:.95rem;overflow-wrap:anywhere}
 .sr-why{font-size:.83rem;color:var(--muted);overflow-wrap:anywhere;line-height:1.45}.sr-why b{color:var(--ink);font-weight:600;margin-right:4px}.sr-why b::after{content:" :"}
 @media (max-width:600px){.sr-row{grid-template-columns:auto minmax(0,1fr)}.sr-st{grid-column:2}}
+`; document.head.appendChild(st); })();
+
+/* ================= Recherche dans les listes : classement et extraits (ext16) ================= */
+let SR_PREP = {q:null, words:[], phrase:"", loose:null};
+function srPrep(q){
+  if (SR_PREP.q===q){ SR_LOOSE = SR_PREP.loose; return SR_PREP; }
+  const words = srQuery(q), phrase = srToks(q).join(" ");
+  const docs = []; MOD_KEYS.forEach(m=>items(m).forEach(t=>docs.push(srDoc(m,t))));
+  SR_LOOSE = new Set(["\u0000"]); const sure = new Set(words.filter(w=>docs.some(d=>d.some(f=>srWord(w,f)>=.8))));
+  SR_LOOSE = new Set(words.filter(w=>!sure.has(w)));
+  SR_PREP = {q, words, phrase, loose:SR_LOOSE}; return SR_PREP;
+}
+matches = function(mod, t){
+  if (!S.filters.q) return _srMatches(mod, t);
+  const q = S.filters.q; S.filters.q = ""; const ok = _srMatches(mod, t); S.filters.q = q; if (!ok) return false;
+  const P = srPrep(q); if (!P.words.length) return true; const r = srScore(mod, t, P.words, P.phrase); return !!(r && r.all);
+};
+const _lrRender = renderRows;
+renderRows = function(){
+  const q = (S.filters.q||"").trim(); if (!q) return _lrRender();
+  const el = $("#rows"); if (!el) return;
+  if (!S.loaded[S.mod] && S.dbOk!==false) return _lrRender();
+  const P = srPrep(q); const M = MODS[S.mod];
+  const rows = items(S.mod).filter(t=>matches(S.mod,t)).map(t=>srScore(S.mod, t, P.words, P.phrase) || {t, score:0, why:[]}).sort((a,b)=>b.score-a.score);
+  const rc = $("#rcount"); if (rc) rc.textContent = `${rows.length} résultat${rows.length>1?"s":""} sur ${S.data[S.mod].size}${rows.length>1?", du plus pertinent au moins pertinent":""}`;
+  if (!rows.length){
+    const R = srRun(q); const sugg = R?.sugg;
+    const other = R ? R.res.filter(r=>r.m!==S.mod).length : 0;
+    el.innerHTML = `<div class="empty"><span class="big">${I.search}</span><p style="max-width:56ch">Aucune fiche de ${esc(M.long.toLowerCase())} ne contient « ${esc(q)} » avec les filtres choisis.</p>
+      <div class="actions" style="justify-content:center">${sugg?`<button class="btn" data-action="lr-q" data-q="${esc(sugg)}">Chercher « ${esc(sugg)} »</button>`:""}${S.filters.statut||S.filters.service||S.filters.base||S.filters.alerts?`<button class="btn" data-action="fclear">Effacer les filtres</button>`:""}${other?`<button class="btn" data-action="sr-q" data-q="${esc(q)}">${I.search}Voir ${other} résultat${other>1?"s":""} ailleurs dans Égide</button>`:""}</div></div>`;
+    return;
+  }
+  const best = rows[0].score>0 && (rows.length===1 || rows[0].score >= rows[1].score*1.25 || norm(rows[0].t.ref||"")===P.phrase);
+  const why = r => { const L = r.why.filter(f=>f.k!=="_title" && f.k!=="ref").slice(0,2); return L.length ? `<span class="lr-why">${L.map(f=>`<span><b>${esc(f.l||"Contenu")}</b> ${srSnip(f, P.words, 160)}</span>`).join("")}</span>` : ""; };
+  const markTitle = (m,t) => srSnip({txt:titleOf(m,t), n:norm(titleOf(m,t)), toks:[1]}, P.words, 200);
+  el.innerHTML = rows.map((r,i)=>{ const t = r.t; const tag = i===0 && best ? `<span class="lr-best">Meilleur résultat · Entrée pour ouvrir</span>` : "";
+    let h;
+    if (S.mod==="traitements"){
+      h = trtRow(t).replace(`${esc(t.nom||"Sans titre")}`, markTitle("traitements",t));
+      const j = h.indexOf("</small></span>"); if (j>0) h = h.slice(0,j+8) + why(r) + h.slice(j+8);
+    } else {
+      h = `<button class="row-i has-md" style="${colsStyle(M.columns)}" data-action="open" data-mod="${S.mod}" data-id="${esc(t._id)}">${M.columns.map(c=>`<span class="${c.cls||""}">${c.v(t)}</span>`).join("")}${why(r).replace('class="lr-why"','class="lr-why lr-full"')}</button>`;
+    }
+    return (i===0 && best) ? h.replace('class="row-i', 'class="row-i lr-top').replace(/(<span class="nm">|<span class="lr-why lr-full">)/, tag+"$1") : h;
+  }).join("");
+};
+const lrActions = {
+  "lr-q"(el){ S.filters.q = el.dataset.q; const i = $("#f-q"); if (i) i.value = S.filters.q; render(); }
+};
+document.addEventListener("keydown", e => {
+  if (e.key!=="Enter" || e.target?.id!=="f-q" || !S.filters.q) return;
+  const b = document.querySelector("#rows [data-action=open]"); if (b){ e.preventDefault(); b.click(); }
+});
+(function(){ const st = document.createElement("style"); st.textContent = `
+#rows mark{background:color-mix(in srgb,var(--warn) 26%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.lr-why{display:flex;flex-direction:column;gap:2px;margin-top:5px;font-size:.8rem;font-weight:400;color:var(--muted);white-space:normal;overflow-wrap:anywhere;line-height:1.45}
+.lr-why b{color:var(--ink);font-weight:600;margin-right:4px}.lr-why b::after{content:" :"}
+.lr-full{grid-column:1/-1;margin-top:0}
+.lr-best{display:block;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--primary);margin-bottom:3px}
+.lr-full + .lr-best,.row-i>.lr-best{grid-column:1/-1;order:-1}
+.row-i.lr-top{background:var(--primary-soft);box-shadow:inset 3px 0 0 var(--primary)}
 `; document.head.appendChild(st); })();
 
 /* ================= Exports ================= */
@@ -11690,7 +11751,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions, srActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions, srActions, lrActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
