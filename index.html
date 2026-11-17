@@ -2961,7 +2961,7 @@ const I = {
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v3h16v-3"/></svg>'
 };
 
-const EGIDE_VERSION = "2026.11.17-a";
+const EGIDE_VERSION = "2026.11.17-b";
 /* ================= Référentiels ================= */
 const INFO_MODES = ["Mention sur le formulaire de collecte (papier ou en ligne)","Notice d'information remise individuellement","Politique de confidentialité sur le site internet","Affichage dans les locaux (panneaux)","Note d'information aux salariés ou intranet","Charte informatique ou règlement intérieur","Contrat, conditions générales ou bon de commande","Courriel ou courrier d'information","Information orale, avec trace écrite","Consultation ou information du CSE","Information au premier contact (collecte indirecte, art. 14)","Exception à l'information documentée (art. 14.5)"];
 const infoText = t => [...arr(t.infoModes), t.informationPersonnes?.trim()].filter(Boolean).join(" ; ");
@@ -4635,6 +4635,7 @@ function render(){
   else if (S.view==="lettre") html = vLettre();
   else if (S.view==="agenda") html = vAgenda();
   else if (S.view==="corbeille") html = vCorbeille();
+  else if (S.view==="referentiel") html = vReferentiel();
   else if (S.view==="majimp") html = vMajImp();
   else if (S.mod==="traitements") html = {list:vTrtList, detail:vTrtDetail, edit:vTrtEdit}[S.view]();
   else if (S.mod==="formations" && S.view==="list") html = vFormList();
@@ -9403,7 +9404,7 @@ function navLabel(e){
     if (e.view==="detail"){ const t = S.data[e.mod]?.get(e.selId); return t ? `${t.ref?t.ref+" · ":""}${titleOf(e.mod,t)||M.single}` : M.long; }
     return M.long; }
   const b = document.querySelector(`#nav [data-view="${e.view}"]`); if (b){ const c = b.cloneNode(true); c.querySelectorAll(".cnt,.ic").forEach(x=>x.remove()); const l = c.textContent.trim(); if (l) return l; }
-  return {dashboard:"Accueil", alertes:"Points à traiter", search:"Recherche", org:"Organisation", backup:"Sauvegarde", rapport:"Rapport", copilot:"Copilot", lettre:"Article de la semaine", agenda:"Calendrier Outlook", majimp:"Réponse de vérification", corbeille:"Corbeille"}[e.view] || "page précédente";
+  return {dashboard:"Accueil", alertes:"Points à traiter", search:"Recherche", org:"Organisation", backup:"Sauvegarde", rapport:"Rapport", copilot:"Copilot", lettre:"Article de la semaine", agenda:"Calendrier Outlook", majimp:"Réponse de vérification", corbeille:"Corbeille", referentiel:"Référentiel des durées"}[e.view] || "page précédente";
 }
 function backBar(){
   const e = S.navHist[S.navHist.length-1]; if (!e) return "";
@@ -11091,7 +11092,7 @@ coherence = function(){ const R = _ptCoh(); const L = liveTrt().filter(t=>ptAllG
 I.trash = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13a1.5 1.5 0 0 1-1.5 1.4h-7A1.5 1.5 0 0 1 7 20z" fill="currentColor" fill-opacity=".28"/><path d="M4 7h16M9.5 7V4.5h5V7M10 11v6M14 11v6"/></svg>`;
 const TR_DAYS = 365;
 S.trash = new Map(); S.trashLoaded = false; S.trashF = ""; S.trashDel = null;
-const trSrc = x => x.kind==="fiche" ? (MODS[x.mod] ? {l:MODS[x.mod].single, L:MODS[x.mod].label, cls:MODS[x.mod].cls, ic:MODS[x.mod].icon} : {l:"Fiche", L:"Fiches", cls:"m-gen", ic:"list"})
+let trSrc = x => x.kind==="fiche" ? (MODS[x.mod] ? {l:MODS[x.mod].single, L:MODS[x.mod].label, cls:MODS[x.mod].cls, ic:MODS[x.mod].icon} : {l:"Fiche", L:"Fiches", cls:"m-gen", ic:"list"})
   : x.kind==="piece" ? {l:"Pièce justificative", L:"Pièces justificatives", cls:"m-gen", ic:"clip"}
   : x.kind==="document" ? {l:"Document", L:"Documents", cls:"m-gen", ic:"report"}
   : x.kind==="resultat" ? {l:"Résultat de formation", L:"Résultats de formation", cls:"m-for", ic:"learn"} : {l:"Élément", L:"Autres", cls:"m-gen", ic:"info"};
@@ -11207,6 +11208,495 @@ function trWatch(){
 .tr-m{font-size:.74rem;font-weight:700;color:var(--c)}.tr-m .mono{color:var(--muted);font-weight:500}
 .tr-a{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.tr-conf{font-size:.84rem;font-weight:600;color:var(--crit)}
 @media (max-width:640px){.tr-it{grid-template-columns:auto minmax(0,1fr)}.tr-a{grid-column:2;justify-content:flex-start}}
+`; document.head.appendChild(st); })();
+
+/* ================= Référentiel des durées de conservation : données (ext18) ================= */
+const RF_U = {
+  rh: "https://www.cnil.fr/sites/default/files/2026-04/referentiel_durees_de_conservation_gestion_des_ressources_humaines.pdf",
+  com: "https://www.cnil.fr/sites/cnil/files/atoms/files/referentiel_traitements-donnees-caractere-personnel_gestion-activites-commerciales.pdf",
+  guide: "https://www.cnil.fr/sites/cnil/files/atoms/files/guide_durees_de_conservation.pdf",
+  audience: "https://www.cnil.fr/fr/solutions-pour-la-mesure-daudience",
+  choix: "https://www.cnil.fr/fr/cnil-direct/question/cookies-si-jai-refuse-ses-cookies-un-site-web-peut-il-me-redemander-de-les",
+  cepdvideo: "https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201903_video_devices_en.pdf",
+  ct: a => "https://code.travail.gouv.fr/code-du-travail/"+a.toLowerCase()
+};
+const RF_SRC = {rh:"CNIL, référentiel des durées de conservation « Gestion des ressources humaines » (avril 2026)", com:"CNIL, référentiel « Gestion des activités commerciales »", guide:"CNIL, guide pratique « Les durées de conservation » (juillet 2020)"};
+const RF_NAT = {obl:{l:"Obligation légale", tone:"crit", s:"Durée fixée par un texte : on ne peut pas s'en écarter."}, reco:{l:"Recommandation CNIL / CEPD", tone:"info", s:"Durée préconisée par l'autorité : s'en écarter suppose une justification documentée."}, bp:{l:"Bonne pratique", tone:"neutral", s:"Usage courant à adapter à votre contexte, sans texte qui l'impose."}};
+const RF_DOMS = ["Recrutement","Gestion du personnel","Paie et déclarations sociales","Santé et sécurité au travail","Relations collectives","Alertes et contentieux","Accès aux locaux et vidéo","Véhicules","Informatique et communications","Clients et prospection","Paiement","Sites web et traceurs","Comptabilité, fiscalité et contrats","Fournisseurs et partenaires","Gouvernance RGPD","Santé"];
+/* id · domaine · données · base active · archivage intermédiaire · point de départ · ensuite · nature · sources · lien · mots-clés · base active max (jours) · durée pour une échéance [n, unité] · précision */
+const RF_BASE = [
+  // Recrutement
+  {id:"rec-retenu", dom:"Recrutement", n:"Dossier du candidat retenu", act:"Jusqu'à la signature du contrat de travail", arch:"Aucun : les données utiles rejoignent le dossier du salarié", dep:"Fin de la procédure de recrutement", fin:"dossier", nat:"reco", src:RF_SRC.rh+" ; CNIL, guide du recrutement", url:RF_U.rh, kw:"recrut embauche candidat"},
+  {id:"rec-nonretenu", dom:"Recrutement", n:"Candidature non retenue", act:"Le temps de la procédure de recrutement", arch:"5 ans, uniquement à des fins de preuve (action en discrimination), en accès restreint", dep:"Date à laquelle le poste a été pourvu", fin:"suppr", nat:"obl", src:"Art. L1134-5 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("l1134-5"), kw:"recrut candidat candidature cv", du:[5,"ans"]},
+  {id:"rec-vivier", chk:["vivier","cvtheque","candidat","recrut"], dom:"Recrutement", n:"Vivier de candidats (CVthèque)", act:"2 ans maximum", arch:"5 ans, uniquement à des fins de preuve", dep:"Dernier contact avec le candidat (poste pourvu pour l'archivage)", fin:"suppr", nat:"reco", src:RF_SRC.rh+" ; CNIL, guide du recrutement", url:RF_U.rh, kw:"vivier cvtheque cv candidat recrut", max:730, du:[2,"ans"]},
+  {id:"rec-honor", dom:"Recrutement", n:"Contrôle d'honorabilité", act:"Selon les textes propres à l'activité", arch:"Attestation : jusqu'à l'expiration des délais et voies de recours", dep:"Délivrance de l'attestation", fin:"suppr", nat:"obl", src:"Textes applicables à chaque activité ; "+RF_SRC.rh, url:RF_U.rh, kw:"honorabilite casier"},
+  // Gestion du personnel
+  {id:"rh-dossier", dom:"Gestion du personnel", n:"Dossier professionnel du salarié", act:"Durée de la relation de travail, sauf texte contraire", arch:"Seulement si une obligation légale ou un besoin de preuve le justifie, dans la limite de la prescription applicable (souvent 5 ans)", dep:"Fin de la relation de travail", fin:"suppr", nat:"reco", src:RF_SRC.rh+" ; art. 2224 du Code civil (prescription de 5 ans)", url:RF_U.rh, kw:"personnel salarie dossier administratif administrative administration gestion rh"},
+  {id:"rh-rup", dom:"Gestion du personnel", n:"Registre unique du personnel", act:"Durée de présence dans l'effectif", arch:"5 ans", dep:"Départ du salarié", fin:"suppr", nat:"obl", src:"Art. R1221-26 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("r1221-26"), kw:"registre unique personnel", du:[5,"ans"]},
+  {id:"rh-temps", dom:"Gestion du personnel", n:"Décompte de la durée du travail", act:"Jusqu'à l'émission du bulletin de paie", arch:"1 an (ou durée de la période de référence si l'aménagement dépasse l'année) ; 3 ans pour les salariés au forfait", dep:"Émission du bulletin de paie", fin:"suppr", nat:"obl", src:"Art. D3171-16 et L3245-1 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("d3171-16"), kw:"temps travail horaires pointage conges absences", du:[1,"ans"]},
+  {id:"rh-sanction", dom:"Gestion du personnel", n:"Sanctions disciplinaires", act:"3 ans maximum : au-delà, une sanction ne peut plus être invoquée", arch:"Aucun, sauf contentieux en cours", dep:"Date de la sanction", fin:"suppr", nat:"obl", src:"Art. L1332-5 du Code du travail", url:RF_U.ct("l1332-5"), kw:"disciplinaire sanction", du:[3,"ans"]},
+  {id:"rh-eval", dom:"Gestion du personnel", n:"Entretiens annuels et évaluations", act:"Durée de la relation de travail", arch:"Seulement si un besoin de preuve le justifie, dans la limite de la prescription", dep:"Fin de la relation de travail", fin:"suppr", nat:"bp", src:"Bonne pratique, dans l'esprit du "+RF_SRC.rh, url:RF_U.rh, kw:"entretien evaluation annuel"},
+  {id:"rh-formation", dom:"Gestion du personnel", n:"Formation professionnelle et entretiens professionnels", act:"Durée de la relation de travail", arch:"6 ans, durée du cycle de l'entretien professionnel récapitulatif", dep:"Date de l'entretien", fin:"suppr", nat:"bp", src:"Art. L6315-1 du Code du travail (cycle de 6 ans)", url:RF_U.ct("l6315-1"), kw:"formation entretien professionnel", du:[6,"ans"]},
+  {id:"rh-frais", dom:"Gestion du personnel", n:"Notes de frais et justificatifs", act:"Exercice comptable en cours", arch:"10 ans (pièces justificatives comptables)", dep:"Clôture de l'exercice", fin:"suppr", nat:"obl", src:"Art. L123-22 du Code de commerce", kw:"frais deplacement remboursement", du:[10,"ans"]},
+  // Paie
+  {id:"pa-bulletin", dom:"Paie et déclarations sociales", n:"Bulletins de paie (double)", act:"1 mois (mise à disposition)", arch:"5 ans ; le bulletin électronique reste disponible pour le salarié 50 ans ou jusqu'à l'âge de la retraite augmenté de 6 ans ; 3 ans pour les actions en paiement des salaires", dep:"Remise du bulletin au salarié", fin:"suppr", nat:"obl", src:"Art. L3243-4 et D3243-8 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("l3243-4"), kw:"paie bulletin salaire remuneration", du:[5,"ans"]},
+  {id:"pa-edition", dom:"Paie et déclarations sociales", n:"Données d'identification pour l'édition de la paie", act:"Durée de présence dans l'effectif", arch:"6 ans glissants après le dépôt de la DSN", dep:"Dépôt de la DSN", fin:"suppr", nat:"obl", src:"Art. L102 B du Livre des procédures fiscales ; art. L243-16 du Code de la sécurité sociale ; "+RF_SRC.rh, url:RF_U.rh, kw:"paie remuneration", du:[6,"ans"]},
+  {id:"pa-cotis", dom:"Paie et déclarations sociales", n:"Éléments de calcul des cotisations sociales", act:"1 mois maximum", arch:"6 ans", dep:"Établissement ou réception des éléments", fin:"suppr", nat:"obl", src:"Art. L243-16 du Code de la sécurité sociale ; "+RF_SRC.rh, url:RF_U.rh, kw:"cotisations urssaf charges sociales paie", du:[6,"ans"]},
+  {id:"pa-dsn", dom:"Paie et déclarations sociales", n:"Déclaration sociale nominative (DSN)", act:"Jusqu'à réception du certificat de conformité", arch:"6 ans", dep:"Établissement ou réception des éléments", fin:"suppr", nat:"obl", src:"Art. R133-13 du Code de la sécurité sociale ; "+RF_SRC.rh, url:RF_U.rh, kw:"dsn declaration sociale", du:[6,"ans"]},
+  // Santé et sécurité au travail
+  {id:"sst-at", dom:"Santé et sécurité au travail", n:"Déclarations d'accidents du travail", act:"Le temps de la gestion avant transmission aux organismes", arch:"5 ans", dep:"Déclaration par l'employeur", fin:"suppr", nat:"obl", src:RF_SRC.rh, url:RF_U.rh, kw:"accident travail at sinistre", du:[5,"ans"]},
+  {id:"sst-verif", dom:"Santé et sécurité au travail", n:"Vérifications et contrôles de santé et sécurité", act:"Le temps du contrôle", arch:"5 ans, et en tout état de cause les documents des deux derniers contrôles", dep:"Date de la vérification ou du contrôle", fin:"suppr", nat:"obl", src:"Art. D4711-3 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("d4711-3"), kw:"verification controle securite", du:[5,"ans"]},
+  {id:"sst-duerp", dom:"Santé et sécurité au travail", n:"Document unique d'évaluation des risques (DUERP)", act:"Durée de validité de chaque version", arch:"40 ans au moins, dans toutes ses versions successives", dep:"Élaboration de chaque version", fin:"archives", nat:"obl", src:"Art. L4121-3-1 du Code du travail", url:RF_U.ct("l4121-3-1"), kw:"duerp document unique risques professionnels", du:[40,"ans"]},
+  // Relations collectives
+  {id:"rc-mandats", dom:"Relations collectives", n:"Mandats des représentants du personnel", act:"Durée du mandat + 6 mois (ou durée plus favorable du règlement intérieur)", arch:"En cas de contentieux : prescription pénale de 6 ans", dep:"Fin du mandat", fin:"suppr", nat:"obl", src:"Art. L2411-5 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("l2411-5"), kw:"cse representant personnel mandat syndical elu"},
+  {id:"rc-deleg", dom:"Relations collectives", n:"Heures de délégation et congés spéciaux", act:"Durée des mandats", arch:"6 ans", dep:"Établissement ou réception des éléments", fin:"suppr", nat:"obl", src:"Art. L2142-1-3 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("l2142-1-3"), kw:"delegation cse syndical", du:[6,"ans"]},
+  {id:"rc-vote", dom:"Relations collectives", n:"Élections : fichiers du vote électronique", act:"Le temps des opérations de vote", arch:"Sous scellés jusqu'à l'épuisement des voies et délais de recours, puis destruction", dep:"Clôture du scrutin", fin:"suppr", nat:"reco", src:"CNIL, recommandation relative au vote électronique ; "+RF_SRC.rh, url:RF_U.rh, kw:"election vote electronique cse"},
+  {id:"rc-emarg", dom:"Relations collectives", n:"Élections : enveloppes et listes d'émargement", act:"Le temps des opérations électorales", arch:"4 mois après l'expiration des délais de recours", dep:"Expiration des délais de recours", fin:"suppr", nat:"obl", src:"Art. R2122-90 du Code du travail ; "+RF_SRC.rh, url:RF_U.ct("r2122-90"), kw:"election emargement", du:[4,"mois"]},
+  // Alertes et contentieux
+  {id:"al-signal", dom:"Alertes et contentieux", n:"Signalements (dispositif d'alerte professionnelle)", act:"Le temps des vérifications, jusqu'à la décision sur les suites, dans un délai raisonnable", arch:"Au-delà, seulement si les personnes ne sont plus identifiables (anonymisation)", dep:"Réception du signalement", fin:"anon", nat:"obl", src:"Loi n° 2022-401 du 21 mars 2022 ; "+RF_SRC.rh, url:RF_U.rh, kw:"alerte lanceur signalement ethique whistleblowing"},
+  {id:"al-contentieux", dom:"Alertes et contentieux", n:"Dossiers précontentieux et contentieux", act:"Pendant le litige", arch:"Jusqu'à l'épuisement des voies de recours", dep:"Début du contentieux", fin:"suppr", nat:"obl", src:"Droits de la défense (art. 6 de la CEDH) ; "+RF_SRC.rh, url:RF_U.rh, kw:"contentieux litige prudhomal juridique precontentieux"},
+  // Accès aux locaux et vidéo
+  {id:"ac-badge-id", dom:"Accès aux locaux et vidéo", n:"Contrôle d'accès par badge : identification", act:"Durée de l'habilitation", arch:"5 ans si les données servent au suivi du temps de travail", dep:"Fin de l'habilitation", fin:"suppr", nat:"reco", src:RF_SRC.rh+" ; CNIL, fiche « accès aux locaux et contrôle des horaires »", url:RF_U.rh, kw:"badge controle acces locaux"},
+  {id:"ac-badge-log", chk:["badge","controle d'acces","controle d acces"], dom:"Accès aux locaux et vidéo", n:"Contrôle d'accès par badge : historique des passages", act:"3 mois", arch:"Aucun", dep:"Enregistrement du passage", fin:"suppr", nat:"reco", src:RF_SRC.rh+" ; CNIL, fiche « accès aux locaux et contrôle des horaires »", url:RF_U.rh, kw:"badge controle acces passage", max:92, du:[3,"mois"]},
+  {id:"ac-bio-id", dom:"Accès aux locaux et vidéo", n:"Biométrie : données d'identification (hors gabarits)", act:"Durée de l'habilitation", arch:"6 mois", dep:"Retrait de l'habilitation ou fin des fonctions", fin:"suppr", nat:"obl", src:"CNIL, règlement type biométrie ; "+RF_SRC.rh, url:RF_U.rh, kw:"biometrie empreinte", du:[6,"mois"]},
+  {id:"ac-bio-gab", dom:"Accès aux locaux et vidéo", n:"Biométrie : gabarits chiffrés", act:"Durée de l'habilitation (les enregistrements bruts ne sont pas conservés)", arch:"Aucun : suppression au retrait de l'habilitation", dep:"Retrait de l'habilitation ou fin des fonctions", fin:"suppr", nat:"obl", src:"CNIL, règlement type biométrie ; "+RF_SRC.rh, url:RF_U.rh, kw:"biometrie gabarit"},
+  {id:"ac-bio-log", dom:"Accès aux locaux et vidéo", n:"Biométrie : journal des accès", act:"6 mois glissants", arch:"Seulement en cas d'obligation ou de besoin de preuve, dans la limite de la prescription", dep:"Enregistrement", fin:"suppr", nat:"obl", src:"CNIL, règlement type biométrie ; "+RF_SRC.rh, url:RF_U.rh, kw:"biometrie journal", max:183, du:[6,"mois"]},
+  {id:"ac-video", chk:["video","camera"], dom:"Accès aux locaux et vidéo", n:"Images de vidéoprotection", act:"1 mois maximum", arch:"Aucun ; en cas de procédure disciplinaire ou pénale, extraction des images utiles pour la durée de la procédure", dep:"Captation des images", fin:"suppr", nat:"obl", src:"Art. 5.1.e du RGPD ; art. L252-5 du Code de la sécurité intérieure (par analogie) ; "+RF_SRC.rh+" ; CEPD, lignes directrices 3/2019", url:RF_U.rh, kw:"video videoprotection videosurveillance camera", max:31, du:[1,"mois"], note:"Le CEPD rappelle que des dommages se constatent en général en un ou deux jours : quelques jours de conservation suffisent souvent."},
+  {id:"ac-visiteurs", chk:["visiteur"], dom:"Accès aux locaux et vidéo", n:"Registre des visiteurs", act:"3 mois", arch:"Aucun", dep:"Date de la visite", fin:"suppr", nat:"bp", src:"Bonne pratique, alignée sur l'historique des badges", kw:"visiteur accueil", max:92, du:[3,"mois"]},
+  // Véhicules
+  {id:"ve-geo-tour", chk:["geoloc"], dom:"Véhicules", n:"Géolocalisation des véhicules (optimisation des tournées)", act:"2 mois", arch:"1 an", dep:"Collecte", fin:"suppr", nat:"reco", src:"CNIL, fiche « la géolocalisation des véhicules » ; "+RF_SRC.rh, url:RF_U.rh, kw:"geolocalisation gps vehicule flotte", max:62, du:[2,"mois"]},
+  {id:"ve-geo-fact", dom:"Véhicules", n:"Géolocalisation pour la facturation d'une prestation", act:"Jusqu'à la facturation", arch:"1 an à titre de preuve si aucune autre preuve n'est possible (prolongeable en cas de contestation)", dep:"Facturation", fin:"suppr", nat:"reco", src:"CNIL, fiche « la géolocalisation des véhicules » ; "+RF_SRC.rh, url:RF_U.rh, kw:"geolocalisation facturation intervention"},
+  {id:"ve-tachy", dom:"Véhicules", n:"Chronotachygraphes", act:"Jusqu'à la fin de la gestion de la paie", arch:"1 an après utilisation (ou durée de la période de référence) ; 3 ans pour les salariés au forfait", dep:"Collecte", fin:"suppr", nat:"obl", src:"Règlement (UE) n° 165/2014 ; art. D3171-16 du Code du travail ; "+RF_SRC.rh, url:RF_U.rh, kw:"chronotachygraphe tachygraphe conducteur poids lourd", du:[1,"ans"]},
+  {id:"ve-antai", chk:["contravention","antai"], dom:"Véhicules", n:"Désignation du conducteur (avis de contravention)", act:"45 jours maximum", arch:"Seulement en cas d'obligation ou de besoin de preuve (prescription de 12 mois en matière contraventionnelle)", dep:"Réception de l'avis de contravention", fin:"suppr", nat:"obl", src:"Art. L121-6 du Code de la route ; "+RF_SRC.rh, url:RF_U.rh, kw:"contravention antai designation conducteur amende", max:45, du:[45,"jours"]},
+  // Informatique
+  {id:"it-logs", chk:["journalisation","logs","journaux de connexion","tracabilite"], dom:"Informatique et communications", n:"Journaux d'accès et d'actions (traçabilité)", act:"6 mois à 1 an, sauf exception justifiée", arch:"Aucun", dep:"Enregistrement de l'événement", fin:"suppr", nat:"reco", src:"CNIL, délibération n° 2021-122 du 14 octobre 2021 (journalisation) ; "+RF_SRC.rh, url:RF_U.rh, kw:"journal journalisation logs traces connexion tracabilite", max:365, du:[1,"ans"]},
+  {id:"it-comptes", dom:"Informatique et communications", n:"Comptes utilisateurs et habilitations", act:"Durée de l'habilitation", arch:"Aucun", dep:"Départ ou fin de l'habilitation", fin:"suppr", nat:"bp", src:"Bonne pratique de sécurité", kw:"compte utilisateur habilitation annuaire"},
+  {id:"it-mail", dom:"Informatique et communications", n:"Messagerie d'un salarié qui quitte l'entreprise", act:"Fermeture de la boîte au départ, après information du salarié", arch:"Aucun, hors messages professionnels utiles reversés aux dossiers concernés", dep:"Départ du salarié", fin:"suppr", nat:"bp", src:"Bonne pratique, conforme aux positions de la CNIL", kw:"messagerie email mail boite"},
+  {id:"it-appels", chk:["ecoute","enregistrement des appels","enregistrement d'appels"], dom:"Informatique et communications", n:"Enregistrement des appels (formation, qualité, évaluation)", act:"6 mois maximum ; suppression à bref délai après analyse", arch:"1 an maximum pour les seuls documents d'analyse", dep:"Enregistrement", fin:"suppr", nat:"reco", src:"CNIL, fiche « l'écoute et l'enregistrement des appels sur le lieu de travail » ; "+RF_SRC.rh, url:RF_U.rh, kw:"ecoute enregistrement appel telephone call", max:183, du:[6,"mois"]},
+  {id:"it-appels-preuve", dom:"Informatique et communications", n:"Enregistrement d'appels à titre de preuve d'un contrat", act:"Aucune utilisation courante", arch:"Le temps de la prescription, par exemple 5 ans pour une vente", dep:"Conclusion du contrat", fin:"suppr", nat:"obl", src:"Art. 2224 du Code civil ; "+RF_SRC.rh, url:RF_U.rh, kw:"enregistrement appel preuve vente", du:[5,"ans"]},
+  {id:"it-ticket", dom:"Informatique et communications", n:"Tickets d'assistance informatique", act:"Le temps de la résolution", arch:"1 an", dep:"Clôture du ticket", fin:"suppr", nat:"bp", src:"Bonne pratique", kw:"ticket assistance support helpdesk", du:[1,"ans"]},
+  {id:"it-sauvegardes", dom:"Informatique et communications", n:"Sauvegardes", act:"Cycle de rotation des sauvegardes (ex. 30 jours)", arch:"Aucun", dep:"Date de la sauvegarde", fin:"suppr", nat:"bp", src:"Bonne pratique : les données effacées en base doivent disparaître des sauvegardes au fil de la rotation", kw:"sauvegarde backup"},
+  // Clients et prospection
+  {id:"cl-relation", dom:"Clients et prospection", n:"Données clients (gestion du contrat, fidélité)", act:"Durée de la relation contractuelle", arch:"Seulement en cas d'obligation légale ou de besoin de preuve, dans la limite de la prescription (5 ans en général)", dep:"Fin du contrat", fin:"suppr", nat:"reco", src:RF_SRC.com+" ; art. L110-4 du Code de commerce et art. 2224 du Code civil", url:RF_U.com, kw:"client relation commerciale contrat fidelite crm"},
+  {id:"cl-sav", dom:"Clients et prospection", n:"Réclamations et service après-vente", act:"Durée de la relation contractuelle", arch:"Selon la prescription applicable en cas de besoin de preuve", dep:"Fin du contrat", fin:"suppr", nat:"reco", src:RF_SRC.com, url:RF_U.com, kw:"reclamation sav service apres vente"},
+  {id:"cl-prospect-client", dom:"Clients et prospection", n:"Prospection des clients", act:"Durée de la relation, puis 3 ans", arch:"Aucun", dep:"Fin de la relation (achat, fin de garantie ou de contrat, dernier contact)", fin:"suppr", nat:"reco", src:RF_SRC.com+" ; "+RF_SRC.guide, url:RF_U.com, kw:"prospection client marketing newsletter", du:[3,"ans"]},
+  {id:"cl-prospect", chk:["prospect"], dom:"Clients et prospection", n:"Prospects (non clients)", act:"3 ans", arch:"Aucun", dep:"Collecte ou dernier contact émanant du prospect (la simple ouverture d'un e-mail ne compte pas)", fin:"suppr", nat:"reco", src:RF_SRC.com+" ; "+RF_SRC.guide, url:RF_U.com, kw:"prospect prospection marketing", max:1095, du:[3,"ans"]},
+  {id:"cl-compte", dom:"Clients et prospection", n:"Comptes en ligne inactifs", act:"Jusqu'à la suppression du compte ; suppression proposée après 2 ans d'inactivité, après avertissement", arch:"Aucun", dep:"Dernière activité", fin:"suppr", nat:"reco", src:RF_SRC.com, url:RF_U.com, kw:"compte en ligne espace client inactif", max:730, du:[2,"ans"]},
+  {id:"cl-satisf", dom:"Clients et prospection", n:"Enquêtes de satisfaction et études", act:"Le temps nécessaire à l'enquête, ou jusqu'à l'opposition ou au retrait du consentement", arch:"Aucun (les résultats anonymisés peuvent être gardés)", dep:"Fin de l'enquête", fin:"anon", nat:"reco", src:RF_SRC.com, url:RF_U.com, kw:"satisfaction enquete sondage etude"},
+  {id:"cl-pid", dom:"Clients et prospection", n:"Copie de pièce d'identité", act:"Aucune conservation en base active : simple vérification lorsqu'elle suffit", arch:"Jusqu'à 6 ans en archive si une obligation légale ou un besoin de preuve l'impose", dep:"Vérification de l'identité", fin:"suppr", nat:"reco", src:RF_SRC.com, url:RF_U.com, kw:"piece identite cni passeport"},
+  {id:"cl-opposition", dom:"Clients et prospection", n:"Liste d'opposition à la prospection", act:"3 ans", arch:"Aucun", dep:"Exercice du droit d'opposition", fin:"suppr", nat:"bp", src:"Bonne pratique, sur la durée de prospection du "+RF_SRC.com, url:RF_U.com, kw:"opposition liste repoussoir bloctel", du:[3,"ans"]},
+  // Paiement
+  {id:"pay-cvv", dom:"Paiement", n:"Cryptogramme visuel de la carte bancaire", act:"Aucune conservation après le paiement", arch:"Aucun", dep:"Fin de la transaction", fin:"suppr", nat:"obl", src:RF_SRC.com+" ; CNIL, délibération n° 2018-303 (cartes de paiement)", url:RF_U.com, kw:"cryptogramme cvv carte bancaire"},
+  {id:"pay-carte", dom:"Paiement", n:"Numéro de carte bancaire", act:"Le temps de la transaction ; au-delà, seulement avec l'accord de la personne pour des achats ultérieurs", arch:"13 mois (15 mois pour une carte à débit différé) pour les contestations", dep:"Date de débit", fin:"suppr", nat:"obl", src:"Art. L133-24 du Code monétaire et financier ; CNIL, délibération n° 2018-303", url:RF_U.com, kw:"carte bancaire paiement", du:[13,"mois"]},
+  // Web
+  {id:"web-cookies", chk:["cookie","traceur"], dom:"Sites web et traceurs", n:"Cookies de mesure d'audience", act:"Durée de vie de 13 mois, sans prolongation automatique lors des nouvelles visites", arch:"Aucun", dep:"Dépôt du traceur", fin:"suppr", nat:"reco", src:"CNIL, mesure d'audience exemptée de consentement", url:RF_U.audience, kw:"cookie traceur audience analytics site web", max:396, du:[13,"mois"]},
+  {id:"web-audience", dom:"Sites web et traceurs", n:"Données de mesure d'audience collectées", act:"25 mois maximum", arch:"Aucun", dep:"Collecte", fin:"suppr", nat:"reco", src:"CNIL, mesure d'audience exemptée de consentement", url:RF_U.audience, kw:"audience statistiques analytics", max:760, du:[25,"mois"]},
+  {id:"web-choix", dom:"Sites web et traceurs", n:"Choix de l'internaute sur les cookies (accord ou refus)", act:"6 mois", arch:"Aucun", dep:"Expression du choix", fin:"suppr", nat:"reco", src:"CNIL, réponse « cookies : si j'ai refusé, un site peut-il me redemander ? »", url:RF_U.choix, kw:"cookie consentement choix bandeau", max:183, du:[6,"mois"]},
+  // Comptabilité
+  {id:"cpt-pieces", dom:"Comptabilité, fiscalité et contrats", n:"Documents comptables et pièces justificatives (factures)", act:"Exercice comptable en cours", arch:"10 ans", dep:"Clôture de l'exercice", fin:"suppr", nat:"obl", src:"Art. L123-22 du Code de commerce ; "+RF_SRC.guide, url:RF_U.guide, kw:"comptabilite facture comptable piece justificative facturation", du:[10,"ans"]},
+  {id:"cpt-fiscal", dom:"Comptabilité, fiscalité et contrats", n:"Documents à valeur fiscale", act:"Exercice en cours", arch:"6 ans", dep:"Dernière opération mentionnée", fin:"suppr", nat:"obl", src:"Art. L102 B du Livre des procédures fiscales", kw:"fiscal impot tva", du:[6,"ans"]},
+  {id:"cpt-contrats", dom:"Comptabilité, fiscalité et contrats", n:"Contrats commerciaux, bons de commande", act:"Durée du contrat", arch:"5 ans", dep:"Fin du contrat", fin:"suppr", nat:"obl", src:"Art. L110-4 du Code de commerce ; art. 2224 du Code civil", kw:"contrat commande devis", du:[5,"ans"]},
+  {id:"cpt-conso", dom:"Comptabilité, fiscalité et contrats", n:"Contrats conclus en ligne avec un consommateur (120 € et plus)", act:"Durée du contrat", arch:"10 ans", dep:"Conclusion du contrat ou livraison", fin:"suppr", nat:"obl", src:"Art. L213-1 et D213-1 et suivants du Code de la consommation", kw:"vente en ligne ecommerce consommateur commande", du:[10,"ans"]},
+  // Fournisseurs
+  {id:"fo-contacts", dom:"Fournisseurs et partenaires", n:"Contacts chez les fournisseurs et partenaires", act:"Durée de la relation commerciale", arch:"5 ans si un besoin de preuve le justifie", dep:"Fin de la relation", fin:"suppr", nat:"bp", src:"Art. 2224 du Code civil (prescription)", kw:"fournisseur partenaire achat contact"},
+  {id:"fo-tiers", dom:"Fournisseurs et partenaires", n:"Évaluation des tiers (lutte contre la corruption)", act:"Durée de la relation", arch:"5 ans après la fin de la relation", dep:"Fin de la relation", fin:"suppr", nat:"bp", src:"Bonne pratique fondée sur la prescription de 5 ans (art. 2224 du Code civil) ; voir aussi les recommandations de la CNIL sur les dispositifs anticorruption", kw:"anticorruption sapin evaluation tiers", du:[5,"ans"]},
+  // Gouvernance RGPD
+  {id:"gv-droits", dom:"Gouvernance RGPD", n:"Demandes d'exercice des droits", act:"Jusqu'à la réponse", arch:"La réponse peut être gardée à titre de preuve pendant la prescription applicable", dep:"Date de la réponse", fin:"suppr", nat:"reco", src:RF_SRC.com, url:RF_U.com, kw:"exercice droits demande acces effacement"},
+  {id:"gv-droits-pid", dom:"Gouvernance RGPD", n:"Pièce d'identité fournie pour exercer un droit", act:"Suppression dès que la demande est satisfaite", arch:"Exceptionnellement, selon la prescription pénale en cas de risque contentieux élevé, décidé au cas par cas", dep:"Réponse à la demande", fin:"suppr", nat:"reco", src:RF_SRC.com, url:RF_U.com, kw:"piece identite exercice droits"},
+  {id:"gv-consent", dom:"Gouvernance RGPD", n:"Preuve du consentement", act:"Durée du traitement fondé sur ce consentement", arch:"Le temps de la prescription applicable (souvent 5 ans)", dep:"Fin du traitement ou retrait du consentement", fin:"suppr", nat:"bp", src:"Art. 7.1 du RGPD (preuve du consentement) ; art. 2224 du Code civil", kw:"consentement preuve"},
+  {id:"gv-violations", dom:"Gouvernance RGPD", n:"Registre des violations de données", act:"Durée de vie des traitements concernés", arch:"5 ans", dep:"Clôture de l'incident", fin:"suppr", nat:"bp", src:"Art. 33.5 du RGPD (documentation des violations)", kw:"violation incident fuite registre", du:[5,"ans"]},
+  {id:"gv-aipd", dom:"Gouvernance RGPD", n:"Analyses d'impact (AIPD)", act:"Durée de vie du traitement", arch:"Versement possible aux archives définitives", dep:"Fin du traitement", fin:"archives", nat:"bp", src:"Art. 35 du RGPD", kw:"aipd analyse impact"},
+  // Santé
+  {id:"sa-dossier", dom:"Santé", n:"Dossier médical d'un patient (établissement de santé)", act:"Durée de la prise en charge", arch:"20 ans après le dernier séjour ou la dernière consultation (règles particulières pour les mineurs)", dep:"Dernier passage du patient", fin:"suppr", nat:"obl", src:"Art. R1112-7 du Code de la santé publique", kw:"patient dossier medical sante hopital", du:[20,"ans"]}
+];
+
+/* ================= Référentiel des durées de conservation : écran, usages et exports (ext18) ================= */
+const RF_MAJ = "17 novembre 2026";
+S.refCustom = new Map();
+const RF = {q:"", dom:"", nat:"", edit:null, pick:null, del:null, open:new Set()};
+/* Référentiel complet : entrées de base + ajouts et adaptations de l'organisme */
+function rfAll(){
+  const over = new Map(), extra = [];
+  S.refCustom.forEach(c=>{ if (c.baseId) over.set(c.baseId, c); else extra.push(c); });
+  const out = [];
+  RF_BASE.forEach(b=>{ const c = over.get(b.id); if (c?.masque) return; out.push(c ? {...b, ...c, id:b.id, _id:c._id, custom:"adapte"} : b); });
+  extra.forEach(c=>{ if (!c.masque) out.push({...c, id:c._id, custom:"ajout"}); });
+  return out.sort((a,b)=>(RF_DOMS.indexOf(a.dom)+1||99)-(RF_DOMS.indexOf(b.dom)+1||99) || String(a.n).localeCompare(String(b.n)));
+}
+const rfGet = id => rfAll().find(e=>e.id===id);
+const rfDoms = () => { const s = [...RF_DOMS]; rfAll().forEach(e=>{ if (e.dom && !s.includes(e.dom)) s.push(e.dom); }); return s; };
+const rfFin = k => (FIN_OPTS.find(o=>o[0]===k)||[])[1] || "";
+const rfDur = e => [e.act, e.arch && !/^aucun/i.test(e.arch) ? "puis archivage : "+e.arch : ""].filter(Boolean).join(" ; ");
+/* Les autres écrans lisent le même référentiel */
+function rfSyncLegacy(){
+  const all = rfAll();
+  DUREES_REF.length = 0;
+  rfDoms().forEach(d=>{ const L = all.filter(e=>e.dom===d); if (L.length) DUREES_REF.push([d, L.map(e=>[e.n, e.act, e.arch||"Aucun archivage", e.src||"", e.id])]); });
+  DUREES_SETS.length = 0;
+  [["Recrutement : parcours complet", ["rec-retenu","rec-nonretenu","rec-vivier"]],
+   ["Gestion du personnel : parcours complet", ["rh-dossier","rh-rup","pa-bulletin","pa-cotis","rh-temps"]],
+   ["Clients et prospects : parcours complet", ["cl-relation","cl-prospect-client","cl-prospect","cl-opposition"]]]
+    .forEach(([l, ids])=>{ const n = ids.map(id=>all.find(e=>e.id===id)?.n).filter(Boolean); if (n.length) DUREES_SETS.push([l+` (${n.length} lignes)`, ["", n]]); });
+  DUR_LIMITS.length = 0;
+  all.filter(e=>e.max && arr(e.chk).length).forEach(e=>DUR_LIMITS.push([{test:s=>{ const n = norm(s||""); return e.chk.some(k=>n.includes(norm(k))); }}, e.max, `${e.act} pour « ${e.n} » (${(RF_NAT[e.nat]||RF_NAT.bp).l.toLowerCase()}, ${String(e.src||"").split(" ; ")[0]})`]));
+}
+/* Ajout d'une ligne dans le tableau des durées d'un traitement (saisie) */
+durRefApply = function(val){
+  const d = S.draft; if (!d) return; const all = rfAll(); let rows = [];
+  if (String(val).startsWith("set.")){ const s = DUREES_SETS[+val.slice(4)]; if (s) rows = s[1][1].map(n=>all.find(e=>e.n===n)).filter(Boolean); }
+  else { const [g,i] = String(val).split(".").map(Number); const r = DUREES_REF[g]?.[1]?.[i]; const e = r && all.find(x=>x.id===r[4]); if (e) rows = [e]; }
+  if (!rows.length) return;
+  d.consL = rlGet(d,"consL").filter(r=>r.objet.trim()||r.active.trim()||r.archive.trim());
+  rows.forEach(e=>d.consL.push({...RL.consL.empty, objet:e.n, active:e.act, archive:e.arch||"Aucun archivage", fin:e.fin||""}));
+  rlRedraw("consL");
+  const src = $("#durref-src"); if (src) src.innerHTML = rows.map(e=>`<b>${esc(e.n)}</b> · <span class="pill t-${(RF_NAT[e.nat]||RF_NAT.bp).tone}">${esc((RF_NAT[e.nat]||RF_NAT.bp).l)}</span> · ${esc(e.src||"")}`).join("<br>") + `<br><button type="button" class="lnk" data-action="rf-open">Voir le référentiel complet</button>`;
+  const sel = $("#e-durref"); if (sel) sel.value = "";
+};
+/* Références qui correspondent à une fiche (nom, finalités, données) */
+const RF_GEN = new Set("social sociale sociales sociaux securite systeme information professionnel professionnelle professionnelles professionnels gestion donnees donnee personnel personnelle personnelles salarie salaries suivi travail service services entreprise interne internes dossier dossiers traitement traitements locaux site sites outil outils activite activites relation relations ensemble cadre".split(" "));
+function rfMatch(name, more, n=3){
+  const pick = t => [...new Set(srQuery(t||"").filter(w=>w.length>3 && !RF_GEN.has(w) && !RF_GEN.has(srStem(w))))];
+  const wn = pick(name), wm = pick(more).filter(w=>!wn.includes(w)); const words = [...wn.map(w=>[w,1.5]), ...wm.map(w=>[w,.7])]; const nt = norm(name||"");
+  const all = rfAll().map(e=>({e, fn:{toks:srToks(e.n).filter(t=>!RF_GEN.has(t))}, fk:{toks:srToks(e.kw||"")}}));
+  const df = new Map(words.map(([w])=>[w, all.filter(x=>Math.max(srWord(w,x.fn), srWord(w,x.fk))>=.8).length]));
+  return all.map(({e, fn, fk})=>{ let s = 0;
+      words.forEach(([w,k])=>{ const x = Math.max(srWord(w, fn)*1.3, srWord(w, fk)); if (x>=.9) s += x*k*(df.get(w)>2 ? 1.6/(1+Math.log(df.get(w))) : 1); });
+      arr(e.chk).forEach(k=>{ if (nt.includes(norm(k))) s += 2; }); return {e, s}; })
+    .filter(x=>x.s>=1.75).sort((a,b)=>b.s-a.s).slice(0,n).map(x=>x.e);
+}
+const rfUsage = e => items("traitements").filter(t=>arr(t.consL).some(r=>norm(r.objet||"")===norm(e.n)));
+/* ---------- Écran ---------- */
+function rfFiltered(){
+  let L = rfAll();
+  if (RF.dom) L = L.filter(e=>e.dom===RF.dom);
+  if (RF.nat) L = L.filter(e=>RF.nat==="org" ? !!e.custom : e.nat===RF.nat && !e.custom);
+  const q = RF.q.trim();
+  if (q){ const words = srQuery(q), ph = norm(q);
+    L = L.map(e=>{ const F = [[e.n,3],[e.kw,2],[[e.act,e.arch,e.dep,e.note].join(" "),1],[e.src,.6]].map(([t,w])=>({toks:srToks(t||""), w})); let s = 0;
+      for (const wd of words){ const x = Math.max(...F.map(f=>srWord(wd, f)*f.w)); if (!x) return null; s += x; }
+      if (norm(e.n).includes(ph)) s += 4; return {e,s}; }).filter(Boolean).sort((a,b)=>b.s-a.s).map(x=>x.e); }
+  return L;
+}
+function rfForm(e){
+  const v = e || {dom:RF.dom||"Gestion du personnel", nat:"bp", fin:"suppr"};
+  const nat = [["obl","Obligation légale"],["reco","Recommandation CNIL / CEPD"],["bp","Bonne pratique ou choix de l'organisme"]];
+  return `<section class="panel rf-form" id="rf-form"><div class="panel-h"><h2>${e?.id&&RF_BASE.some(b=>b.id===e.id)?"Adapter la durée pour votre organisme":e?"Modifier la durée":"Ajouter une durée"}</h2></div><div class="panel-b">
+    ${e?.id&&RF_BASE.some(b=>b.id===e.id)?`<div class="notice">${I.info}<div>Votre version remplace celle du référentiel dans toute l'application. Vous pourrez revenir à la version d'origine à tout moment.</div></div>`:""}
+    <div class="fields">
+      <div class="f full"><label for="rf-n">Données ou document <span class="req">*</span></label><input id="rf-n" value="${esc(v.n||"")}" placeholder="Ex. : Dossiers de mutuelle"></div>
+      <div class="f"><label for="rf-dom">Domaine</label><input id="rf-dom" list="rf-doms" value="${esc(v.dom||"")}"><datalist id="rf-doms">${rfDoms().map(d=>`<option value="${esc(d)}">`).join("")}</datalist></div>
+      <div class="f"><label for="rf-nat">Nature de la durée</label><select id="rf-nat">${nat.map(([k,l])=>`<option value="${k}" ${v.nat===k?"selected":""}>${l}</option>`).join("")}</select></div>
+      <div class="f"><label for="rf-act">Base active <span class="req">*</span></label><input id="rf-act" value="${esc(v.act||"")}" placeholder="Ex. : Durée du contrat de travail"></div>
+      <div class="f"><label for="rf-arch">Archivage intermédiaire</label><input id="rf-arch" value="${esc(v.arch||"")}" placeholder="Ex. : 5 ans, accès restreint"></div>
+      <div class="f"><label for="rf-dep">Point de départ</label><input id="rf-dep" value="${esc(v.dep||"")}" placeholder="Ex. : départ du salarié"></div>
+      <div class="f"><label for="rf-fin">Ensuite</label><select id="rf-fin">${FIN_OPTS.filter(o=>o[0]!=="autre").map(([k,l])=>`<option value="${k}" ${v.fin===k?"selected":""}>${esc(l)}</option>`).join("")}</select></div>
+      <div class="f full"><label for="rf-src">Texte ou source</label><input id="rf-src" value="${esc(v.src||"")}" placeholder="Ex. : art. L3243-4 du Code du travail ; décision interne du 12 mars 2026"></div>
+      <div class="f full"><label for="rf-url">Lien vers la source</label><input id="rf-url" type="url" value="${esc(v.url||"")}" placeholder="https://"></div>
+      <div class="f full"><label for="rf-note">Précision</label><textarea id="rf-note" rows="2" placeholder="Ex. : durée allongée en raison d'une convention collective">${esc(v.note||"")}</textarea></div>
+    </div>
+    <div class="actions"><button class="btn" data-action="rf-cancel">Annuler</button><button class="btn primary" data-action="rf-save" data-id="${esc(e?.id||"")}">${I.save}Enregistrer</button></div></div></section>`;
+}
+function vReferentiel(){
+  const all = rfAll(), L = rfFiltered();
+  const cnt = k => all.filter(e=>k==="org" ? !!e.custom : e.nat===k && !e.custom).length;
+  const groups = []; L.forEach(e=>{ let g = groups.find(x=>x.d===e.dom); if (!g){ g = {d:e.dom, it:[]}; groups.push(g); } g.it.push(e); });
+  const T = items("traitements").filter(t=>t.statut!=="archive");
+  const card = e => { const N = RF_NAT[e.nat]||RF_NAT.bp; const used = rfUsage(e); const isBase = RF_BASE.some(b=>b.id===e.id);
+    return `<article class="rf-it ${e.custom?"org":""}" id="rf-${esc(e.id)}">
+      <header><div class="rf-t"><h3>${RF.q?srSnip({txt:e.n, n:norm(e.n), toks:[1]}, srQuery(RF.q), 200):esc(e.n)}</h3><div class="rf-tags"><span class="pill t-${N.tone}" title="${esc(N.s)}">${esc(N.l)}</span>${e.custom==="adapte"?`<span class="pill t-plum">Adaptée par l'organisme</span>`:e.custom?`<span class="pill t-plum">Ajout de l'organisme</span>`:""}${used.length?`<span class="rf-used">${I.list}Utilisée dans ${used.length} traitement${used.length>1?"s":""}</span>`:""}</div></div></header>
+      <dl class="rf-dl"><div><dt>Base active</dt><dd>${esc(e.act||"—")}</dd></div><div><dt>Archivage intermédiaire</dt><dd>${esc(e.arch||"Aucun")}</dd></div><div><dt>Point de départ</dt><dd>${esc(e.dep||"—")}</dd></div><div><dt>Ensuite</dt><dd>${esc(rfFin(e.fin)||"Suppression")}</dd></div></dl>
+      ${e.note?`<p class="rf-note">${I.info}<span>${esc(e.note)}</span></p>`:""}
+      <p class="rf-src"><b>Source</b> ${esc(e.src||"Non renseignée")}${e.url?` · <a href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">Consulter</a>`:""}</p>
+      ${RF.pick===e.id?`<div class="rf-pick"><label for="rf-pick-t">Ajouter cette durée au traitement</label><div class="row"><select id="rf-pick-t"><option value="">Choisir un traitement…</option>${T.map(t=>`<option value="${esc(t._id)}">${esc(t.ref||"")} · ${esc(t.nom||"")}</option>`).join("")}</select><button class="btn sm primary" data-action="rf-pick-ok" data-id="${esc(e.id)}">Ajouter</button><button class="btn sm" data-action="rf-pick-x">Annuler</button></div></div>`:""}
+      ${RF.del===e.id?`<div class="confirm"><span>${isBase?"Revenir à la version d'origine du référentiel ?":"Mettre cette durée à la corbeille ?"}</span><button class="btn sm" data-action="rf-del-x">Annuler</button><button class="btn sm danger solid" data-action="rf-del-ok" data-id="${esc(e.id)}">${isBase?"Rétablir":"Supprimer"}</button></div>`:""}
+      ${W()&&RF.pick!==e.id&&RF.del!==e.id?`<footer><button class="btn sm" data-action="rf-pick" data-id="${esc(e.id)}">${I.plus}Ajouter à un traitement</button><button class="btn sm" data-action="rf-rule" data-id="${esc(e.id)}">${I.hourglass}Planifier la suppression</button><button class="lnk" data-action="rf-edit" data-id="${esc(e.id)}">${isBase&&!e.custom?"Adapter":"Modifier"}</button>${e.custom?`<button class="lnk muted-l" data-action="rf-del" data-id="${esc(e.id)}">${isBase?"Rétablir l'original":"Supprimer"}</button>`:""}</footer>`:""}
+    </article>`; };
+  const doms = rfDoms().filter(d=>all.some(e=>e.dom===d));
+  return `<div class="rf-page">
+  <div class="head"><div class="phead"><span class="pico" style="--c:#1A8A80">${I.hourglass}</span><div><h1>Référentiel des durées de conservation</h1><p class="psub">${all.length} durées issues de la CNIL, du CEPD et des textes en vigueur, à jour au ${RF_MAJ}${S.refCustom.size?` · ${all.filter(e=>e.custom).length} adaptées ou ajoutées par votre organisme`:""}.</p></div></div>
+    <div class="actions"><div class="rf-exp" role="group" aria-label="Exporter"><span class="muted">Exporter ${L.length<all.length?`les ${L.length} durées affichées`:"le référentiel"}</span><button class="btn" data-action="rf-pdf" ${S.dl&&L.length?"":"disabled"}>${I.pdf}PDF</button><button class="btn" data-action="rf-word" ${S.dl&&L.length?"":"disabled"}>${I.dl}Word</button><button class="btn" data-action="rf-xlsx" ${S.dl&&L.length?"":"disabled"}>${I.dl}Excel</button></div>
+    ${W()?`<button class="btn primary" data-action="rf-new">${I.plus}Ajouter une durée</button>`:""}</div></div>
+  <div class="rf-legend">${["obl","reco","bp"].map(k=>`<button class="rf-lg ${RF.nat===k?"on":""}" data-action="rf-nat" data-k="${k}" aria-pressed="${RF.nat===k}"><span class="pill t-${RF_NAT[k].tone}">${RF_NAT[k].l}</span><b>${cnt(k)}</b><small>${RF_NAT[k].s}</small></button>`).join("")}${cnt("org")?`<button class="rf-lg ${RF.nat==="org"?"on":""}" data-action="rf-nat" data-k="org" aria-pressed="${RF.nat==="org"}"><span class="pill t-plum">Votre organisme</span><b>${cnt("org")}</b><small>Durées adaptées ou ajoutées : elles remplacent le référentiel partout dans Égide.</small></button>`:""}</div>
+  <div class="notice">${I.info}<div>Ce référentiel n'est pas exhaustif et ne remplace pas la lecture du texte cité : une convention collective, un contrat ou un contentieux peuvent imposer une autre durée. Les durées choisies ici alimentent la saisie des traitements, le contrôle du registre et la planification des suppressions.</div></div>
+  ${RF.edit?rfForm(RF.edit==="new"?null:rfGet(RF.edit)):""}
+  <div class="rf-bar"><div class="search rf-search">${I.search}<input id="rf-q" type="search" placeholder="Chercher : paie, vidéo, prospects, factures…" value="${esc(RF.q)}" autocomplete="off" aria-label="Chercher dans le référentiel"></div>
+    <select id="rf-dom-s" aria-label="Domaine"><option value="">Tous les domaines (${all.length})</option>${doms.map(d=>`<option value="${esc(d)}" ${RF.dom===d?"selected":""}>${esc(d)} (${all.filter(e=>e.dom===d).length})</option>`).join("")}</select>
+    ${RF.q||RF.dom||RF.nat?`<button class="lnk" data-action="rf-clear">Tout afficher</button>`:""}</div>
+  ${!L.length?`<div class="empty"><span class="big">${I.search}</span><p>Aucune durée ne correspond. Essayez un autre mot, ou ajoutez cette durée pour votre organisme.</p></div>`:""}
+  ${groups.map(g=>`<section class="rf-g"><h2 class="rf-gh"><span>${esc(g.d)}</span><small>${g.it.length}</small></h2><div class="rf-grid">${g.it.map(card).join("")}</div></section>`).join("")}
+  <p class="rf-sources">Principales sources : <a href="${RF_U.rh}" target="_blank" rel="noopener noreferrer">CNIL, référentiel RH (2026)</a> · <a href="${RF_U.com}" target="_blank" rel="noopener noreferrer">CNIL, gestion des activités commerciales</a> · <a href="${RF_U.guide}" target="_blank" rel="noopener noreferrer">CNIL, guide des durées de conservation</a> · <a href="${RF_U.cepdvideo}" target="_blank" rel="noopener noreferrer">CEPD, lignes directrices 3/2019</a> · Code du travail, Code de commerce, Code de la sécurité sociale, Livre des procédures fiscales.</p>
+  </div>`;
+}
+/* ---------- Actions ---------- */
+async function rfSaveForm(id){
+  const g = k => ($("#rf-"+k)?.value||"").trim();
+  const d = {dom:g("dom")||"Autres", n:g("n"), act:g("act"), arch:g("arch"), dep:g("dep"), fin:g("fin"), nat:g("nat"), src:g("src"), url:/^https?:\/\//.test(g("url"))?g("url"):"", note:g("note"), modifieLe:new Date().toISOString(), modifiePar:S.meName||""};
+  if (!d.n || !d.act) return toast("Indiquez au moins les données et la durée en base active.");
+  const base = RF_BASE.find(b=>b.id===id); const cur = rfGet(id);
+  try{
+    if (base){ const ex = [...S.refCustom.values()].find(c=>c.baseId===id); const did = ex?._id || "base-"+id; await S.db.collection("referentiel").doc(did).set({...d, baseId:id, chk:base.chk||[], max:base.max||0, kw:base.kw||"", du:base.du||null}); S.refCustom.set(did, {...d, baseId:id, _id:did}); }
+    else { const did = cur?._id || S.db.collection("referentiel").doc().id; await S.db.collection("referentiel").doc(did).set({...d, kw:d.n}); S.refCustom.set(did, {...d, kw:d.n, _id:did}); }
+    RF.edit = null; rfSyncLegacy(); toast("Durée enregistrée"); render();
+  }catch(e){ writeError(e); }
+}
+async function rfAddToTrt(eid, tid){
+  const e = rfGet(eid), t = S.data.traitements.get(tid); if (!e || !t) return toast("Choisissez un traitement.");
+  const d = structuredClone(t); d.consL = rlGet(d,"consL").filter(r=>r.objet.trim()||r.active.trim()||r.archive.trim());
+  if (d.consL.some(r=>norm(r.objet)===norm(e.n))) return toast("Cette durée figure déjà dans la fiche.");
+  d.consL.push({...RL.consL.empty, objet:e.n, active:e.act, archive:e.arch||"Aucun archivage", fin:e.fin||""}); RL.consL.sync(d);
+  try{ await persist("traitements", tid, d, "Durée ajoutée depuis le référentiel : "+e.n); RF.pick = null; toast(`Durée ajoutée à « ${t.nom} »`); render(); }catch(err){ writeError(err); }
+}
+function rfRule(e, tid){
+  const d = blankOf("conservation"); const u = {jours:"jours", mois:"mois", ans:"ans"};
+  Object.assign(d, {titre:`${e.fin==="anon"?"Anonymisation":e.fin==="archives"?"Versement aux archives":"Suppression"} : ${e.n}`, donnees:e.n, pointDepart:e.dep||"", base:[e.src, e.url].filter(Boolean).join(" · "),
+    action: e.fin==="anon" ? "anonymisation" : e.fin==="archives" ? "archivage" : "suppression", notes:`Durée de référence : ${rfDur(e)}.`});
+  if (e.du){ d.duree = String(e.du[0]); d.unite = u[e.du[1]]||""; }
+  if (tid) d.traitementIds = [tid];
+  startEdit("conservation", d);
+}
+const rfActions = {
+  "rf-open"(el){ if (el?.dataset?.q){ RF.q = el.dataset.q; RF.dom = ""; RF.nat = ""; } go("referentiel"); },
+  "rf-nat"(el){ RF.nat = RF.nat===el.dataset.k ? "" : el.dataset.k; render(); },
+  "rf-clear"(){ RF.q = ""; RF.dom = ""; RF.nat = ""; render(); },
+  "rf-new"(){ RF.edit = "new"; render(); requestAnimationFrame(()=>{ $("#rf-form")?.scrollIntoView({block:"start"}); $("#rf-n")?.focus(); }); },
+  "rf-edit"(el){ RF.edit = el.dataset.id; render(); requestAnimationFrame(()=>{ $("#rf-form")?.scrollIntoView({block:"start"}); $("#rf-n")?.focus(); }); },
+  "rf-cancel"(){ RF.edit = null; render(); },
+  "rf-save"(el){ rfSaveForm(el.dataset.id); },
+  "rf-pick"(el){ RF.pick = el.dataset.id; RF.del = null; render(); requestAnimationFrame(()=>$("#rf-pick-t")?.focus()); },
+  "rf-pick-x"(){ RF.pick = null; render(); },
+  "rf-pick-ok"(el){ rfAddToTrt(el.dataset.id, $("#rf-pick-t")?.value); },
+  "rf-rule"(el){ const e = rfGet(el.dataset.id); if (e) rfRule(e, el.dataset.t); },
+  "rf-del"(el){ RF.del = el.dataset.id; RF.pick = null; render(); },
+  "rf-del-x"(){ RF.del = null; render(); },
+  async "rf-del-ok"(el){ const e = rfGet(el.dataset.id); RF.del = null; if (!e?._id) return render();
+    try{ const c = S.refCustom.get(e._id); if (!e.baseId && !RF_BASE.some(b=>b.id===e.id)) await trPut("reference", "referentiel", e._id, c, e.n, ""); await S.db.collection("referentiel").doc(e._id).delete(); S.refCustom.delete(e._id); rfSyncLegacy(); toast(RF_BASE.some(b=>b.id===e.id) ? "Version d'origine rétablie" : "Durée placée dans la corbeille"); }catch(err){ writeError(err); }
+    render(); },
+  "rf-pdf"(){ rfPdf(rfFiltered()); },
+  async "rf-word"(){ if (!S.dl) return toast("Téléchargement indisponible dans cette vue."); const L = rfFiltered(); if (!L.length) return; await save(`${slugOrg()}-referentiel-durees-conservation-${today()}.docx`, rfDocx(L)); },
+  "rf-xlsx"(){ rfXlsx(rfFiltered()); },
+  "rf-add-trt"(el){ const d = S.draft; const e = rfGet(el.dataset.id); if (!d || !e) return; d.consL = rlGet(d,"consL").filter(r=>r.objet.trim()||r.active.trim()||r.archive.trim()); if (d.consL.some(r=>norm(r.objet)===norm(e.n))) return toast("Cette durée figure déjà dans la fiche."); d.consL.push({...RL.consL.empty, objet:e.n, active:e.act, archive:e.arch||"Aucun archivage", fin:e.fin||""}); rlRedraw("consL"); S.dirty = true; toast("Durée ajoutée : "+e.n); },
+  "rf-add-det"(el){ rfAddToTrt(el.dataset.id, S.selId); }
+};
+document.addEventListener("input", e=>{ if (e.target?.id==="rf-q"){ RF.q = e.target.value; const pos = e.target.selectionStart; render(); const i = $("#rf-q"); if (i){ i.focus(); try{ i.setSelectionRange(pos,pos); }catch(_){} } } });
+document.addEventListener("change", e=>{ if (e.target?.id==="rf-dom-s"){ RF.dom = e.target.value; render(); } });
+/* ---------- Partout dans l'application ---------- */
+/* 1. Page Conservation : accès au référentiel */
+const _rfList = vList;
+vList = function(){ const h = _rfList(); if (S.mod!=="conservation") return h;
+  const i = h.indexOf('<div class="actions">'); if (i<0) return h; const j = h.indexOf('</div>', i); const k = h.indexOf('</div>', j+6); if (k<0) return h;
+  const h2 = h.slice(0,i) + `<div class="actions"><button class="btn" data-action="rf-open">${I.list}Référentiel des durées</button>` + h.slice(i+'<div class="actions">'.length, k+6) + `<button class="rf-banner" data-action="rf-open"><span class="pico" style="--c:#1A8A80">${I.hourglass}</span><span><b>Référentiel des durées de conservation</b><small>${rfAll().length} durées CNIL, CEPD et textes en vigueur, à ajouter à vos traitements, à planifier ou à exporter en PDF, Word et Excel.</small></span>${I.next}</button>` + h.slice(k+6);
+  return h2; };
+/* 2. Fiche de traitement : durées de référence proposées dans la rubrique Conservation */
+const _rfDet = vTrtDetail;
+vTrtDetail = function(){
+  let h = _rfDet(); const t = S.data.traitements.get(S.selId); if (!t) return h;
+  const have = new Set(arr(t.consL).map(r=>norm(r.objet||"")));
+  const M = rfMatch(t.nom, [t.finalites, arr(t.personnes).join(" ")].join(" "), 4).filter(e=>!have.has(norm(e.n))).slice(0,3);
+  const i = h.indexOf('id="d-s-cons"'); if (i<0) return h; const j = h.indexOf("</section>", i); if (j<0) return h;
+  const box = `<div class="rf-sug"><div class="rf-sug-h"><b>${M.length?"Durées de référence pour ce traitement":"Référentiel des durées"}</b><button class="lnk" data-action="rf-open" data-q="${esc(t.nom||"")}">Ouvrir le référentiel</button></div>
+    ${M.map(e=>`<div class="rf-sug-it"><div><b>${esc(e.n)}</b><small>${esc(rfDur(e))} · <span class="pill t-${(RF_NAT[e.nat]||RF_NAT.bp).tone}">${esc((RF_NAT[e.nat]||RF_NAT.bp).l)}</span></small><small class="rf-sug-src">${esc(e.src||"")}</small></div>${W()?`<div class="rf-sug-a"><button class="btn sm" data-action="rf-add-det" data-id="${esc(e.id)}">${I.plus}Ajouter</button><button class="lnk" data-action="rf-rule" data-id="${esc(e.id)}" data-t="${esc(t._id)}">Planifier la suppression</button></div>`:""}</div>`).join("")}</div>`;
+  return h.slice(0,j) + box + h.slice(j);
+};
+/* 3. Saisie d'un traitement : suggestions sous le tableau des durées */
+const _rfCons = consSection;
+consSection = function(d){
+  const h = _rfCons(d); const have = new Set(arr(d.consL).map(r=>norm(r.objet||"")));
+  const M = rfMatch(d.nom, [d.finalites, arr(d.personnes).join(" ")].join(" "), 5).filter(e=>!have.has(norm(e.n))).slice(0,3);
+  return (M.length ? `<div class="f full rf-sug rf-sug-ed"><div class="rf-sug-h"><b>Suggéré pour « ${esc(d.nom||"ce traitement")} »</b><button type="button" class="lnk" data-action="rf-open">Voir tout le référentiel</button></div>${M.map(e=>`<div class="rf-sug-it"><div><b>${esc(e.n)}</b><small>${esc(rfDur(e))} · ${esc((RF_NAT[e.nat]||RF_NAT.bp).l)}</small></div><div class="rf-sug-a"><button type="button" class="btn sm" data-action="rf-add-trt" data-id="${esc(e.id)}">${I.plus}Ajouter</button></div></div>`).join("")}</div>` : "") + h;
+};
+/* 4. Échéance de conservation : durée de référence rappelée */
+const _rfExtra = MODS.conservation.extra;
+MODS.conservation.extra = t => { const base = _rfExtra ? _rfExtra(t) : ""; const M = rfMatch(t.titre, t.donnees, 1);
+  if (!M.length) return base; const e = M[0]; const N = RF_NAT[e.nat]||RF_NAT.bp;
+  return base + `<section class="panel"><div class="panel-h"><h2>Durée de référence</h2><button class="lnk" data-action="rf-open" data-q="${esc(e.n)}">Voir dans le référentiel</button></div><div class="panel-b"><p><b>${esc(e.n)}</b> · <span class="pill t-${N.tone}">${esc(N.l)}</span></p><p>${esc(rfDur(e))}${e.dep?` · à compter de : ${esc(e.dep)}`:""}</p><p class="muted" style="font-size:.85rem">${esc(e.src||"")}</p></div></section>`; };
+/* 5. Recherche : page et résultats du référentiel */
+SR_PAGES.push(["referentiel",null,"Référentiel des durées de conservation","hourglass","referentiel durees conservation duree archivage purge cnil cepd"]);
+const _rfSearch = vSearch;
+vSearch = function(){ const h = _rfSearch(); const q = (S.gq||"").trim(); if (!q || S.gmod) return h;
+  const words = srQuery(q); if (!words.length) return h;
+  const L = rfAll().map(e=>{ const fld = {toks:srToks([e.n, e.kw].join(" "))}; let s = 0; for (const w of words){ const x = srWord(w, fld); if (!x) return null; s += x; } return {e,s}; }).filter(Boolean).sort((a,b)=>b.s-a.s).slice(0,4).map(x=>x.e);
+  if (!L.length) return h;
+  const sec = `<section class="sr-g m-cons"><div class="sec-t"><h2><span class="mtag m-cons">Référentiel des durées</span> <span class="muted num" style="font-size:.9rem;font-weight:500">${L.length}</span></h2><button class="lnk" data-action="rf-open" data-q="${esc(q)}">Tout voir</button></div><ul class="sr-list">${L.map(e=>`<li><button class="sr-row m-cons" data-action="rf-open" data-q="${esc(e.n)}"><span class="sr-ic">${I.hourglass}</span><span class="sr-x"><span class="sr-t"><b>${srSnip({txt:e.n, n:norm(e.n), toks:[1]}, words, 140)}</b></span><span class="sr-why"><b>Durée</b> ${esc(rfDur(e))}</span></span><span class="sr-st"><span class="pill t-${(RF_NAT[e.nat]||RF_NAT.bp).tone}">${esc((RF_NAT[e.nat]||RF_NAT.bp).l)}</span></span></button></li>`).join("")}</ul></section>`;
+  const k = h.lastIndexOf("</div>"); return h.slice(0,k) + sec + h.slice(k); };
+/* 6. Corbeille : les durées ajoutées par l'organisme */
+const _rfTrSrc = trSrc;
+trSrc = x => x.kind==="reference" ? {l:"Durée du référentiel", L:"Référentiel des durées", cls:"m-cons", ic:"hourglass"} : _rfTrSrc(x);
+/* ---------- Exports ---------- */
+const rfTitle = L => L.length < rfAll().length ? `Référentiel des durées de conservation (sélection de ${L.length} durées)` : "Référentiel des durées de conservation";
+function rfXlsx(L){
+  (async()=>{
+    if (!S.dl) return toast("Téléchargement indisponible dans cette vue.");
+    let out;
+    try{
+      const X = await loadXLSX(); const wb = X.utils.book_new();
+      const head = ["Domaine","Données ou document","Base active","Archivage intermédiaire","Point de départ","Ensuite","Nature de la durée","Texte ou source","Lien","Précision","Origine"];
+      const rows = L.map(e=>[e.dom, e.n, e.act||"", e.arch||"Aucun", e.dep||"", rfFin(e.fin)||"Suppression", (RF_NAT[e.nat]||RF_NAT.bp).l, e.src||"", e.url||"", e.note||"", e.custom==="adapte"?"Adaptée par l'organisme":e.custom?"Ajoutée par l'organisme":"Référentiel Égide"]);
+      const ws = X.utils.aoa_to_sheet([head, ...rows]);
+      ws["!cols"] = [{wch:24},{wch:40},{wch:38},{wch:44},{wch:30},{wch:16},{wch:24},{wch:60},{wch:40},{wch:40},{wch:20}];
+      ws["!autofilter"] = {ref: X.utils.encode_range({s:{r:0,c:0}, e:{r:Math.max(rows.length,1), c:head.length-1}})};
+      ws["!freeze"] = {xSplit:0, ySplit:1}; ws["!views"] = [{state:"frozen", ySplit:1}];
+      L.forEach((e,i)=>{ if (e.url){ const c = X.utils.encode_cell({r:i+1, c:8}); if (ws[c]) ws[c].l = {Target:e.url}; } });
+      X.utils.book_append_sheet(wb, ws, "Durées");
+      const info = X.utils.aoa_to_sheet([
+        [rfTitle(L)], [S.org.raisonSociale||""], [`À jour au ${RF_MAJ} · exporté le ${fmtD(today())}`], [],
+        ["Nature de la durée","Ce que cela veut dire"], ...["obl","reco","bp"].map(k=>[RF_NAT[k].l, RF_NAT[k].s]), ["Votre organisme","Durée adaptée ou ajoutée par l'organisme : elle remplace le référentiel dans Égide."], [],
+        ["À savoir"], ["Base active : données utilisées au quotidien par les services."], ["Archivage intermédiaire : données sorties de l'usage courant, gardées pour une obligation légale ou une preuve, en accès restreint."], ["Ce référentiel n'est pas exhaustif et ne remplace pas la lecture du texte cité."], [],
+        ["Principales sources"], ["CNIL, référentiel des durées de conservation « Gestion des ressources humaines » (avril 2026)", RF_U.rh], ["CNIL, référentiel « Gestion des activités commerciales »", RF_U.com], ["CNIL, guide pratique « Les durées de conservation » (2020)", RF_U.guide], ["CEPD, lignes directrices 3/2019 sur la vidéo", RF_U.cepdvideo]]);
+      info["!cols"] = [{wch:70},{wch:90}];
+      X.utils.book_append_sheet(wb, info, "À lire");
+      out = X.write(wb, {bookType:"xlsx", type:"array"});
+    }catch(e){ console.error(e); return toast("Le fichier Excel n'a pas pu être créé. Vérifiez votre connexion et réessayez."); }
+    await save(`${slugOrg()}-referentiel-durees-conservation-${today()}.xlsx`, new Blob([out], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
+  })();
+}
+function rfDocx(L){
+  const x = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"");
+  const F = `<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>`;
+  const links = []; const link = u => { links.push(u); return "rIdL"+links.length; };
+  const r = (t, o={}) => `<w:r><w:rPr>${F}${o.b?"<w:b/>":""}${o.i?"<w:i/>":""}${o.caps?"<w:caps/>":""}${o.u?'<w:u w:val="single"/>':""}<w:color w:val="${o.c||"2B2F36"}"/>${o.sp?`<w:spacing w:val="${o.sp}"/>`:""}<w:sz w:val="${o.sz||18}"/><w:szCs w:val="${o.sz||18}"/></w:rPr><w:t xml:space="preserve">${x(t)}</w:t></w:r>`;
+  const P = (runs, o={}) => `<w:p><w:pPr>${o.keep?"<w:keepNext/>":""}${o.shd?`<w:shd w:val="clear" w:color="auto" w:fill="${o.shd}"/>`:""}<w:spacing w:before="${o.before||0}" w:after="${o.after??60}" w:line="${o.line||260}" w:lineRule="auto"/>${o.ind?`<w:ind w:left="${o.ind}" w:right="${o.ind}"/>`:""}${o.jc?`<w:jc w:val="${o.jc}"/>`:""}</w:pPr>${runs}</w:p>`;
+  const HL = (u, t, o) => u ? `<w:hyperlink r:id="${link(u)}" w:history="1">${r(t, {...o, c:"0088CE", u:true})}</w:hyperlink>` : "";
+  const W = 15398; /* A4 paysage, marges 1,5 cm */
+  const cols = [3100, 2900, 3700, 2400, 3298];
+  const NC = {obl:"C8243D", reco:"0088CE", bp:"6B7785"};
+  const cell = (inner, w, o={}) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}<w:tcMar><w:top w:w="70" w:type="dxa"/><w:bottom w:w="70" w:type="dxa"/><w:start w:w="100" w:type="dxa"/><w:end w:w="100" w:type="dxa"/></w:tcMar></w:tcPr>${inner}</w:tc>`;
+  const hdr = `<w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr>${["Données ou document","Base active","Archivage intermédiaire","Point de départ · ensuite","Nature et source"].map((h,i)=>cell(P(r(h,{b:true,c:"FFFFFF",sz:17}),{after:0}), cols[i], {fill:"1A8A80"})).join("")}</w:tr>`;
+  const body = [];
+  body.push(P(r("Égide · registre RGPD", {b:true, caps:true, c:"1A8A80", sz:16, sp:20}), {after:60}));
+  body.push(P(r(rfTitle(L), {b:true, c:"003865", sz:40}), {after:80, line:240}));
+  body.push(P(r([S.org.raisonSociale, `à jour au ${RF_MAJ}`, `exporté le ${fmtD(today())}`].filter(Boolean).join("  ·  "), {c:"6B7785", sz:19}), {after:200}));
+  body.push(P(r("Chaque durée se lit en deux temps : la base active, pendant laquelle les services utilisent les données, puis l'archivage intermédiaire, réservé à une obligation légale ou à une preuve, en accès restreint. À l'issue, les données sont supprimées, anonymisées ou versées aux archives définitives.", {sz:19}), {after:120, line:276, jc:"both"}));
+  body.push(P(["obl","reco","bp"].map(k=>r("■ ", {c:NC[k], sz:18})+r(RF_NAT[k].l+" ", {b:true, sz:18})+r(RF_NAT[k].s+"    ", {c:"6B7785", sz:17})).join(""), {after:200, line:276}));
+  const doms = []; L.forEach(e=>{ let g = doms.find(d=>d.d===e.dom); if (!g){ g = {d:e.dom, it:[]}; doms.push(g); } g.it.push(e); });
+  doms.forEach(g=>{
+    body.push(P(r(g.d.toUpperCase(), {b:true, c:"FFFFFF", sz:21, sp:12}) + r(`    ${g.it.length} durée${g.it.length>1?"s":""}`, {c:"D5EEEB", sz:17}), {keep:true, before:200, after:0, shd:"003865", ind:100, line:300}));
+    const rows = g.it.map((e,i)=>{ const fill = i%2 ? "F4F8FA" : "FFFFFF";
+      return `<w:tr><w:trPr><w:cantSplit/></w:trPr>${[
+        P(r(e.n, {b:true, c:"003865", sz:18}), {after:e.note?40:0}) + (e.note?P(r(e.note, {i:true, c:"6B7785", sz:16}), {after:0}):"") + (e.custom?P(r(e.custom==="adapte"?"Adaptée par l'organisme":"Ajoutée par l'organisme", {b:true, c:"800064", sz:15}), {after:0, before:40}):""),
+        P(r(e.act||"—", {sz:18}), {after:0}),
+        P(r(e.arch||"Aucun", {sz:18}), {after:0}),
+        P(r(e.dep||"—", {sz:17}), {after:40}) + P(r("Ensuite : ", {b:true, c:"6B7785", sz:16}) + r(rfFin(e.fin)||"Suppression", {c:"6B7785", sz:16}), {after:0}),
+        P(r((RF_NAT[e.nat]||RF_NAT.bp).l, {b:true, c:NC[e.nat]||NC.bp, sz:16}), {after:40}) + P(r(e.src||"", {sz:15, c:"4A5560"}), {after:e.url?30:0}) + (e.url?P(HL(e.url, "Consulter la source", {sz:15}), {after:0}):"")
+      ].map((c,k)=>cell(c, cols[k], {fill})).join("")}</w:tr>`; }).join("");
+    body.push(`<w:tbl><w:tblPr><w:tblW w:w="${W}" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="D6DEE6"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="D6DEE6"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="E3E9EE"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${cols.map(c=>`<w:gridCol w:w="${c}"/>`).join("")}</w:tblGrid>${hdr}${rows}</w:tbl>`);
+  });
+  body.push(P("", {after:0}));
+  body.push(P(r("Principales sources : CNIL, référentiel des durées de conservation « Gestion des ressources humaines » (avril 2026) ; CNIL, référentiel « Gestion des activités commerciales » ; CNIL, guide pratique « Les durées de conservation » (2020) ; CEPD, lignes directrices 3/2019 ; Code du travail, Code de commerce, Code de la sécurité sociale, Livre des procédures fiscales. Ce référentiel n'est pas exhaustif et ne remplace pas la lecture du texte cité.", {i:true, c:"6B7785", sz:16}), {before:160, after:0, line:260}));
+  const NS = `xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"`;
+  const fr = `<w:r><w:rPr>${F}<w:color w:val="8A949F"/><w:sz w:val="16"/></w:rPr>`;
+  const footer = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:ftr ${NS}><w:p><w:pPr><w:tabs><w:tab w:val="right" w:pos="${W}"/></w:tabs></w:pPr>${fr}<w:t xml:space="preserve">${x("Référentiel des durées de conservation · "+(S.org.raisonSociale||"Égide"))}</w:t></w:r>${fr}<w:tab/></w:r>${fr}<w:t xml:space="preserve">Page </w:t></w:r>${fr}<w:fldChar w:fldCharType="begin"/></w:r>${fr}<w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>${fr}<w:fldChar w:fldCharType="separate"/></w:r>${fr}<w:t>1</w:t></w:r>${fr}<w:fldChar w:fldCharType="end"/></w:r></w:p></w:ftr>`;
+  const doc = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${NS}><w:body>${body.join("")}<w:sectPr><w:footerReference w:type="default" r:id="rId3"/><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/><w:pgMar w:top="850" w:right="720" w:bottom="850" w:left="720" w:header="425" w:footer="425" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr>${F}<w:color w:val="2B2F36"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="fr-FR"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="60" w:line="260" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>`;
+  const core = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${x(rfTitle(L))}</dc:title><dc:creator>Égide</dc:creator><dc:language>fr-FR</dc:language></cp:coreProperties>`;
+  const CT = "application/vnd.openxmlformats-officedocument.wordprocessingml"; const RT = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+  return zipStore([
+    ["[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}.styles+xml"/><Override PartName="/word/footer1.xml" ContentType="${CT}.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
+    ["_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${RT}/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`],
+    ["word/_rels/document.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${RT}/styles" Target="styles.xml"/><Relationship Id="rId3" Type="${RT}/footer" Target="footer1.xml"/>${links.map((u,i)=>`<Relationship Id="rIdL${i+1}" Type="${RT}/hyperlink" Target="${x(u)}" TargetMode="External"/>`).join("")}</Relationships>`],
+    ["word/document.xml", doc], ["word/styles.xml", styles], ["word/footer1.xml", footer], ["docProps/core.xml", core]
+  ]);
+}
+function rfPdf(L){
+  if (!L.length) return;
+  pdfRun(`${slugOrg()}-referentiel-durees-conservation-${today()}.pdf`, J=>{
+    const d = new J({unit:"mm", format:"a4", orientation:"landscape"}); d.setLineHeightFactor(1.3);
+    const PW = 297, PH = 210, M = 12, CW = PW-2*M; const TEAL = [26,138,128], NAVY = RGB.navy;
+    const NCOL = {obl:RGB.crit, reco:RGB.blue, bp:RGB.muted};
+    const cols = [62, 56, 66, 44, CW-62-56-66-44]; const heads = ["Données ou document","Base active","Archivage intermédiaire","Point de départ · ensuite","Nature et source"];
+    const LH = s => s*0.3528*1.3;
+    /* Bandeau */
+    d.setFillColor(...TEAL); d.rect(0,0,PW,30,"F"); d.setFillColor(...lighten(TEAL,.14)); d.circle(PW-10, 2, 26, "F");
+    d.setTextColor(255,255,255); d.setFont("helvetica","bold"); d.setFontSize(9); d.text(pt("ÉGIDE · REGISTRE RGPD"), M, 10);
+    d.setFontSize(18); d.text(pt(rfTitle(L)), M, 20);
+    d.setFont("helvetica","normal"); d.setFontSize(9); d.text(pt([S.org.raisonSociale, `à jour au ${RF_MAJ}`, `exporté le ${fmtD(today())}`].filter(Boolean).join("  ·  ")), M, 26.5);
+    let y = 38;
+    d.setTextColor(...RGB.ink); d.setFontSize(9);
+    const intro = d.splitTextToSize(pt("Chaque durée se lit en deux temps : la base active, pendant laquelle les services utilisent les données, puis l'archivage intermédiaire, réservé à une obligation légale ou à une preuve, en accès restreint. À l'issue, les données sont supprimées, anonymisées ou versées aux archives définitives."), CW);
+    d.text(intro, M, y); y += intro.length*LH(9) + 2;
+    let x = M; ["obl","reco","bp"].forEach(k=>{ d.setFillColor(...NCOL[k]); d.rect(x, y-2.6, 3, 3, "F"); d.setFont("helvetica","bold"); d.setFontSize(8.5); d.setTextColor(...RGB.ink); const t = pt(RF_NAT[k].l); d.text(t, x+5, y); x += d.getTextWidth(t)+12; });
+    y += 7;
+    const header = () => { let cx = M; d.setFillColor(...TEAL); d.rect(M, y, CW, 7, "F"); d.setFont("helvetica","bold"); d.setFontSize(8.5); d.setTextColor(255,255,255); heads.forEach((h,i)=>{ d.text(pt(h), cx+2, y+4.7); cx += cols[i]; }); y += 7; };
+    const newPage = () => { d.addPage(); y = 14; };
+    const doms = []; L.forEach(e=>{ let g = doms.find(z=>z.d===e.dom); if (!g){ g = {d:e.dom, it:[]}; doms.push(g); } g.it.push(e); });
+    doms.forEach(g=>{
+      { const e0 = g.it[0]; d.setFont("helvetica","normal"); d.setFontSize(8.4); const h0 = Math.max(...[e0.act, e0.arch, e0.src].map((t,k)=>d.splitTextToSize(pt(t||""), [56,66,cols[4]][k]-4).length))*LH(8.4) + 14;
+        if (y + 9 + 7 + h0 > PH-14) newPage(); }
+      d.setFillColor(...NAVY); d.roundedRect(M, y, CW, 8, 1.5, 1.5, "F"); d.setFont("helvetica","bold"); d.setFontSize(10.5); d.setTextColor(255,255,255); d.text(pt(g.d.toUpperCase()), M+3, y+5.4);
+      d.setFont("helvetica","normal"); d.setFontSize(8.5); d.text(pt(`${g.it.length} durée${g.it.length>1?"s":""}`), M+CW-3, y+5.4, {align:"right"}); y += 9;
+      header();
+      g.it.forEach((e,i)=>{
+        const N = RF_NAT[e.nat]||RF_NAT.bp;
+        const c0 = [[pt(e.n),"bold",8.6,NAVY], ...(e.note?[[pt(e.note),"italic",7.4,RGB.muted]]:[]), ...(e.custom?[[pt(e.custom==="adapte"?"Adaptée par l'organisme":"Ajoutée par l'organisme"),"bold",7.2,RGB.plum]]:[])];
+        const cells = [c0, [[pt(e.act||"-"),"normal",8.4,RGB.ink]], [[pt(e.arch||"Aucun"),"normal",8.4,RGB.ink]], [[pt(e.dep||"-"),"normal",8,RGB.ink],[pt("Ensuite : "+(rfFin(e.fin)||"Suppression")),"normal",7.4,RGB.muted]], [[pt(N.l),"bold",7.6,NCOL[e.nat]||RGB.muted],[pt(e.src||""),"normal",7.2,RGB.ink]]];
+        const lines = cells.map((c,k)=>c.map(([t,st,sz,col])=>{ d.setFont("helvetica",st); d.setFontSize(sz); return {l:d.splitTextToSize(t, cols[k]-4), st, sz, col}; }));
+        const h = Math.max(...lines.map(c=>c.reduce((s,b)=>s+b.l.length*LH(b.sz)+1.2,0))) + 3;
+        if (y + h > PH-14){ newPage(); header(); }
+        if (i%2){ d.setFillColor(244,248,250); d.rect(M, y, CW, h, "F"); }
+        let cx = M;
+        lines.forEach((c,k)=>{ let cy = y+3.6; c.forEach(b=>{ d.setFont("helvetica", b.st); d.setFontSize(b.sz); d.setTextColor(...b.col); d.text(b.l, cx+2, cy); cy += b.l.length*LH(b.sz)+1.2; }); cx += cols[k]; });
+        d.setDrawColor(227,233,238); d.setLineWidth(.2); d.line(M, y+h, M+CW, y+h);
+        y += h;
+      });
+      y += 5;
+    });
+    if (y > PH-30) newPage();
+    d.setFont("helvetica","italic"); d.setFontSize(7.6); d.setTextColor(...RGB.muted);
+    const src = d.splitTextToSize(pt("Principales sources : CNIL, référentiel des durées de conservation « Gestion des ressources humaines » (avril 2026) ; CNIL, référentiel « Gestion des activités commerciales » ; CNIL, guide pratique « Les durées de conservation » (2020) ; CEPD, lignes directrices 3/2019 ; Code du travail, Code de commerce, Code de la sécurité sociale, Livre des procédures fiscales. Ce référentiel n'est pas exhaustif et ne remplace pas la lecture du texte cité."), CW);
+    d.text(src, M, y+2);
+    const n = d.getNumberOfPages();
+    for (let p=1; p<=n; p++){ d.setPage(p); d.setFont("helvetica","normal"); d.setFontSize(7.5); d.setTextColor(...RGB.muted); d.text(pt("Référentiel des durées de conservation · "+(S.org.raisonSociale||"Égide")), M, PH-6); d.text(`Page ${p} / ${n}`, PW-M, PH-6, {align:"right"}); }
+    return {blob:()=>d.output("blob")};
+  });
+}
+/* ---------- Données de l'organisme ---------- */
+function rfWatch(){
+  if (!S.db || rfWatch.on) return; rfWatch.on = true;
+  S.db.collection("referentiel").onSnapshot(snap=>{ S.refCustom = new Map(snap.docs.map(x=>[x.id, {...x.data(), _id:x.id}])); rfSyncLegacy(); if (S.view==="referentiel" && !RF.edit) render(); }, ()=>{});
+}
+rfSyncLegacy();
+(function rfWait(){ if (S.db) rfWatch(); else setTimeout(rfWait, 400); })();
+(function(){ const st = document.createElement("style"); st.textContent = `
+.rf-page{display:flex;flex-direction:column;gap:18px}
+.rf-exp{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.rf-exp .muted{font-size:.8rem;margin-right:2px}
+.rf-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.rf-lg{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;padding:12px 14px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.rf-lg b{font-family:var(--f-display);font-size:1.4rem;color:var(--heading);font-variant-numeric:tabular-nums;text-align:right}.rf-lg small{grid-column:1/-1;color:var(--muted);font-size:.78rem;line-height:1.4}
+.rf-lg .pill{justify-self:start}.rf-lg.on{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-soft)}.rf-lg:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.rf-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}
+.rf-search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-control,10px);padding:0 12px}
+.rf-search svg{width:16px;height:16px;color:var(--muted)}.rf-search input{border:0;background:none;padding:10px 0;flex:1;min-width:0;font:inherit;color:var(--ink);outline:none}
+.rf-search:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.rf-bar select{flex:0 1 300px;min-width:0;max-width:100%}.rf-search input{box-shadow:none!important;height:auto}
+.rf-g{display:flex;flex-direction:column;gap:10px}
+.rf-gh{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin:4px 0 0}.rf-gh small{font:600 .74rem var(--f-body);color:var(--muted);background:var(--sunk);border-radius:99px;padding:1px 8px}
+.rf-gh::before{content:"";width:10px;height:10px;border-radius:3px;background:#1A8A80}
+.rf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,430px),1fr));gap:12px}
+.rf-it{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rf-it.org{border-color:color-mix(in srgb,var(--plum) 35%,var(--line))}
+.rf-it:target{box-shadow:0 0 0 3px var(--primary-soft);border-color:var(--primary)}
+.rf-t h3{font-size:.98rem;color:var(--heading);overflow-wrap:anywhere;margin:0 0 6px}
+.rf-tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rf-used{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:600;color:var(--primary)}.rf-used svg{width:13px;height:13px}
+.rf-dl{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin:0}.rf-dl div{min-width:0}
+.rf-dl dt{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}.rf-dl dd{margin:0;font-size:.86rem;color:var(--ink);overflow-wrap:anywhere;line-height:1.45}
+.rf-note{display:flex;gap:8px;align-items:flex-start;margin:0;padding:8px 10px;border-radius:var(--r-sm);background:var(--primary-soft);font-size:.82rem}.rf-note svg{width:15px;height:15px;color:var(--primary);flex:none;margin-top:2px}
+.rf-src{margin:0;font-size:.78rem;color:var(--muted);overflow-wrap:anywhere;line-height:1.45}.rf-src b{color:var(--ink);margin-right:4px}
+.rf-it footer{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.rf-pick{display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:var(--r-sm);background:var(--surface-2)}.rf-pick label{font-size:.82rem;font-weight:600;color:var(--heading)}
+.rf-pick .row{display:flex;flex-wrap:wrap;gap:8px}.rf-pick select{flex:1;min-width:0}
+.rf-sources{font-size:.8rem;color:var(--muted);line-height:1.6}
+.rf-banner{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:var(--r);background:linear-gradient(110deg,color-mix(in srgb,#1A8A80 14%,var(--surface)),var(--surface));border:1px solid var(--line);margin-top:4px}
+.rf-banner .pico{width:42px;height:42px;border-radius:12px}.rf-banner .pico svg{width:20px;height:20px}
+.rf-banner>span:nth-child(2){flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}.rf-banner b{color:var(--heading)}.rf-banner small{color:var(--muted);font-size:.84rem}
+.rf-banner>svg{width:18px;height:18px;color:var(--muted)}.rf-banner:hover{border-color:#1A8A80}.rf-banner:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.rf-sug{display:flex;flex-direction:column;gap:8px;margin:12px 20px 18px;padding:12px 14px;border-radius:var(--r-sm);background:color-mix(in srgb,#1A8A80 8%,var(--surface));border:1px dashed color-mix(in srgb,#1A8A80 40%,var(--line))}
+.rf-sug-ed{margin:0 0 4px}
+.rf-sug-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}.rf-sug-h b{color:var(--heading);font-size:.9rem}
+.rf-sug-it{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line)}
+.rf-sug-it>div:first-child{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}.rf-sug-it b{font-size:.88rem;color:var(--ink)}.rf-sug-it small{color:var(--muted);font-size:.8rem;overflow-wrap:anywhere}
+.rf-sug-src{font-size:.74rem!important}
+.rf-sug-a{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+@media (max-width:600px){.rf-dl{grid-template-columns:1fr}}
 `; document.head.appendChild(st); })();
 
 /* ================= Exports ================= */
@@ -11941,7 +12431,7 @@ window.addEventListener?.("resize", ()=>{ if (ARV.open) arFit(); });
 ["dragenter","dragover"].forEach(t=>document.addEventListener(t, e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z || !e.dataTransfer?.types?.includes("Files")) return; e.preventDefault(); e.dataTransfer.dropEffect="copy"; z.classList.add("over"); }));
 document.addEventListener("dragleave", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (z && !z.contains(e.relatedTarget)) z.classList.remove("over"); });
 document.addEventListener("drop", e=>{ const z=e.target.closest?.("[data-pjdrop]"); if (!z) { if (e.dataTransfer?.types?.includes("Files")) e.preventDefault(); return; } e.preventDefault(); z.classList.remove("over"); pjUpload([...(e.dataTransfer.files||[])], z.dataset.mod||"", z.dataset.rid||""); });
-Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions, srActions, lrActions, trActions);
+Object.assign(actions, trainActions, trnActions, newsActions, arActions, numActions, recoActions, trt3Actions, trt7Actions, trt8Actions, ltActions, prjActions, agActions, mjActions, srActions, lrActions, trActions, rfActions);
 document.addEventListener("keydown", e => { if (LOCAL && !TRAIN && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); actions["save-now"](); return; } });
 document.addEventListener("keydown", e => {
   if (e.target?.id==="o-dirnew" && e.key==="Enter"){ e.preventDefault(); actions["org-dir-add"](e.target); return; }
